@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolución de Costos Queso Río — Gestión 2025</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d1b2e;
+  --surface:rgba(17,34,64,0.90);
+  --border:rgba(100,180,255,0.10);
+  --border2:rgba(100,180,255,0.20);
+  --amber:#f5a623;
+  --emerald:#00c9a7;
+  --indigo:#7b9fff;
+  --violet:#b97fff;
+  --crimson:#ff4e6a;
+  --sky:#38bdf8;
+  --text:#e4eeff;
+  --muted:rgba(228,238,255,0.50);
+  --faint:rgba(228,238,255,0.20);
+  --serif:'Cormorant Garamond',serif;
+  --sans:'Outfit',sans-serif;
+}
+html{font-size:15px}
+body{
+  background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 80% 55% at 5% 0%,rgba(0,120,255,0.14) 0%,transparent 58%),
+    radial-gradient(ellipse 55% 50% at 95% 100%,rgba(0,201,167,0.12) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 35% at 50% 50%,rgba(123,159,255,0.06) 0%,transparent 70%);
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(100,180,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(100,180,255,0.03) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+header{
+  position:relative;z-index:2;
+  background:linear-gradient(90deg,rgba(8,22,48,0.98),rgba(11,20,42,0.98));
+  border-bottom:1px solid var(--border2);
+  padding:18px 36px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 4px 40px rgba(0,0,0,.5);
+}
+header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--amber) 25%,var(--emerald) 55%,var(--indigo) 80%,transparent);
+  opacity:.8;
+}
+.h-left{display:flex;align-items:center;gap:16px}
+.logo{
+  width:46px;height:46px;
+  background:linear-gradient(135deg,#f5e6d3,var(--amber));
+  border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:24px;font-weight:700;color:#fff;
+  box-shadow:0 4px 22px rgba(245,166,35,.40);
+}
+.h-meta .h-title{font-family:var(--serif);font-size:24px;font-weight:700;color:#e8f0ff;line-height:1.1;letter-spacing:.01em}
+.h-meta .h-sub{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.h-period{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.wrap{position:relative;z-index:1;padding:26px 36px 40px;display:flex;flex-direction:column;gap:20px}
+
+/* LAYOUT KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
+.kpi-row-trimesters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+
+.kpi{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;
+  padding:16px 18px;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.kpi:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.kpi::after{content:'';position:absolute;bottom:-22px;right:-14px;width:70px;height:70px;border-radius:50%;opacity:.12;filter:blur(20px)}
+.kpi-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.kpi-num{font-family:var(--serif);font-size:34px;font-weight:700;line-height:1;margin-bottom:3px}
+.kpi-desc{font-size:11px;color:var(--muted)}
+.kpi-flag{position:absolute;top:12px;right:12px;font-size:9px;font-weight:700;letter-spacing:.07em;padding:3px 8px;border-radius:12px}
+.c-amber .kpi-accent{background:linear-gradient(90deg,#d06c00,var(--amber))} .c-amber .kpi-num{color:var(--amber)} .c-amber::after{background:var(--amber)}
+.c-emerald .kpi-accent{background:linear-gradient(90deg,#007a65,var(--emerald))} .c-emerald .kpi-num{color:var(--emerald)} .c-emerald::after{background:var(--emerald)}
+.c-emerald .kpi-flag{background:rgba(0,201,167,.13);color:var(--emerald);border:1px solid rgba(0,201,167,.28)}
+.c-indigo .kpi-accent{background:linear-gradient(90deg,#2244bb,var(--indigo))} .c-indigo .kpi-num{color:var(--indigo)} .c-indigo::after{background:var(--indigo)}
+.c-crimson .kpi-accent{background:linear-gradient(90deg,#a00025,var(--crimson))} .c-crimson .kpi-num{color:var(--crimson)} .c-crimson::after{background:var(--crimson)}
+.c-crimson .kpi-flag{background:rgba(255,78,106,.13);color:var(--crimson);border:1px solid rgba(255,78,106,.28)}
+.c-violet .kpi-accent{background:linear-gradient(90deg,#6e30cc,var(--violet))} .c-violet .kpi-num{color:var(--violet)} .c-violet::after{background:var(--violet)}
+.c-sky .kpi-accent{background:linear-gradient(90deg,#0876a8,var(--sky))} .c-sky .kpi-num{color:var(--sky)} .c-sky::after{background:var(--sky)}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px 26px}
+.p-title{font-family:var(--serif);font-size:19px;font-weight:700;color:#e8f0ff;line-height:1.1;margin-bottom:3px}
+.p-sub{font-size:12.5px;color:var(--muted);letter-spacing:.03em;margin-bottom:18px}
+.chart-box{position:relative;height:340px}
+.bottom-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+.legend-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:50%}
+.leg-dash{width:22px;height:0;border-top:2px dashed}
+.leg-solid{width:22px;height:0;border-top:2.5px solid}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+.th-group{background:rgba(123,159,255,.08);border-bottom:1px solid rgba(123,159,255,.2)}
+.th-group th{padding:10px 10px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--indigo)}
+.th-group th:first-child{text-align:left}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:rgba(123,159,255,.04)}
+tbody td{padding:9px 10px;text-align:center;color:var(--muted);border-bottom:1px solid rgba(100,180,255,.04)}
+tbody td:first-child{text-align:left;color:rgba(228,238,255,.85);font-weight:600}
+.qrow{background:rgba(245,166,35,.06);border-top:1px solid rgba(245,166,35,.15);border-bottom:1px solid rgba(245,166,35,.15)}
+.qrow td{color:var(--amber);font-weight:700;font-size:13px}
+.qrow td:first-child{color:var(--amber)}
+.sep{border-top:2px solid rgba(123,159,255,.12) !important}
+tfoot tr{background:rgba(0,201,167,.07)}
+tfoot td{padding:11px 10px;text-align:center;font-weight:700;color:var(--emerald);font-size:13.5px;border-top:2px solid rgba(0,201,167,.25)}
+tfoot td:first-child{text-align:left}
+.v-up{color:var(--crimson);font-weight:600}.v-down{color:var(--emerald);font-weight:600}.v-same{color:var(--muted)}
+.tag{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:600}
+.tag-high{background:rgba(255,78,106,.12);color:var(--crimson);border:1px solid rgba(255,78,106,.22)}
+.tag-low{background:rgba(0,201,167,.11);color:var(--emerald);border:1px solid rgba(0,201,167,.22)}
+.tag-mid{background:rgba(245,166,35,.11);color:var(--amber);border:1px solid rgba(245,166,35,.22)}
+
+.bar-section{margin-bottom:16px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-label{font-size:12.5px;font-weight:600;color:var(--text);width:100px;flex-shrink:0}
+.bar-track{flex:1;height:9px;background:rgba(228,238,255,.06);border-radius:5px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .6s ease}
+.bar-val{font-size:12.5px;font-weight:700;width:48px;text-align:right;flex-shrink:0}
+.q-divider{height:1px;background:rgba(100,180,255,.12);margin:14px 0}
+.q4-card{
+  background:linear-gradient(135deg,rgba(255,78,106,.15),rgba(245,166,35,.10));
+  border:1px solid rgba(255,78,106,.3);
+  border-radius:14px;
+  padding:16px;
+  margin-top:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.q4-card .q4-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--crimson);font-weight:700}
+.q4-card .q4-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.q4-card .q4-val{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--amber)}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:14px 36px;display:flex;justify-content:space-between;align-items:center}
+.f-note{font-size:12px;color:var(--faint);letter-spacing:.04em}
+.f-brand{font-size:12px;color:var(--faint);font-family:var(--serif)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.kpi-row .kpi:nth-child(1){animation:fadeUp .45s ease both .04s}
+.kpi-row .kpi:nth-child(2){animation:fadeUp .45s ease both .10s}
+.kpi-row .kpi:nth-child(3){animation:fadeUp .45s ease both .16s}
+.kpi-row-trimesters .kpi:nth-child(1){animation:fadeUp .45s ease both .22s}
+.kpi-row-trimesters .kpi:nth-child(2){animation:fadeUp .45s ease both .28s}
+.kpi-row-trimesters .kpi:nth-child(3){animation:fadeUp .45s ease both .34s}
+.kpi-row-trimesters .kpi:nth-child(4){animation:fadeUp .45s ease both .40s}
+.panel{animation:fadeUp .5s ease both .45s}
+.bottom-grid>*{animation:fadeUp .5s ease both}
+.bottom-grid>*:nth-child(1){animation-delay:.52s}
+.bottom-grid>*:nth-child(2){animation-delay:.60s}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-left">
+    <div class="logo">QR</div>
+    <div class="h-meta">
+      <div class="h-title">Evolución de Costos — Queso Río</div>
+      <div class="h-sub">Universidad Adventista de Bolivia · Lácteos · Gestión Completa 2025</div>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="h-period">Gestión 2025 · Enero — Diciembre · 4 Trimestres</div>
+  </div>
+</header>
+
+<div class="wrap">
+  
+  <!-- ★★★ FILA SUPERIOR: KPIs PRINCIPALES ★★★ -->
+  <div class="kpi-row">
+    <div class="kpi c-amber">
+      <div class="kpi-accent"></div>
+      <div class="kpi-lbl">Promedio Anual</div>
+      <div class="kpi-num">49,8</div>
+      <div class="kpi-desc">Bs./kg · 2025</div>
+    </div>
+    <div class="kpi c-crimson">
+      <div class="kpi-accent"></div>
+      <div class="kpi-flag">⚠ Pico</div>
+      <div class="kpi-lbl">Mes más caro</div>
+      <div class="kpi-num">55,8</div>
+      <div class="kpi-desc">Bs./kg · Agosto</div>
+    </div>
+    <div class="kpi c-emerald">
+      <div class="kpi-accent"></div>
+      <div class="kpi-flag">▼ Mínimo</div>
+      <div class="kpi-lbl">Mes más barato</div>
+      <div class="kpi-num">38,4</div>
+      <div class="kpi-desc">Bs./kg · Diciembre</div>
+    </div>
+  </div>
+
+  <!-- ★★★ FILA INFERIOR: TRIMESTRES ★★★ -->
+  <div class="kpi-row-trimesters">
+    <div class="kpi c-indigo">
+      <div class="kpi-accent"></div>
+      <div class="kpi-lbl">Trim. I (Ene–Mar)</div>
+      <div class="kpi-num">45,4</div>
+      <div class="kpi-desc">Bs./kg · promedio</div>
+    </div>
+    <div class="kpi c-violet">
+      <div class="kpi-accent"></div>
+      <div class="kpi-lbl">Trim. II (Abr–Jun)</div>
+      <div class="kpi-num">51,9</div>
+      <div class="kpi-desc">Bs./kg · promedio</div>
+    </div>
+    <div class="kpi c-sky">
+      <div class="kpi-accent"></div>
+      <div class="kpi-lbl">Trim. III (Jul–Sep)</div>
+      <div class="kpi-num">55,3</div>
+      <div class="kpi-desc">Bs./kg · promedio</div>
+    </div>
+    <div class="kpi c-crimson">
+      <div class="kpi-accent"></div>
+      <div class="kpi-flag" style="background:rgba(255,78,106,.15);color:var(--crimson);border:1px solid rgba(255,78,106,.3)">★ Q4</div>
+      <div class="kpi-lbl">Trim. IV (Oct–Dic)</div>
+      <div class="kpi-num">47,0</div>
+      <div class="kpi-desc">Bs./kg · promedio</div>
+    </div>
+  </div>
+
+  <!-- MAIN CHART PANEL -->
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div class="p-title" style="margin:0">Evolución Mensual &amp; Comparativo Trimestral</div>
+        <div class="p-sub" style="margin:4px 0 0">Barras: costo mensual (Bs/kg) · <strong style="color:var(--amber)">Línea: tendencia conectada</strong> · Punteado: promedios trimestrales</div>
+      </div>
+      <div class="legend-row" style="margin:0">
+        <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>Barras</div>
+        <div class="leg"><div class="leg-solid" style="border-color:var(--amber);border-width:2.5px"></div>Tendencia</div>
+        <div class="leg"><div class="leg-dash" style="border-color:rgba(123,159,255,.7)"></div>T1</div>
+        <div class="leg"><div class="leg-dash" style="border-color:rgba(185,127,255,.7)"></div>T2</div>
+        <div class="leg"><div class="leg-dash" style="border-color:rgba(56,189,248,.7)"></div>T3</div>
+        <div class="leg"><div class="leg-dash" style="border-color:rgba(255,78,106,.8);border-width:2.5px"></div>T4</div>
+      </div>
+    </div>
+    <div class="chart-box"><canvas id="mainChart"></canvas></div>
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+    <div class="panel" style="padding:22px">
+      <div class="p-title">Resumen Mensual &amp; Trimestral</div>
+      <div class="p-sub" style="margin-bottom:14px">Costo promedio Bs./kg · variación mensual · clasificación</div>
+      <table>
+        <thead>
+          <tr class="th-group">
+            <th>Mes</th>
+            <th>Prom. Mensual</th>
+            <th>Variación</th>
+            <th>Nivel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- T1 -->
+          <tr><td>Enero</td><td style="color:var(--amber);font-weight:700">41,0</td><td class="v-same">—</td><td><span class="tag tag-low">Bajo</span></td></tr>
+          <tr><td>Febrero</td><td style="color:var(--amber);font-weight:700">45,7</td><td class="v-up">+11,5%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr><td>Marzo</td><td style="color:var(--amber);font-weight:700">49,5</td><td class="v-up">+8,3%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr class="qrow"><td>▶ Trim. I (Ene–Mar)</td><td>45,4</td><td>—</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          
+          <!-- T2 -->
+          <tr class="sep"><td>Abril</td><td style="color:var(--amber);font-weight:700">52,1</td><td class="v-up">+5,3%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr><td>Mayo</td><td style="color:var(--amber);font-weight:700">50,8</td><td class="v-down">−2,5%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr><td>Junio</td><td style="color:var(--amber);font-weight:700">52,7</td><td class="v-up">+3,7%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr class="qrow"><td>▶ Trim. II (Abr–Jun)</td><td>51,9</td><td>+14,3%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          
+          <!-- T3 -->
+          <tr class="sep"><td>Julio</td><td style="color:var(--amber);font-weight:700">54,7</td><td class="v-up">+3,8%</td><td><span class="tag tag-high">Alto</span></td></tr>
+          <tr><td>Agosto</td><td style="color:var(--amber);font-weight:700">55,8</td><td class="v-up">+2,0%</td><td><span class="tag tag-high">Alto ⚠</span></td></tr>
+          <tr><td>Septiembre</td><td style="color:var(--amber);font-weight:700">55,3</td><td class="v-down">−0,9%</td><td><span class="tag tag-high">Alto</span></td></tr>
+          <tr class="qrow"><td>▶ Trim. III (Jul–Sep)</td><td>55,3</td><td>+6,6%</td><td><span class="tag tag-high">Alto</span></td></tr>
+          
+          <!-- T4 -->
+          <tr class="sep"><td>Octubre</td><td style="color:var(--amber);font-weight:700">51,2</td><td class="v-down">−7,4%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr><td>Noviembre</td><td style="color:var(--amber);font-weight:700">50,2</td><td class="v-down">−2,0%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+          <tr><td>Diciembre</td><td style="color:var(--amber);font-weight:700">38,4</td><td class="v-down">−23,5%</td><td><span class="tag tag-low">Bajo</span></td></tr>
+          <tr class="qrow"><td>▶ Trim. IV (Oct–Dic)</td><td>47,0</td><td>−15,0%</td><td><span class="tag tag-mid">Medio</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Promedio Anual 2025</td><td>49,8</td><td>—</td><td style="color:var(--amber)">Gestión completa</td></tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Q4 ANALYSIS PANEL -->
+    <div class="panel" style="padding:22px;display:flex;flex-direction:column;gap:0">
+      <div class="p-title">Análisis Detallado — Trimestre IV</div>
+      <div class="p-sub" style="margin-bottom:18px">Desglose mensual Oct–Dic con variación y tendencias</div>
+      <div class="bar-section">
+        <div style="font-size:11px;color:rgba(241, 243, 237, 0.868);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px">
+          <span>★</span> Trimestre IV · Octubre–Diciembre
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Octubre</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#a00025,var(--crimson))"></div></div>
+          <div class="bar-val" style="color:var(--crimson)">51,2</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px 110px">−7,4% vs Septiembre</div>
+        <div class="bar-row">
+          <div class="bar-label">Noviembre</div>
+          <div class="bar-track"><div class="bar-fill" style="width:98%;background:linear-gradient(90deg,#a00025,var(--crimson))"></div></div>
+          <div class="bar-val" style="color:var(--crimson)">50,2</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin:-6px 0 12px 110px">−2,0% vs Octubre</div>
+        <div class="bar-row">
+          <div class="bar-label">Diciembre</div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%;background:linear-gradient(90deg,#a00025,var(--crimson))"></div></div>
+          <div class="bar-val" style="color:var(--crimson)">38,4</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin:-6px 0 4px 110px">−23,5% vs Noviembre</div>
+      </div>
+      <div class="q-divider"></div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;font-weight:600">Tendencia Q4</div>
+      <div style="position:relative;height:100px;margin-bottom:16px"><canvas id="q4MiniChart"></canvas></div>
+      <div class="q4-card">
+        <div>
+          <div class="q4-lbl">Estabilidad Q4</div>
+          <div class="q4-sub">Variación vs. promedio anual</div>
+        </div>
+        <div class="q4-val" style="color:var(--emerald)">−5,6%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-note">Fuente: Sistema de costos UAB · Registro de compras 2025 · Producto: Queso Río · Uso interno — Junta Administrativa</div>
+  <div class="f-brand">Universidad Adventista de Bolivia</div>
+</footer>
+
+<script>
+const AMBER   = '#f5a623';
+const EMERALD = '#00c9a7';
+const INDIGO  = '#7b9fff';
+const VIOLET  = '#b97fff';
+const SKY     = '#38bdf8';
+const CRIMSON = '#ff4e6a';
+const BG      = '#0d1b2e';
+
+const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+// Monthly averages extracted from the table
+const monthly = [41.0, 45.7, 49.5, 52.1, 50.8, 52.7, 54.7, 55.8, 55.3, 51.2, 50.2, 38.4];
+
+// Trimester averages
+const t1 = Array(12).fill(null); t1[0]=45.4; t1[1]=45.4; t1[2]=45.4;
+const t2 = Array(12).fill(null); t2[3]=51.9; t2[4]=51.9; t2[5]=51.9;
+const t3 = Array(12).fill(null); t3[6]=55.3; t3[7]=55.3; t3[8]=55.3;
+const t4 = Array(12).fill(null); t4[9]=47.0;  t4[10]=47.0; t4[11]=47.0;
+
+// ── MAIN CHART ──
+const ctx = document.getElementById('mainChart').getContext('2d');
+const gAmber = ctx.createLinearGradient(0,0,0,340);
+gAmber.addColorStop(0,'rgba(245,166,35,0.22)');
+gAmber.addColorStop(1,'rgba(245,166,35,0)');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Costo Mensual',
+        data: monthly,
+        backgroundColor: monthly.map(v => v >= 54.0 ? 'rgba(255,78,106,0.65)' : v >= 48.0 ? 'rgba(245,166,35,0.65)' : 'rgba(123,159,255,0.55)'),
+        borderColor: monthly.map(v => v >= 54.0 ? CRIMSON : v >= 48.0 ? AMBER : INDIGO),
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
+        barPercentage: 0.7,
+        categoryPercentage: 0.8,
+        order: 5
+      },
+      {
+        type: 'line',
+        label: 'Tendencia Mensual',
+        data: monthly,
+        borderColor: AMBER,
+        backgroundColor: 'transparent',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointBackgroundColor: BG,
+        pointBorderColor: AMBER,
+        pointBorderWidth: 2,
+        fill: false,
+        tension: 0.35,
+        order: 3
+      },
+      {
+        type: 'line',
+        label: 'Prom. Trim. I',
+        data: t1,
+        borderColor: INDIGO,
+        borderWidth: 2,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'Prom. Trim. II',
+        data: t2,
+        borderColor: VIOLET,
+        borderWidth: 2,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'Prom. Trim. III',
+        data: t3,
+        borderColor: SKY,
+        borderWidth: 2,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 2
+      },
+      {
+        type: 'line',
+        label: 'Prom. Trim. IV',
+        data: t4,
+        borderColor: CRIMSON,
+        borderWidth: 2.5,
+        borderDash: [6, 3],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: {
+        labels: {
+          color: 'rgba(228,238,255,.45)',
+          font: { family: "'Outfit',sans-serif", size: 12 },
+          boxWidth: 14,
+          boxHeight: 10,
+          padding: 16,
+          filter: function(i) { return !i.text.startsWith('Prom. Trim.'); }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(9,18,38,.97)',
+        borderColor: 'rgba(100,180,255,.15)',
+        borderWidth: 1,
+        titleColor: AMBER,
+        bodyColor: 'rgba(228,238,255,.82)',
+        padding: 13,
+        callbacks: {
+          label: function(c) {
+            if (c.parsed.y === null) return null;
+            return ' ' + c.dataset.label + ': Bs. ' + c.parsed.y.toFixed(2);
+          }
+        },
+        filter: function(i) { return i.parsed.y !== null; }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(100,180,255,.05)' },
+        ticks: {
+          color: 'rgba(228,238,255,.45)',
+          font: { size: 13, family: "'Outfit',sans-serif" }
+        }
+      },
+      y: {
+        grid: { color: 'rgba(100,180,255,.06)' },
+        ticks: {
+          color: 'rgba(228,238,255,.40)',
+          font: { size: 13 },
+          callback: function(v) { return 'Bs. ' + v; }
+        },
+        min: 30,
+        max: 65,
+        title: {
+          display: true,
+          text: 'Costo (Bs./kg)',
+          color: 'rgba(228,238,255,.28)',
+          font: { size: 11 }
+        }
+      }
+    }
+  }
+});
+
+// ── Q4 MINI CHART ──
+const q4Ctx = document.getElementById('q4MiniChart').getContext('2d');
+new Chart(q4Ctx, {
+  type: 'line',
+  data: {
+    labels: ['Oct', 'Nov', 'Dic'],
+    datasets: [
+      {
+        label: 'Q4 2025',
+        data: [51.2, 50.2, 38.4],
+        borderColor: CRIMSON,
+        backgroundColor: 'rgba(255,78,106,0.15)',
+        borderWidth: 3,
+        pointRadius: 6,
+        pointHoverRadius: 9,
+        pointBackgroundColor: CRIMSON,
+        pointBorderColor: BG,
+        pointBorderWidth: 2,
+        fill: true,
+        tension: 0.35
+      },
+      {
+        label: 'Prom. Anual',
+        data: [49.8, 49.8, 49.8],
+        borderColor: 'rgba(245,166,35,.5)',
+        borderWidth: 2,
+        borderDash: [5, 3],
+        pointRadius: 0,
+        fill: false,
+        tension: 0
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(9,18,38,.97)',
+        borderColor: 'rgba(100,180,255,.15)',
+        borderWidth: 1,
+        titleColor: AMBER,
+        bodyColor: 'rgba(228,238,255,.82)',
+        padding: 10,
+        callbacks: {
+          label: function(c) { return ' ' + c.dataset.label + ': Bs. ' + c.parsed.y.toFixed(2); }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(100,180,255,.04)' },
+        ticks: { color: 'rgba(228,238,255,.4)', font: { size: 11 } }
+      },
+      y: {
+        grid: { color: 'rgba(100,180,255,.05)' },
+        ticks: {
+          color: 'rgba(228,238,255,.35)',
+          font: { size: 11 },
+          callback: function(v) { return 'Bs.' + v; }
+        },
+        min: 35.0,
+        max: 55.0
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

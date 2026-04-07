@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Queso - Precio Unitario Queso Rio (2026)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        th, td {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="bg-slate-900 text-white pt-6 pb-8 px-6 shadow-md rounded-b-xl relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-bold tracking-wide text-center md:text-left uppercase">
+                    Evolución de Precio: Papaya 2025
+                </h1>
+                <p class="text-gray-400 mt-2 text-center md:text-left">Comparativa semanal de costo unitario (Enero - Marzo)</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 flex flex-col gap-6 -mt-4 relative z-20">
+        
+        <section class="w-full flex flex-col pt-4">
+            <div class="bg-white rounded-xl p-6 shadow-lg flex-1 flex flex-col border border-gray-100">
+                <div class="mb-2">
+                    <h2 class="text-xl font-bold text-gray-800">Costo Unitario por Unidad (und)</h2>
+                    <p class="text-sm text-blue-600 font-medium">*Nota: Las barras representan el precio exacto de cada semana, destacando la fluctuación respecto al promedio.</p>
+                </div>
+                
+                <div class="relative flex-1 min-h-[450px] w-full bg-white">
+                    <canvas id="cheeseChart" style="background-color: white;"></canvas>
+                </div>
+            </div>
+        </section>
+        <section class="w-full flex flex-col">
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-100 table-container">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Detalle de Costos (Bs por unidad)</h2>
+                
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-xs font-bold">
+                            <th class="p-3 border-b-2 border-slate-200 rounded-tl-lg">Producto</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center border-l border-slate-200">S1 Ene</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center">S1 Feb</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center border-l border-slate-200">S2 Feb</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center">S3 Feb</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center">S4 Feb</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center border-l border-slate-200">S1 Mar</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center">S2 Mar</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center rounded-tr-lg">S3 Mar</th>
+                            <th class="p-3 border-b-2 border-slate-200 text-center">S4 Mar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="row-promedio-semanal" class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-2 text-right">Promedio semanal</td>
+                            <td class="p-3 text-center">12.0</td>
+                            <td class="p-3 text-center">12.0</td>
+                            <td class="p-3 text-center">13.0</td>
+                            <td class="p-3 text-center">13.0</td>
+                            <td class="p-3 text-center">15.0</td>
+                            <td class="p-3 text-center">12.0</td>
+                            <td class="p-3 text-center">10.0</td>
+                            <td class="p-3 text-center">11.0</td>
+                            <td class="p-3 text-center">9.0</td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-2 text-right">Promedio Mensual</td>
+                            <td class="p-2 text-center border-l border-gray-200" colspan="1">12.0</td>
+                            <td class="p-2 text-center border-l border-gray-200" colspan="4">13.3</td>
+                            <td class="p-2 text-center border-l border-gray-200" colspan="3">10.5</td>
+                        </tr>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="p-2 text-right">Promedio Trimestral</td>
+                            <td class="p-2 text-center border-l border-gray-200" colspan="8">11.9</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <script>
+            const ctx = document.getElementById('cheeseChart').getContext('2d');
+
+            const labels = ['S1 Ene', 'S1 Feb', 'S2 Feb', 'S3 Feb', 'S4 Feb', 'S1 Mar', 'S2 Mar', 'S3 Mar', 'S4 Mar'];
+            
+            // Datos de la columna de costo unitario de la imagen
+            const weeklyData = [12.0, 12.0, 13.0, 13.0, 15.0, 12.0, 10.0, 11.0, 9.0];
+            // Línea de referencia basada en los promedios mensuales calculados
+            const monthlyAvgData = [12.0, 12.0, 13.0, 13.0, 15.0, 12.0, 10.0, 11.0, 9.0];
+        new Chart(ctx, {
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Precio Unitario (Bs/kg)',
+                        data: weeklyData,
+                        // Nueva lógica: Colores por bloques de 3 semanas (meses)
+                        backgroundColor: function(context) {
+                            const index = context.dataIndex;
+                            if (index <= 0) return 'rgba(59, 130, 246, 0.8)'; // Enero: Azul
+                            if (index <= 4) return 'rgba(16, 185, 129, 0.8)'; // Febrero: Verde
+                            return 'rgba(245, 158, 11, 0.8)';                 // Marzo: Naranja
+                        },
+                        borderColor: function(context) {
+                            const index = context.dataIndex;
+                            if (index <= 2) return '#2563eb'; // Borde Enero
+                            if (index <= 5) return '#059669'; // Borde Febrero
+                            return '#d97706';                 // Borde Marzo
+                        },
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        order: 2
+                    },
+                    {
+                        type: 'line', // Línea para el promedio
+                        label: 'Costo Promedio Mensual',
+                        data: monthlyAvgData,
+                        borderColor: '#ef4444', // Rojo
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 9,
+                        pointBackgroundColor: '#fff',
+                        borderDash: [5, 5], // Línea punteada
+                        tension: 0, // Líneas rectas
+                        fill: false,
+                        order: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { family: 'Montserrat', size: 13, weight: '600' },
+                            usePointStyle: true,
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: ${context.parsed.y} Bs`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        suggestedMin: 0,
+                        suggestedMax: 25,
+                        title: {
+                            display: true,
+                            text: 'Costo en Bolivianos (Bs)',
+                            font: { family: 'Montserrat', weight: 'bold' }
+                        },
+                        grid: { color: '#f1f5f9' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        const filaDestino = document.getElementById('row-promedio-semanal');
+        const valorMaximo = Math.max(...weeklyData);
+        const valorMinimo = Math.min(...weeklyData);
+
+        // Esto limpia tus 11 líneas manuales y deja solo el título para reescribir encima
+        filaDestino.innerHTML = '<td class="p-2 text-right font-medium">Promedio semanal</td>';
+
+        weeklyData.forEach(valor => {
+            const td = document.createElement('td');
+            td.className = 'p-3 text-center border-b border-gray-100';
+            td.textContent = valor.toFixed(2);
+
+            if (valor === valorMaximo) {
+                td.classList.add('text-red-600', 'bg-red-50', 'font-bold'); // Rojo automático
+            } else if (valor === valorMinimo) {
+                td.classList.add('text-green-600', 'bg-green-50', 'font-bold'); // Verde automático
+            }
+            filaDestino.appendChild(td);
+        });
+    </script>
+</body>
+</html>
+
+
