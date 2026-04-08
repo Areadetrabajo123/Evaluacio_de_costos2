@@ -3,809 +3,482 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Costos — Universidad Adventista de Bolivia</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Sistema de Costos — UAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d1b2e;
-  --surface:rgba(17,34,64,0.90);
-  --surface2:rgba(20,40,75,0.95);
-  --border:rgba(100,180,255,0.10);
-  --border2:rgba(100,180,255,0.20);
-  --amber:#f5a623;
-  --emerald:#00c9a7;
-  --indigo:#7b9fff;
-  --violet:#b97fff;
-  --crimson:#ff4e6a;
-  --sky:#38bdf8;
-  --text:#e4eeff;
-  --muted:rgba(228,238,255,0.50);
-  --faint:rgba(228,238,255,0.20);
+  --bg:#f0f4f8;
+  --bg2:#e8edf3;
+  --surface:#ffffff;
+  --surface2:#f8fafc;
+  --border:#d4dde8;
+  --border2:#b0bec5;
+  --amber:#e8942e;
+  --amber-light:#fff3e0;
+  --emerald:#26a69a;
+  --emerald-light:#e0f2f1;
+  --indigo:#5c6bc0;
+  --indigo-light:#e8eaf6;
+  --violet:#ab47bc;
+  --violet-light:#f3e5f5;
+  --crimson:#ef5350;
+  --crimson-light:#ffebee;
+  --sky:#29b6f6;
+  --sky-light:#e1f5fe;
+  --text:#2c3e50;
+  --text2:#5a6a7a;
+  --muted:#8a99aa;
+  --faint:#b0bec5;
   --serif:'Cormorant Garamond',serif;
   --sans:'Outfit',sans-serif;
 }
 html{font-size:15px}
 body{
   background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;
-  background-image:
-    radial-gradient(ellipse 80% 55% at 5% 0%,rgba(0,120,255,0.14) 0%,transparent 58%),
-    radial-gradient(ellipse 55% 50% at 95% 100%,rgba(0,201,167,0.12) 0%,transparent 55%);
-  padding:40px 20px;
+  overflow-x:hidden;
 }
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(100,180,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(100,180,255,0.03) 1px,transparent 1px);
-  background-size:44px 44px;
+
+/* ==================== WELCOME SCREEN ==================== */
+#welcome{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#1a237e 0%,#0d47a1 30%,#01579b 60%,#004d40 100%);
+  transition:opacity 1s ease,transform 1s ease;
 }
+#welcome.fade-out{opacity:0;transform:scale(1.05);pointer-events:none}
+#welcome::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(255,255,255,0.06) 0%,transparent 40%),
+    radial-gradient(circle at 80% 70%,rgba(0,230,118,0.06) 0%,transparent 40%);
+}
+/* Floating particles */
+#welcome::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(2px 2px at 15% 25%,rgba(255,255,255,0.15),transparent),
+    radial-gradient(2px 2px at 85% 15%,rgba(255,255,255,0.1),transparent),
+    radial-gradient(2px 2px at 45% 75%,rgba(255,255,255,0.08),transparent),
+    radial-gradient(2px 2px at 75% 55%,rgba(255,255,255,0.12),transparent),
+    radial-gradient(2px 2px at 30% 85%,rgba(255,255,255,0.07),transparent),
+    radial-gradient(2px 2px at 60% 35%,rgba(255,255,255,0.11),transparent),
+    radial-gradient(2px 2px at 90% 80%,rgba(255,255,255,0.09),transparent),
+    radial-gradient(2px 2px at 10% 65%,rgba(255,255,255,0.06),transparent);
+  animation:twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle{0%{opacity:.5}100%{opacity:1}}
+
+.welcome-content{position:relative;text-align:center;z-index:1}
+.welcome-icon{
+  width:100px;height:100px;margin:0 auto 35px;
+  background:linear-gradient(135deg,#ff8f00,#ff6f00);
+  border-radius:26px;display:flex;align-items:center;justify-content:center;
+  font-size:44px;font-weight:700;color:#fff;font-family:var(--serif);
+  box-shadow:0 15px 60px rgba(255,143,0,0.4);
+  animation:float 3s ease-in-out infinite;
+  position:relative;
+}
+.welcome-icon::after{
+  content:'';position:absolute;inset:-4px;border-radius:30px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
+  z-index:-1;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+.welcome-line1{
+  font-family:var(--serif);font-size:52px;font-weight:700;
+  color:#fff;margin-bottom:14px;
+  opacity:0;animation:fadeUp 1s ease 0.4s forwards;
+  text-shadow:0 2px 30px rgba(0,0,0,0.3);
+}
+.welcome-line2{
+  font-size:20px;color:rgba(255,255,255,0.85);letter-spacing:.2em;text-transform:uppercase;
+  font-weight:500;margin-bottom:14px;
+  opacity:0;animation:fadeUp 1s ease 0.9s forwards;
+}
+.welcome-line3{
+  font-family:var(--serif);font-size:32px;color:#ffc107;font-weight:600;
+  opacity:0;animation:fadeUp 1s ease 1.4s forwards;
+  text-shadow:0 2px 20px rgba(255,193,7,0.3);
+}
+.welcome-progress{
+  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+  width:220px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;
+  overflow:hidden;z-index:1;
+}
+.welcome-progress-bar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#ff8f00,#ffc107,#00e676);
+  border-radius:4px;
+  animation:progressBar 4.5s ease 0.5s forwards;
+}
+@keyframes progressBar{to{width:100%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+/* ==================== MAIN LAYOUT ==================== */
+#mainApp{
+  position:relative;z-index:1;
+  opacity:0;transition:opacity 1s ease 0.2s;
+  max-width:850px;margin:0 auto;padding:30px 20px 60px;
+}
+#mainApp.visible{opacity:1}
 
 /* HEADER */
-header{
-  position:relative;z-index:2;max-width:1400px;margin:0 auto 40px;
-  text-align:center;padding:30px 20px;
-  background:linear-gradient(135deg,rgba(245,166,35,0.1),rgba(123,159,255,0.1));
-  border:1px solid var(--border2);border-radius:20px;
-  box-shadow:0 8px 40px rgba(0,0,0,.4);
+.main-header{
+  text-align:center;padding:40px 20px 35px;margin-bottom:35px;
+  position:relative;
 }
-.logo-main{
-  width:70px;height:70px;margin:0 auto 16px;
-  background:linear-gradient(135deg,var(--amber),#d06c00);
-  border-radius:16px;display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:36px;font-weight:700;color:#fff;
-  box-shadow:0 6px 30px rgba(245,166,35,.4);
+.header-logo{
+  width:65px;height:65px;margin:0 auto 18px;
+  background:linear-gradient(135deg,#ff8f00,#f57c00);
+  border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;
+  box-shadow:0 8px 30px rgba(245,124,0,0.3);
 }
-header h1{font-family:var(--serif);font-size:32px;font-weight:700;color:#e8f0ff;margin-bottom:8px}
-header p{font-size:14px;color:var(--muted);letter-spacing:.04em}
+.main-header h1{
+  font-family:var(--serif);font-size:30px;font-weight:700;
+  color:var(--text);margin-bottom:6px;
+}
+.main-header h1 span{color:var(--amber)}
+.main-header p{font-size:13px;color:var(--muted);letter-spacing:.05em}
 
-/* CONTAINER */
-.container{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:24px}
-
-/* SECTION */
-.section{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:24px;position:relative;overflow:hidden;
-  transition:transform .2s,box-shadow .2s;
+/* CATEGORY SECTIONS */
+.category{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;margin-bottom:14px;
+  overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
 }
-.section:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
-.section::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--amber),var(--indigo));
+.category:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+.category.open{
+  box-shadow:0 8px 40px rgba(0,0,0,0.1);
+  border-color:var(--border2);
 }
-.section-title{
-  font-family:var(--serif);font-size:20px;font-weight:700;
-  color:var(--amber);margin-bottom:16px;display:flex;align-items:center;gap:10px;
-  padding-bottom:12px;border-bottom:1px solid var(--border);
+.category-header{
+  display:flex;align-items:center;gap:16px;
+  padding:20px 24px;cursor:pointer;
+  transition:background 0.2s;
+  user-select:none;
 }
-.section-icon{
-  width:32px;height:32px;border-radius:8px;
+.category-header:hover{background:var(--surface2)}
+.cat-icon{
+  width:48px;height:48px;border-radius:14px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(245,166,35,.15);color:var(--amber);
-  font-size:18px;
+  font-size:22px;flex-shrink:0;
+  transition:transform 0.3s,box-shadow 0.3s;
 }
-
-/* FILE LIST */
-.file-list{list-style:none;display:flex;flex-direction:column;gap:8px}
-.file-item{
-  display:flex;align-items:center;gap:12px;padding:12px 14px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:10px;text-decoration:none;color:var(--text);
-  transition:all .2s;
+.category.open .cat-icon{transform:scale(1.08)}
+.cat-icon.comparativa{background:var(--indigo-light);color:var(--indigo)}
+.cat-icon.promedio{background:var(--emerald-light);color:var(--emerald)}
+.cat-icon.proveedores{background:var(--amber-light);color:var(--amber)}
+.cat-info{flex:1}
+.cat-title{font-weight:600;font-size:16px;color:var(--text)}
+.cat-subtitle{font-size:12px;color:var(--muted);margin-top:3px}
+.cat-badge{
+  font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.06em;margin-left:8px;vertical-align:middle;
 }
-.file-item:hover{
-  background:rgba(245,166,35,.1);border-color:var(--amber);
-  transform:translateX(4px);
-}
-.file-icon{
-  width:36px;height:36px;border-radius:8px;
+.cat-badge.new{background:var(--emerald-light);color:var(--emerald)}
+.cat-badge.current{background:var(--indigo-light);color:var(--indigo)}
+.cat-arrow{
+  width:32px;height:32px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;flex-shrink:0;
+  background:var(--surface2);color:var(--muted);
+  transition:transform 0.4s,background 0.3s,color 0.3s;
+  flex-shrink:0;font-size:16px;
 }
-.file-icon.comparativa{background:rgba(123,159,255,.2);color:var(--indigo)}
-.file-icon.2025{background:rgba(0,201,167,.2);color:var(--emerald)}
-.file-icon.2026{background:rgba(255,78,106,.2);color:var(--crimson)}
-.file-icon.anual{background:rgba(245,166,35,.2);color:var(--amber)}
+.category.open .cat-arrow{transform:rotate(90deg);background:var(--amber-light);color:var(--amber)}
 
-.file-info{flex:1;min-width:0}
-.file-name{font-weight:600;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.file-desc{font-size:11px;color:var(--muted);margin-top:2px}
-
-.file-arrow{
-  font-size:18px;color:var(--muted);transition:transform .2s;
+.cat-content{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.4s;
+  opacity:0;
 }
-.file-item:hover .file-arrow{transform:translateX(4px);color:var(--amber)}
+.category.open .cat-content{max-height:3000px;opacity:1}
+.cat-content-inner{padding:0 24px 22px;border-top:1px solid var(--border)}
 
 /* SUBCATEGORY */
-.subcategory{margin-top:16px;padding-top:16px;border-top:1px dashed var(--border)}
-.subcategory-title{
-  font-size:12px;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--muted);font-weight:700;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
+.subcategory{margin-top:16px}
+.sub-header{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-radius:12px;cursor:pointer;
+  transition:background 0.2s;
+  user-select:none;
 }
-.subcategory-icon{width:20px;height:20px;border-radius:6px;background:rgba(100,180,255,.15);display:flex;align-items:center;justify-content:center;font-size:12px}
+.sub-header:hover{background:var(--surface2)}
+.sub-icon{
+  width:32px;height:32px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;
+  background:var(--indigo-light);color:var(--indigo);
+}
+.sub-title{font-size:13px;font-weight:600;color:var(--indigo);text-transform:uppercase;letter-spacing:.06em}
+.sub-arrow{
+  font-size:14px;color:var(--faint);transition:transform 0.3s;margin-left:auto;
+}
+.subcategory.open .sub-arrow{transform:rotate(90deg);color:var(--indigo)}
+.sub-content{
+  max-height:0;overflow:hidden;
+  transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.subcategory.open .sub-content{max-height:800px}
+.sub-content-inner{padding:6px 0 6px 44px}
 
-/* BADGE */
-.badge{
-  display:inline-flex;align-items:center;padding:3px 10px;
-  border-radius:20px;font-size:10px;font-weight:700;
-  letter-spacing:.05em;text-transform:uppercase;margin-left:8px;
+/* FILE LINKS */
+.file-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.file-link{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 16px;border-radius:12px;
+  text-decoration:none;color:var(--text);
+  background:var(--surface2);
+  border:1px solid transparent;
+  transition:all 0.25s;
 }
-.badge-new{background:rgba(0,201,167,.2);color:var(--emerald);border:1px solid rgba(0,201,167,.3)}
-.badge-current{background:rgba(255,78,106,.2);color:var(--crimson);border:1px solid rgba(255,78,106,.3)}
+.file-link:hover{
+  background:#fff;
+  border-color:var(--border2);
+  transform:translateX(6px);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.file-link .f-icon{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+  background:var(--amber-light);
+}
+.file-link .f-info{flex:1;min-width:0}
+.file-link .f-name{font-weight:500;font-size:13.5px}
+.file-link .f-desc{font-size:10.5px;color:var(--muted);margin-top:2px}
+.file-link .f-arrow{
+  font-size:14px;color:var(--faint);transition:transform 0.2s,color 0.2s;
+}
+.file-link:hover .f-arrow{transform:translateX(4px);color:var(--amber)}
 
 /* FOOTER */
-footer{
-  max-width:1400px;margin:40px auto 0;text-align:center;
-  padding:20px;font-size:12px;color:var(--faint);
+.main-footer{
+  text-align:center;padding:30px 20px;margin-top:20px;
   border-top:1px solid var(--border);
 }
+.main-footer p{font-size:11px;color:var(--faint);letter-spacing:.04em}
 
 /* RESPONSIVE */
-@media(max-width:768px){
-  .container{grid-template-columns:1fr}
-  header h1{font-size:24px}
+@media(max-width:600px){
+  .welcome-line1{font-size:36px}
+  .welcome-line2{font-size:16px}
+  .welcome-line3{font-size:24px}
+  .main-header h1{font-size:24px}
+  .category-header{padding:16px 18px;gap:12px}
+  .cat-icon{width:42px;height:42px;font-size:20px}
+  .cat-content-inner{padding:0 18px 18px}
+  .sub-content-inner{padding:6px 0 6px 32px}
 }
-
-/* ANIMATION */
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.section{animation:fadeIn .5s ease both}
-.section:nth-child(1){animation-delay:.1s}
-.section:nth-child(2){animation-delay:.2s}
-.section:nth-child(3){animation-delay:.3s}
-.section:nth-child(4){animation-delay:.4s}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-main">UAB</div>
-  <h1>Sistema de Gestión de Costos</h1>
-  <p>Universidad Adventista de Bolivia · Dashboard Interactivo de Costos de Insumos</p>
-</header>
+<!-- ==================== WELCOME SCREEN ==================== -->
+<div id="welcome">
+  <div class="welcome-content">
+    <div class="welcome-icon">UAB</div>
+    <div class="welcome-line1">Bienvenidos</div>
+    <div class="welcome-line2">Almacén Comedor</div>
+    <div class="welcome-line3">2025 — 2026</div>
+  </div>
+  <div class="welcome-progress">
+    <div class="welcome-progress-bar"></div>
+  </div>
+</div>
 
-<div class="container">
+<!-- ==================== MAIN APP ==================== -->
+<div id="mainApp">
 
-  <!-- COMPARATIVA 2025 vs 2026 -->
-  <div class="section">
-    <div class="section-title">
-      <div class="section-icon">📊</div>
-      Comparativa Enero-Marzo (2025 vs 2026)
-    </div>
-    <ul class="file-list">
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ARROZ.html" class="file-item">
-        <div class="file-icon comparativa">🍚</div>
-        <div class="file-info">
-          <div class="file-name">Arroz Grano de Oro</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/TOMATE.html" class="file-item">
-        <div class="file-icon comparativa">🍅</div>
-        <div class="file-info">
-          <div class="file-name">Tomate</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/CEBOLLA.html" class="file-item">
-        <div class="file-icon comparativa">🧅</div>
-        <div class="file-info">
-          <div class="file-name">Cebolla Roja</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ZANAHORIA.html" class="file-item">
-        <div class="file-icon comparativa">🥕</div>
-        <div class="file-info">
-          <div class="file-name">Zanahoria</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HARINA.html" class="file-item">
-        <div class="file-icon comparativa">🌾</div>
-        <div class="file-info">
-          <div class="file-name">Harina Blanca</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/AZUCAR.html" class="file-item">
-        <div class="file-icon comparativa">🍬</div>
-        <div class="file-info">
-          <div class="file-name">Azúcar</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ACEITE.html" class="file-item">
-        <div class="file-icon comparativa">🫒</div>
-        <div class="file-info">
-          <div class="file-name">Aceite</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HUEVO.html" class="file-item">
-        <div class="file-icon comparativa">🥚</div>
-        <div class="file-info">
-          <div class="file-name">Huevo</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/LECHE.html" class="file-item">
-        <div class="file-icon comparativa">🥛</div>
-        <div class="file-info">
-          <div class="file-name">Leche</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/QUESORIO.html" class="file-item">
-        <div class="file-icon comparativa">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Queso Río</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MOSARELLA.html" class="file-item">
-        <div class="file-icon comparativa">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Mozzarella</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/YOGURT.html" class="file-item">
-        <div class="file-icon comparativa">🥣</div>
-        <div class="file-info">
-          <div class="file-name">Yogurt</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPA_HOLANDESA.html" class="file-item">
-        <div class="file-icon comparativa">🥔</div>
-        <div class="file-info">
-          <div class="file-name">Papa Holandesa</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/BROCOLI.html" class="file-item">
-        <div class="file-icon comparativa">🥦</div>
-        <div class="file-info">
-          <div class="file-name">Brócoli</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MORRON.html" class="file-item">
-        <div class="file-icon comparativa">🫑</div>
-        <div class="file-info">
-          <div class="file-name">Morrón</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPAYA.html" class="file-item">
-        <div class="file-icon comparativa">🥭</div>
-        <div class="file-info">
-          <div class="file-name">Papaya</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PIÑA.html" class="file-item">
-        <div class="file-icon comparativa">🍍</div>
-        <div class="file-info">
-          <div class="file-name">Piña</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PLATANO.html" class="file-item">
-        <div class="file-icon comparativa">🍌</div>
-        <div class="file-info">
-          <div class="file-name">Plátano</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/SANDIA.html" class="file-item">
-        <div class="file-icon comparativa">🍉</div>
-        <div class="file-info">
-          <div class="file-name">Sandía</div>
-          <div class="file-desc">Comparativo trimestral completo</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-    </ul>
+  <div class="main-header">
+    <div class="header-logo">UAB</div>
+    <h1>Sistema de Gestión de <span>Costos</span></h1>
+    <p>Universidad Adventista de Bolivia · Panel de Control</p>
   </div>
 
-  <!-- GESTIÓN 2025 -->
-  <div class="section">
-    <div class="section-title">
-      <div class="section-icon">📅</div>
-      Enero-Marzo 2025
-      <span class="badge badge-new">Histórico</span>
+  <!-- 1. COMPARATIVA -->
+  <div class="category" id="cat-comparativa">
+    <div class="category-header" onclick="openCategory('cat-comparativa')">
+      <div class="cat-icon comparativa">📊</div>
+      <div class="cat-info">
+        <div class="cat-title">Comparativa de Costos <span class="cat-badge new">Nuevo</span></div>
+        <div class="cat-subtitle">Enero-Marzo 2025 vs 2026 · 19 productos</div>
+      </div>
+      <div class="cat-arrow">›</div>
     </div>
-    <ul class="file-list">
-      <li><a href="Enero_Marzo 2025/TOMATE2025.html" class="file-item">
-        <div class="file-icon 2025">🍅</div>
-        <div class="file-info">
-          <div class="file-name">Tomate</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/CEBOLLA2025.html" class="file-item">
-        <div class="file-icon 2025">🧅</div>
-        <div class="file-info">
-          <div class="file-name">Cebolla Roja</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/ZANAHORIA2025.html" class="file-item">
-        <div class="file-icon 2025">🥕</div>
-        <div class="file-info">
-          <div class="file-name">Zanahoria</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/HARINA2025.html" class="file-item">
-        <div class="file-icon 2025">🌾</div>
-        <div class="file-info">
-          <div class="file-name">Harina Blanca</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/AZUCAR2025.html" class="file-item">
-        <div class="file-icon 2025">🍬</div>
-        <div class="file-info">
-          <div class="file-name">Azúcar</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/ACEITE2025.html" class="file-item">
-        <div class="file-icon 2025">🫒</div>
-        <div class="file-info">
-          <div class="file-name">Aceite</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/HUEVO2025.html" class="file-item">
-        <div class="file-icon 2025">🥚</div>
-        <div class="file-info">
-          <div class="file-name">Huevo</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/LECHE2025.html" class="file-item">
-        <div class="file-icon 2025">🥛</div>
-        <div class="file-info">
-          <div class="file-name">Leche</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/QUESORIO2025.html" class="file-item">
-        <div class="file-icon 2025">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Queso Río</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/MOSARELLA2025.html" class="file-item">
-        <div class="file-icon 2025">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Mozzarella</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/YOGURT2025.html" class="file-item">
-        <div class="file-icon 2025">🥣</div>
-        <div class="file-info">
-          <div class="file-name">Yogurt</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/PAPA_HOLANDESA2025.html" class="file-item">
-        <div class="file-icon 2025">🥔</div>
-        <div class="file-info">
-          <div class="file-name">Papa Holandesa</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/BROCOLI2025.html" class="file-item">
-        <div class="file-icon 2025">🥦</div>
-        <div class="file-info">
-          <div class="file-name">Brócoli</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/MORRON2025.html" class="file-item">
-        <div class="file-icon 2025">🫑</div>
-        <div class="file-info">
-          <div class="file-name">Morrón</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/PAPAYA2025.html" class="file-item">
-        <div class="file-icon 2025">🥭</div>
-        <div class="file-info">
-          <div class="file-name">Papaya</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/PIÑA2025.html" class="file-item">
-        <div class="file-icon 2025">🍍</div>
-        <div class="file-info">
-          <div class="file-name">Piña</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/PLATANO2025.html" class="file-item">
-        <div class="file-icon 2025">🍌</div>
-        <div class="file-info">
-          <div class="file-name">Plátano</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero_Marzo 2025/SANDIA2025.html" class="file-item">
-        <div class="file-icon 2025">🍉</div>
-        <div class="file-info">
-          <div class="file-name">Sandía</div>
-          <div class="file-desc">Gestión primer trimestre 2025</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-    </ul>
+    <div class="cat-content"><div class="cat-content-inner">
+      <ul class="file-list">
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ACEITE.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ARROZ.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz Grano de Oro</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/AZUCAR.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar Blanca</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/BROCOLI.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/CEBOLLA.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla Roja</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HARINA.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina Blanca</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HUEVO.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/LECHE.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MORRON.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón Verde</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MOSARELLA.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozzarella</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPA_HOLANDESA.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPAYA.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PIÑA.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PLATANO.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/QUESORIO.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/SANDIA.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/TOMATE.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/YOGURT.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+        <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ZANAHORIA.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
+      </ul>
+    </div></div>
   </div>
 
-  <!-- GESTIÓN 2026 -->
-  <div class="section">
-    <div class="section-title">
-      <div class="section-icon">📅</div>
-      Enero-Marzo 2026
-      <span class="badge badge-current">Actual</span>
+  <!-- 2. PROMEDIO ANUAL 2025 -->
+  <div class="category" id="cat-promedio">
+    <div class="category-header" onclick="openCategory('cat-promedio')">
+      <div class="cat-icon promedio">📈</div>
+      <div class="cat-info">
+        <div class="cat-title">Promedio Anual 2025 <span class="cat-badge current">2025</span></div>
+        <div class="cat-subtitle">Datos históricos organizados por categoría</div>
+      </div>
+      <div class="cat-arrow">›</div>
     </div>
-    <ul class="file-list">
-      <li><a href="Enero-Marzo 2026/TOMATE2026.html" class="file-item">
-        <div class="file-icon 2026">🍅</div>
-        <div class="file-info">
-          <div class="file-name">Tomate</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
+    <div class="cat-content"><div class="cat-content-inner">
+
+      <div class="subcategory" id="sub-abarrotes">
+        <div class="sub-header" onclick="toggleSub('sub-abarrotes')">
+          <div class="sub-icon">🥫</div>
+          <span class="sub-title">Abarrotes</span>
+          <div class="sub-arrow">›</div>
         </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/CEBOLLA2026.html" class="file-item">
-        <div class="file-icon 2026">🧅</div>
-        <div class="file-info">
-          <div class="file-name">Cebolla Roja</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
+        <div class="sub-content"><div class="sub-content-inner">
+          <ul class="file-list">
+            <li><a href="Promedio anual 2025/Abarrotes/Aceite.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Abarrotes/Arroz.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Abarrotes/Azucar.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Abarrotes/Harina.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina Blanca</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Abarrotes/Huevo.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="subcategory" id="sub-frutas">
+        <div class="sub-header" onclick="toggleSub('sub-frutas')">
+          <div class="sub-icon">🍎</div>
+          <span class="sub-title">Frutas</span>
+          <div class="sub-arrow">›</div>
         </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/ZANAHORIA2026.html" class="file-item">
-        <div class="file-icon 2026">🥕</div>
-        <div class="file-info">
-          <div class="file-name">Zanahoria</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
+        <div class="sub-content"><div class="sub-content-inner">
+          <ul class="file-list">
+            <li><a href="Promedio anual 2025/Frutas/Papaya.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Frutas/Pina.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Frutas/Platano.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Frutas/Sandia.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="subcategory" id="sub-lacteos">
+        <div class="sub-header" onclick="toggleSub('sub-lacteos')">
+          <div class="sub-icon">🥛</div>
+          <span class="sub-title">Lácteos</span>
+          <div class="sub-arrow">›</div>
         </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/HARINA2026.html" class="file-item">
-        <div class="file-icon 2026">🌾</div>
-        <div class="file-info">
-          <div class="file-name">Harina Blanca</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
+        <div class="sub-content"><div class="sub-content-inner">
+          <ul class="file-list">
+            <li><a href="Promedio anual 2025/Lacteos/Leche.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche Fresca</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Lacteos/Mosarella.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozzarella</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Lacteos/Queso_Rio.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Lacteos/Yogurt.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="subcategory" id="sub-verduras">
+        <div class="sub-header" onclick="toggleSub('sub-verduras')">
+          <div class="sub-icon">🥬</div>
+          <span class="sub-title">Verduras</span>
+          <div class="sub-arrow">›</div>
         </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/AZUCAR2026.html" class="file-item">
-        <div class="file-icon 2026">🍬</div>
-        <div class="file-info">
-          <div class="file-name">Azúcar</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/ACEITE2026.html" class="file-item">
-        <div class="file-icon 2026">🫒</div>
-        <div class="file-info">
-          <div class="file-name">Aceite</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/HUEVO2026.html" class="file-item">
-        <div class="file-icon 2026">🥚</div>
-        <div class="file-info">
-          <div class="file-name">Huevo</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/LECHE2026.html" class="file-item">
-        <div class="file-icon 2026">🥛</div>
-        <div class="file-info">
-          <div class="file-name">Leche</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/QUESORIO2026.html" class="file-item">
-        <div class="file-icon 2026">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Queso Río</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/MUSARELLA2026.html" class="file-item">
-        <div class="file-icon 2026">🧀</div>
-        <div class="file-info">
-          <div class="file-name">Mozzarella</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/YOGURT2026.html" class="file-item">
-        <div class="file-icon 2026">🥣</div>
-        <div class="file-info">
-          <div class="file-name">Yogurt</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/PAPA_HOLANDESA2026.html" class="file-item">
-        <div class="file-icon 2026">🥔</div>
-        <div class="file-info">
-          <div class="file-name">Papa Holandesa</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/BROCOLI2026.html" class="file-item">
-        <div class="file-icon 2026">🥦</div>
-        <div class="file-info">
-          <div class="file-name">Brócoli</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/MORRON2026.html" class="file-item">
-        <div class="file-icon 2026">🫑</div>
-        <div class="file-info">
-          <div class="file-name">Morrón</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/PAPAYA2026.html" class="file-item">
-        <div class="file-icon 2026">🥭</div>
-        <div class="file-info">
-          <div class="file-name">Papaya</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/PIÑA2026.html" class="file-item">
-        <div class="file-icon 2026">🍍</div>
-        <div class="file-info">
-          <div class="file-name">Piña</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/PLATANO2026.html" class="file-item">
-        <div class="file-icon 2026">🍌</div>
-        <div class="file-info">
-          <div class="file-name">Plátano</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-      <li><a href="Enero-Marzo 2026/SANDIA2026.html" class="file-item">
-        <div class="file-icon 2026">🍉</div>
-        <div class="file-info">
-          <div class="file-name">Sandía</div>
-          <div class="file-desc">Gestión primer trimestre 2026</div>
-        </div>
-        <span class="file-arrow">→</span>
-      </a></li>
-    </ul>
+        <div class="sub-content"><div class="sub-content-inner">
+          <ul class="file-list">
+            <li><a href="Promedio anual 2025/Verduras/Brocoli.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Verduras/Cebolla.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla Roja</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Verduras/Morron.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón Verde</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Verduras/Papa_Holandesa.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Verduras/Tomate.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Promedio anual 2025/Verduras/Zanahoria.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
+          </ul>
+        </div></div>
+      </div>
+
+    </div></div>
   </div>
 
-  <!-- PROMEDIO ANUAL 2025 -->
-  <div class="section">
-    <div class="section-title">
-      <div class="section-icon">📈</div>
-      Promedio Anual 2025
-    </div>
-    
-    <div class="subcategory">
-      <div class="subcategory-title">
-        <div class="subcategory-icon">🥫</div>
-        Abarrotes
+  <!-- 3. PROVEEDORES -->
+  <div class="category" id="cat-proveedores">
+    <div class="category-header" onclick="openCategory('cat-proveedores')">
+      <div class="cat-icon proveedores">👥</div>
+      <div class="cat-info">
+        <div class="cat-title">Proveedores</div>
+        <div class="cat-subtitle">Directorio de proveedores registrados</div>
       </div>
-      <ul class="file-list">
-        <li><a href="Promedio anual 2025/Abarrotes/Aceite.html" class="file-item">
-          <div class="file-icon anual">🫒</div>
-          <div class="file-info">
-            <div class="file-name">Aceite</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Abarrotes/Huevo.html" class="file-item">
-          <div class="file-icon anual">🥚</div>
-          <div class="file-info">
-            <div class="file-name">Huevo</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-      </ul>
+      <div class="cat-arrow">›</div>
     </div>
+    <div class="cat-content"><div class="cat-content-inner">
+      <ul class="file-list">
+        <li><a href="Proveedores/proveedores.html" class="file-link"><div class="f-icon">📋</div><div class="f-info"><div class="f-name">Lista de Proveedores</div><div class="f-desc">Directorio completo</div></div><span class="f-arrow">→</span></a></li>
+      </ul>
+    </div></div>
+  </div>
 
-    <div class="subcategory">
-      <div class="subcategory-title">
-        <div class="subcategory-icon">🍎</div>
-        Frutas
-      </div>
-      <ul class="file-list">
-        <li><a href="Promedio anual 2025/Frutas/Papaya.html" class="file-item">
-          <div class="file-icon anual">🥭</div>
-          <div class="file-info">
-            <div class="file-name">Papaya</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Frutas/Piña.html" class="file-item">
-          <div class="file-icon anual">🍍</div>
-          <div class="file-info">
-            <div class="file-name">Piña</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Frutas/Platano.html" class="file-item">
-          <div class="file-icon anual">🍌</div>
-          <div class="file-info">
-            <div class="file-name">Plátano</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Frutas/Sandia.html" class="file-item">
-          <div class="file-icon anual">🍉</div>
-          <div class="file-info">
-            <div class="file-name">Sandía</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-      </ul>
-    </div>
-
-    <div class="subcategory">
-      <div class="subcategory-title">
-        <div class="subcategory-icon">🥛</div>
-        Lácteos
-      </div>
-      <ul class="file-list">
-        <li><a href="Promedio anual 2025/Lacteos/Mosarella.html" class="file-item">
-          <div class="file-icon anual">🧀</div>
-          <div class="file-info">
-            <div class="file-name">Mozzarella</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Lacteos/Queso_Rio.html" class="file-item">
-          <div class="file-icon anual">🧀</div>
-          <div class="file-info">
-            <div class="file-name">Queso Río</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Lacteos/Yogurt.html" class="file-item">
-          <div class="file-icon anual">🥣</div>
-          <div class="file-info">
-            <div class="file-name">Yogurt</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-      </ul>
-    </div>
-
-    <div class="subcategory">
-      <div class="subcategory-title">
-        <div class="subcategory-icon">🥬</div>
-        Verduras
-      </div>
-      <ul class="file-list">
-        <li><a href="Promedio anual 2025/Verduras/Brocoli.html" class="file-item">
-          <div class="file-icon anual">🥦</div>
-          <div class="file-info">
-            <div class="file-name">Brócoli</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Verduras/Cebolla.html" class="file-item">
-          <div class="file-icon anual">🧅</div>
-          <div class="file-info">
-            <div class="file-name">Cebolla</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Verduras/Morron.html" class="file-item">
-          <div class="file-icon anual">🫑</div>
-          <div class="file-info">
-            <div class="file-name">Morrón</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Verduras/Papa_Holandesa.html" class="file-item">
-          <div class="file-icon anual">🥔</div>
-          <div class="file-info">
-            <div class="file-name">Papa Holandesa</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Verduras/Tomate.html" class="file-item">
-          <div class="file-icon anual">🍅</div>
-          <div class="file-info">
-            <div class="file-name">Tomate</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-        <li><a href="Promedio anual 2025/Verduras/Zanahoria.html" class="file-item">
-          <div class="file-icon anual">🥕</div>
-          <div class="file-info">
-            <div class="file-name">Zanahoria</div>
-            <div class="file-desc">Promedio anual 2025</div>
-          </div>
-          <span class="file-arrow">→</span>
-        </a></li>
-      </ul>
-    </div>
+  <div class="main-footer">
+    <p>Universidad Adventista de Bolivia · Sistema de Gestión de Costos</p>
+    <p style="margin-top:6px;opacity:.5">Abril 2026 · Uso interno — Junta Administrativa</p>
   </div>
 
 </div>
 
-<footer>
-  <p>Universidad Adventista de Bolivia · Sistema de Gestión de Costos</p>
-  <p style="margin-top:8px;opacity:.6">Generado Abril 2026 · Uso interno — Junta Administrativa</p>
-</footer>
+<script>
+// Welcome screen — only show once per session
+window.addEventListener('load', function(){
+  if(sessionStorage.getItem('welcomeShown')){
+    // Skip welcome, show app directly
+    document.getElementById('welcome').style.display='none';
+    document.getElementById('mainApp').classList.add('visible');
+  } else {
+    // Show welcome for 5 seconds
+    setTimeout(function(){
+      document.getElementById('welcome').classList.add('fade-out');
+      setTimeout(function(){
+        document.getElementById('welcome').style.display='none';
+        document.getElementById('mainApp').classList.add('visible');
+        sessionStorage.setItem('welcomeShown','true');
+      },1000);
+    },5000);
+  }
+});
 
+// Open category — accordion: close all others first
+function openCategory(id){
+  var cats = document.querySelectorAll('.category');
+  cats.forEach(function(cat){
+    if(cat.id !== id && cat.classList.contains('open')){
+      cat.classList.remove('open');
+    }
+  });
+  document.getElementById(id).classList.toggle('open');
+}
+
+// Toggle subcategory
+function toggleSub(id){
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
 </body>
 </html>
