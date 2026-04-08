@@ -3,559 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directorio de Proveedores UAB 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Proveedores UAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0d1b2e;
-  --surface:rgba(17,34,64,0.90);
-  --border:rgba(100,180,255,0.10);
-  --border2:rgba(100,180,255,0.20);
-  --amber:#f5a623;
-  --emerald:#00c9a7;
-  --indigo:#7b9fff;
-  --violet:#b97fff;
-  --crimson:#ff4e6a;
-  --sky:#38bdf8;
-  --text:#e4eeff;
-  --muted:rgba(228,238,255,0.50);
-  --faint:rgba(228,238,255,0.20);
-  --serif:'Cormorant Garamond',serif;
-  --sans:'Outfit',sans-serif;
-}
+  :root {
+    --bg: #0d0f14;
+    --surface: #141720;
+    --border: #252a3a;
+    --accent: #c9a84c;
+    --accent2: #e8c97a;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 48px 32px;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% -10%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px);
+  }
 
-body{
-  background:var(--bg);
-  font-family:var(--sans);
-  color:var(--text);
-  min-height:100vh;
-  background-image:
-    radial-gradient(ellipse 80% 55% at 5% 0%,   rgba(0,120,255,0.14) 0%,transparent 58%),
-    radial-gradient(ellipse 55% 50% at 95% 100%, rgba(0,201,167,0.12) 0%,transparent 55%),
-    radial-gradient(ellipse 45% 35% at 50% 50%,  rgba(123,159,255,0.06) 0%,transparent 70%);
-}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:
-    linear-gradient(rgba(100,180,255,0.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(100,180,255,0.03) 1px,transparent 1px);
-  background-size:44px 44px;
-}
+  .header { text-align:center; margin-bottom:48px; animation:fadeDown 0.8s ease both; }
+  .header-badge {
+    display:inline-block;
+    background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));
+    border:1px solid rgba(201,168,76,0.3); color:var(--accent2);
+    font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase;
+    padding:6px 20px; border-radius:50px; margin-bottom:16px;
+  }
+  .header h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(34px,5vw,60px); font-weight:900;
+    background:linear-gradient(135deg,var(--accent2) 0%,#fff 50%,var(--accent) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1.1; letter-spacing:-1px;
+  }
+  .header p { margin-top:10px; color:var(--muted); font-size:14px; letter-spacing:0.5px; }
+  .header-line { width:80px; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); margin:18px auto 0; }
 
-/* ── HEADER ── */
-header{
-  position:relative;z-index:2;
-  background:linear-gradient(90deg,rgba(8,22,48,0.98),rgba(11,20,42,0.98));
-  border-bottom:1px solid var(--border2);
-  padding:20px 40px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 4px 40px rgba(0,0,0,.5);
-}
-header::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--amber) 25%,var(--emerald) 55%,var(--indigo) 80%,transparent);
-  opacity:.8;
-}
-.h-left{display:flex;align-items:center;gap:18px}
-.logo{
-  width:48px;height:48px;
-  background:linear-gradient(135deg,#d06c00,var(--amber));
-  border-radius:13px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:26px;font-weight:700;color:#fff;
-  box-shadow:0 4px 22px rgba(245,166,35,.40);
-}
-.h-meta .h-title{font-family:var(--serif);font-size:26px;font-weight:700;color:#e8f0ff;line-height:1.1;letter-spacing:.01em}
-.h-meta .h-sub{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
-.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.pill{
-  display:inline-flex;align-items:center;gap:7px;
-  background:rgba(0,201,167,.13);border:1px solid rgba(0,201,167,.38);
-  color:var(--emerald);font-size:12px;font-weight:600;letter-spacing:.1em;
-  padding:5px 15px;border-radius:20px;text-transform:uppercase;
-}
-.pill::before{content:'';width:7px;height:7px;background:var(--emerald);border-radius:50%;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.h-count{font-size:13px;color:var(--muted);letter-spacing:.04em}
-.h-count span{color:var(--amber);font-weight:700;font-size:16px}
+  .kpi-row {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:12px; margin-bottom:48px; animation:fadeUp 0.8s 0.2s ease both;
+  }
+  .kpi {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:16px 18px; text-align:center; position:relative; overflow:hidden;
+  }
+  .kpi::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:var(--kpi-color,var(--accent)); }
+  .kpi-number { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--kpi-color,var(--accent2)); line-height:1; }
+  .kpi-label { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:5px; }
 
-/* ── BODY ── */
-.body{position:relative;z-index:1;padding:32px 40px 44px}
+  .tier-section { margin-bottom:44px; }
+  .tier-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; animation:fadeUp 0.6s ease both; }
+  .tier-pill {
+    display:flex; align-items:center; gap:8px;
+    padding:6px 16px 6px 10px; border-radius:50px;
+    background:linear-gradient(135deg,var(--tier-bg,rgba(201,168,76,0.12)),transparent);
+    border:1px solid var(--tier-border,rgba(201,168,76,0.25)); white-space:nowrap;
+  }
+  .tier-icon { font-size:14px; }
+  .tier-dot { width:8px; height:8px; border-radius:50%; background:var(--tier-color,var(--accent)); box-shadow:0 0 7px var(--tier-color,var(--accent)); }
+  .tier-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--tier-color,var(--accent2)); }
+  .tier-count { font-size:11px; color:var(--muted); }
+  .tier-line { flex:1; height:1px; background:linear-gradient(90deg,var(--tier-border,rgba(201,168,76,0.2)),transparent); }
 
-/* ── SUMMARY STRIP ── */
-.summary{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
-  margin-bottom:32px;
-}
-.sum-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:14px;padding:16px 18px;
-  position:relative;overflow:hidden;
-  transition:transform .2s;
-}
-.sum-card:hover{transform:translateY(-2px)}
-.sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
-.sum-card.s1::before{background:linear-gradient(90deg,#d06c00,var(--amber))}
-.sum-card.s2::before{background:linear-gradient(90deg,#007a65,var(--emerald))}
-.sum-card.s3::before{background:linear-gradient(90deg,#2244bb,var(--indigo))}
-.sum-card.s4::before{background:linear-gradient(90deg,#7a2e2e,var(--crimson))}
-.sum-card.s5::before{background:linear-gradient(90deg,#6e30cc,var(--violet))}
-.sum-card::after{content:'';position:absolute;bottom:-20px;right:-12px;width:70px;height:70px;border-radius:50%;opacity:.12;filter:blur(18px)}
-.sum-card.s1::after{background:var(--amber)}.sum-card.s2::after{background:var(--emerald)}
-.sum-card.s3::after{background:var(--indigo)}.sum-card.s4::after{background:var(--crimson)}
-.sum-card.s5::after{background:var(--violet)}
-.sum-icon{font-size:22px;margin-bottom:8px}
-.sum-num{font-family:var(--serif);font-size:36px;font-weight:700;line-height:1;margin-bottom:3px}
-.sum-card.s1 .sum-num{color:var(--amber)}.sum-card.s2 .sum-num{color:var(--emerald)}
-.sum-card.s3 .sum-num{color:var(--indigo)}.sum-card.s4 .sum-num{color:var(--crimson)}
-.sum-card.s5 .sum-num{color:var(--violet)}
-.sum-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
 
-/* ── SECTION TITLE ── */
-.section-hd{
-  display:flex;align-items:center;gap:12px;margin-bottom:20px;
-}
-.section-hd::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
-.section-hd .s-icon{font-size:16px}
-.section-hd .s-title{font-family:var(--serif);font-size:19px;font-weight:700;color:#e8f0ff;white-space:nowrap}
-.section-hd .s-badge{
-  font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;
-  background:rgba(123,159,255,.12);color:var(--indigo);border:1px solid rgba(123,159,255,.22);
-}
+  .card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:17px 19px;
+    position:relative; overflow:hidden;
+    transition:transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    animation:fadeUp 0.5s ease both;
+  }
+  .card:hover { transform:translateY(-3px); box-shadow:0 10px 32px rgba(0,0,0,0.4); border-color:rgba(201,168,76,0.18); }
+  .card::after { content:''; position:absolute; top:0;left:0; width:3px; height:100%; background:var(--card-accent,var(--accent)); border-radius:0 2px 2px 0; }
 
-/* ── GRID ── */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:16px;
-  margin-bottom:36px;
-}
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:9px; }
+  .card-num {
+    width:25px; height:25px; border-radius:7px;
+    background:rgba(255,255,255,0.04); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:var(--muted); font-weight:600; flex-shrink:0;
+  }
+  .years-badge {
+    font-size:10px; font-weight:600;
+    padding:3px 9px; border-radius:50px;
+    background:var(--badge-bg,rgba(201,168,76,0.1));
+    color:var(--badge-color,var(--accent2));
+    border:1px solid var(--badge-border,rgba(201,168,76,0.2));
+  }
+  .card-name { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:700; color:var(--text); line-height:1.3; margin-bottom:9px; }
+  .products-label { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; }
+  .products-list { display:flex; flex-wrap:wrap; gap:4px; }
+  .product-tag {
+    font-size:10px; color:rgba(232,234,240,0.72);
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+    padding:2px 8px; border-radius:50px; line-height:1.6;
+  }
 
-/* ── SUPPLIER CARD ── */
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  position:relative;overflow:hidden;
-  transition:transform .2s,box-shadow .2s,border-color .2s;
-}
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 20px 55px rgba(0,0,0,.5);
-  border-color:var(--border2);
-}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px}
-.card-num{
-  font-family:var(--serif);font-size:13px;font-weight:700;
-  color:var(--muted);letter-spacing:.05em;
-  background:rgba(100,180,255,.07);border:1px solid rgba(100,180,255,.12);
-  padding:2px 8px;border-radius:8px;white-space:nowrap;flex-shrink:0;
-}
-.card-name{
-  font-size:14.5px;font-weight:700;color:#e8f0ff;line-height:1.25;
-  flex:1;
-}
-/* accent strip left */
-.card::before{
-  content:'';position:absolute;top:18px;left:0;
-  width:3px;height:36px;border-radius:0 3px 3px 0;
-}
-/* glow */
-.card::after{
-  content:'';position:absolute;bottom:-25px;right:-20px;
-  width:80px;height:80px;border-radius:50%;opacity:.09;filter:blur(22px);
-}
-/* colour variants — cycle through palette */
-.card.c0::before{background:var(--amber)}         .card.c0::after{background:var(--amber)}
-.card.c1::before{background:var(--emerald)}        .card.c1::after{background:var(--emerald)}
-.card.c2::before{background:var(--indigo)}         .card.c2::after{background:var(--indigo)}
-.card.c3::before{background:var(--violet)}         .card.c3::after{background:var(--violet)}
-.card.c4::before{background:var(--sky)}            .card.c4::after{background:var(--sky)}
-.card.c5::before{background:var(--crimson)}        .card.c5::after{background:var(--crimson)}
+  .card:nth-child(1){animation-delay:.04s} .card:nth-child(2){animation-delay:.08s}
+  .card:nth-child(3){animation-delay:.12s} .card:nth-child(4){animation-delay:.16s}
+  .card:nth-child(5){animation-delay:.20s} .card:nth-child(6){animation-delay:.24s}
 
-/* ── PRODUCT TAGS ── */
-.products{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-.prod-tag{
-  font-size:12px;font-weight:500;
-  padding:4px 11px;border-radius:20px;
-  border:1px solid;
-  line-height:1.3;
-  transition:opacity .15s;
-}
-.card.c0 .prod-tag{background:rgba(245,166,35,.10);color:rgba(245,166,35,.90);border-color:rgba(245,166,35,.22)}
-.card.c1 .prod-tag{background:rgba(0,201,167,.10);color:rgba(0,201,167,.90);border-color:rgba(0,201,167,.22)}
-.card.c2 .prod-tag{background:rgba(123,159,255,.10);color:rgba(123,159,255,.90);border-color:rgba(123,159,255,.22)}
-.card.c3 .prod-tag{background:rgba(185,127,255,.10);color:rgba(185,127,255,.90);border-color:rgba(185,127,255,.22)}
-.card.c4 .prod-tag{background:rgba(56,189,248,.10);color:rgba(56,189,248,.90);border-color:rgba(56,189,248,.22)}
-.card.c5 .prod-tag{background:rgba(255,78,106,.10);color:rgba(255,78,106,.90);border-color:rgba(255,78,106,.22)}
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(16px)}  to{opacity:1;transform:translateY(0)} }
 
-/* ── FOOTER ── */
-footer{
-  position:relative;z-index:1;
-  border-top:1px solid var(--border);
-  padding:16px 40px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.f-note{font-size:13px;color:var(--faint);letter-spacing:.04em}
-.f-brand{font-size:13px;color:var(--faint);font-family:var(--serif)}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.sum-card{animation:fadeUp .5s ease both}
-.sum-card:nth-child(1){animation-delay:.04s}.sum-card:nth-child(2){animation-delay:.10s}
-.sum-card:nth-child(3){animation-delay:.16s}.sum-card:nth-child(4){animation-delay:.22s}
-.sum-card:nth-child(5){animation-delay:.28s}
-.card{animation:fadeUp .45s ease both}
+  .footer { text-align:center; margin-top:52px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; letter-spacing:0.5px; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="h-left">
-    <div class="logo">A</div>
-    <div class="h-meta">
-      <div class="h-title">Directorio de Proveedores 2026</div>
-      <div class="h-sub">Universidad Adventista de Bolivia · Gestión de Abastecimiento</div>
-    </div>
-  </div>
-  <div class="h-right">
-    <div class="h-count">Total registrado: <span>24</span> proveedores activos</div>
-  </div>
-</header>
+<div class="header">
+  <div class="header-badge">Universidad Adventista de Bolivia</div>
+  <h1>Proveedores UAB</h1>
+  <p>Directorio oficial · Organizado por categoría de producto</p>
+  <div class="header-line"></div>
+</div>
 
-<div class="body">
+<div class="kpi-row">
+  <div class="kpi" style="--kpi-color:#c9a84c;"><div class="kpi-number">24</div><div class="kpi-label">Total proveedores</div></div>
+  <div class="kpi" style="--kpi-color:#5a9fd4;"><div class="kpi-number">5</div><div class="kpi-label">Lácteos</div></div>
+  <div class="kpi" style="--kpi-color:#e06b6b;"><div class="kpi-number">3</div><div class="kpi-label">Pastas &amp; Fideos</div></div>
+  <div class="kpi" style="--kpi-color:#4caf82;"><div class="kpi-number">3</div><div class="kpi-label">Harinas &amp; Soya</div></div>
+  <div class="kpi" style="--kpi-color:#e09a5a;"><div class="kpi-number">3</div><div class="kpi-label">Aderesos &amp; Salsas</div></div>
+  <div class="kpi" style="--kpi-color:#9b7fe8;"><div class="kpi-number">2</div><div class="kpi-label">Abarrotes</div></div>
+  <div class="kpi" style="--kpi-color:#4cba82;"><div class="kpi-number">2</div><div class="kpi-label">Frutas &amp; Verduras</div></div>
+  <div class="kpi" style="--kpi-color:#c9a84c;"><div class="kpi-number">2</div><div class="kpi-label">Chocolatería</div></div>
+</div>
 
-  <!-- SUMMARY STRIP -->
-  <div class="summary">
-    <div class="sum-card s1">
-      <div class="sum-icon">🏭</div>
-      <div class="sum-num">24</div>
-      <div class="sum-lbl">Proveedores Activos</div>
-    </div>
-    <div class="sum-card s2">
-      <div class="sum-icon">📦</div>
-      <div class="sum-num">45+</div>
-      <div class="sum-lbl">Productos Registrados</div>
-    </div>
-    <div class="sum-card s3">
-      <div class="sum-icon">🥬</div>
-      <div class="sum-num">5</div>
-      <div class="sum-lbl">Rubros Principales</div>
-    </div>
-    <div class="sum-card s4">
-      <div class="sum-icon">🤝</div>
-      <div class="sum-num">12</div>
-      <div class="sum-lbl">Empresas Registradas</div>
-    </div>
-    <div class="sum-card s5">
-      <div class="sum-icon">👤</div>
-      <div class="sum-num">6</div>
-      <div class="sum-lbl">Proveedores Personales</div>
-    </div>
-  </div>
 
-  <!-- SECTION: Lácteos, Huevos & Bebidas Vegetales -->
-  <div class="section-hd">
-    <span class="s-icon">🥛</span>
-    <span class="s-title">Lácteos, Huevos &amp; Bebidas Vegetales</span>
-    <span class="s-badge">5 proveedores</span>
+<!-- LÁCTEOS -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#5a9fd4;--tier-bg:rgba(90,159,212,0.08);--tier-border:rgba(90,159,212,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🥛</span><div class="tier-dot"></div><span class="tier-title">Lácteos</span></div>
+    <span class="tier-count">5 proveedores</span><div class="tier-line"></div>
   </div>
-  <div class="grid">
-    <div class="card c1" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 3</div>
-        <div class="card-name">FRIAL EDEN</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Queso Río</span>
-      </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#5a9fd4;">
+      <div class="card-top"><div class="card-num">03</div><div class="years-badge" style="--badge-bg:rgba(90,159,212,0.12);--badge-color:#5a9fd4;--badge-border:rgba(90,159,212,0.3);">⏱ 3 meses</div></div>
+      <div class="card-name">Frial Eden</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Queso río</span></div>
     </div>
-    <div class="card c1" style="animation-delay:.10s">
-      <div class="card-top">
-        <div class="card-num">N° 3</div>
-        <div class="card-name">PATRICIA ÁLVAREZ CARTAGENA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Huevo</span>
-      </div>
+    <div class="card" style="--card-accent:#5a9fd4;">
+      <div class="card-top"><div class="card-num">09</div><div class="years-badge" style="--badge-bg:rgba(90,159,212,0.12);--badge-color:#5a9fd4;--badge-border:rgba(90,159,212,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">Nordlan Ltda.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Leche de soya saborizada</span></div>
     </div>
-    <div class="card c1" style="animation-delay:.15s">
-      <div class="card-top">
-        <div class="card-num">N° 9</div>
-        <div class="card-name">NORDLAN LTDA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Leche de soya saborizada</span>
-      </div>
+    <div class="card" style="--card-accent:#5a9fd4;">
+      <div class="card-top"><div class="card-num">11</div><div class="years-badge" style="--badge-bg:rgba(90,159,212,0.12);--badge-color:#5a9fd4;--badge-border:rgba(90,159,212,0.3);">⏱ 1 año</div></div>
+      <div class="card-name">Provipal S.R.L.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Yogurt de 2 litros</span></div>
     </div>
-    <div class="card c1" style="animation-delay:.20s">
-      <div class="card-top">
-        <div class="card-num">N° 11</div>
-        <div class="card-name">PROVIPAL S.R.L.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Yogurt 2 litros</span>
-      </div>
+    <div class="card" style="--card-accent:#5a9fd4;">
+      <div class="card-top"><div class="card-num">21</div><div class="years-badge" style="--badge-bg:rgba(90,159,212,0.12);--badge-color:#5a9fd4;--badge-border:rgba(90,159,212,0.3);">⏱ 3 años</div></div>
+      <div class="card-name">Compañía de Alimentos S.A.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Crema de leche</span><span class="product-tag">Leche</span><span class="product-tag">Helados</span></div>
     </div>
-    <div class="card c1" style="animation-delay:.25s">
-      <div class="card-top">
-        <div class="card-num">N° 21</div>
-        <div class="card-name">COMPAÑÍA DE ALIMENTOS S.A.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Crema de leche</span>
-        <span class="prod-tag">Leche</span>
-        <span class="prod-tag">Helados</span>
-      </div>
-    </div>
-    <div class="card c1" style="animation-delay:.30s">
-      <div class="card-top">
-        <div class="card-num">N° 22</div>
-        <div class="card-name">PIL</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Leche</span>
-        <span class="prod-tag">Helados</span>
-        <span class="prod-tag">Crema de leche</span>
-        <span class="prod-tag">Dulce de leche</span>
-      </div>
+    <div class="card" style="--card-accent:#5a9fd4;">
+      <div class="card-top"><div class="card-num">22</div><div class="years-badge" style="--badge-bg:rgba(90,159,212,0.12);--badge-color:#5a9fd4;--badge-border:rgba(90,159,212,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">PIL</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Leche</span><span class="product-tag">Helados</span><span class="product-tag">Crema de leche</span><span class="product-tag">Dulce de leche</span></div>
     </div>
   </div>
+</div>
 
-  <!-- SECTION: Harinas, Pastas & Cereales -->
-  <div class="section-hd">
-    <span class="s-icon">🌾</span>
-    <span class="s-title">Harinas, Pastas &amp; Cereales</span>
-    <span class="s-badge">6 proveedores</span>
-  </div>
-  <div class="grid">
-    <div class="card c2" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 6</div>
-        <div class="card-name">SENSORIAL</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Harina de gluten</span>
-        <span class="prod-tag">Levadura instantánea</span>
-        <span class="prod-tag">Crema vegetal</span>
-        <span class="prod-tag">Carne de soya mediana</span>
-      </div>
-    </div>
-    <div class="card c2" style="animation-delay:.10s">
-      <div class="card-top">
-        <div class="card-num">N° 7</div>
-        <div class="card-name">INPASTAS (Fideos Lazaroni)</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Variedad de fideos</span>
-      </div>
-    </div>
-    <div class="card c2" style="animation-delay:.15s">
-      <div class="card-top">
-        <div class="card-num">N° 13</div>
-        <div class="card-name">EUROSIGMA IMPORT &amp; EXPORT S.R.L.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Harina de gluten</span>
-      </div>
-    </div>
-    <div class="card c2" style="animation-delay:.20s">
-      <div class="card-top">
-        <div class="card-num">N° 14</div>
-        <div class="card-name">SFIDA S.A. INVERSIONES (Ferrari)</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Lasaña 200gr</span>
-      </div>
-    </div>
-    <div class="card c2" style="animation-delay:.25s">
-      <div class="card-top">
-        <div class="card-num">N° 15</div>
-        <div class="card-name">NARVAL S.R.L.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Cereal Corn Flakes</span>
-      </div>
-    </div>
-    <div class="card c2" style="animation-delay:.30s">
-      <div class="card-top">
-        <div class="card-num">N° 23</div>
-        <div class="card-name">INDUSTRIAS FACRULESA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Polvo de hornear</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- SECTION: Salsas, Aceites & Aderezos -->
-  <div class="section-hd">
-    <span class="s-icon">🫙</span>
-    <span class="s-title">Salsas, Aceites &amp; Aderezos</span>
-    <span class="s-badge">4 proveedores</span>
+<!-- PASTAS Y FIDEOS -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#e06b6b;--tier-bg:rgba(224,107,107,0.08);--tier-border:rgba(224,107,107,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🍝</span><div class="tier-dot"></div><span class="tier-title">Pastas y Fideos</span></div>
+    <span class="tier-count">3 proveedores</span><div class="tier-line"></div>
   </div>
-  <div class="grid">
-    <div class="card c0" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 1</div>
-        <div class="card-name">INDUSTRIAS VENADO</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Mayonesa</span>
-        <span class="prod-tag">Ketchup</span>
-        <span class="prod-tag">Mostaza</span>
-        <span class="prod-tag">Flan de vainilla</span>
-        <span class="prod-tag">Pudín de chocolate</span>
-        <span class="prod-tag">Gelatinas</span>
-      </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#e06b6b;">
+      <div class="card-top"><div class="card-num">07</div><div class="years-badge" style="--badge-bg:rgba(224,107,107,0.12);--badge-color:#e06b6b;--badge-border:rgba(224,107,107,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">Inpastas (Fideos Lazaroni)</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Variedad de fideos</span></div>
     </div>
-    <div class="card c0" style="animation-delay:.10s">
-      <div class="card-top">
-        <div class="card-num">N° 4</div>
-        <div class="card-name">SILVIA SORIA ESCALERA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Aceite</span>
-      </div>
+    <div class="card" style="--card-accent:#e06b6b;">
+      <div class="card-top"><div class="card-num">14</div><div class="years-badge" style="--badge-bg:rgba(224,107,107,0.12);--badge-color:#e06b6b;--badge-border:rgba(224,107,107,0.3);">⏱ 3 años</div></div>
+      <div class="card-name">SFIDA S.A. Inversiones (Ferrari)</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Lasaña 200gr</span></div>
     </div>
-    <div class="card c0" style="animation-delay:.15s">
-      <div class="card-top">
-        <div class="card-num">N° 10</div>
-        <div class="card-name">TRALOCOM S.R.L.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Salsa Soy Sillao</span>
-      </div>
-    </div>
-    <div class="card c0" style="animation-delay:.20s">
-      <div class="card-top">
-        <div class="card-num">N° 19</div>
-        <div class="card-name">INDUSTRIAS ALIMENTICIAS</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Salsas Italianas</span>
-        <span class="prod-tag">Mermeladas</span>
-      </div>
+    <div class="card" style="--card-accent:#e06b6b;">
+      <div class="card-top"><div class="card-num">20</div><div class="years-badge" style="--badge-bg:rgba(224,107,107,0.12);--badge-color:#e06b6b;--badge-border:rgba(224,107,107,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Alicorp</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Fideos Don Vittorio</span><span class="product-tag">Manteca 15kg</span><span class="product-tag">Mantequilla 10kg</span></div>
     </div>
   </div>
+</div>
 
-  <!-- SECTION: Proteínas Vegetales -->
-  <div class="section-hd">
-    <span class="s-icon">🌱</span>
-    <span class="s-title">Proteínas Vegetales &amp; Soya</span>
-    <span class="s-badge">2 proveedores</span>
-  </div>
-  <div class="grid">
-    <div class="card c4" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 5</div>
-        <div class="card-name">DE MI TIERRA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Carne de soya menuda</span>
-      </div>
-    </div>
-    <div class="card c4" style="animation-delay:.10s">
-      <div class="card-top">
-        <div class="card-num">N° 8</div>
-        <div class="card-name">FANNY ZÁRATE ZURITA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Instantáneo Coco</span>
-        <span class="prod-tag">Instantáneo Almendra</span>
-        <span class="prod-tag">Instantáneo Maní</span>
-        <span class="prod-tag">Extracalcio</span>
-      </div>
-    </div>
-  </div>
 
-  <!-- SECTION: Chocolates & Repostería -->
-  <div class="section-hd">
-    <span class="s-icon">🍫</span>
-    <span class="s-title">Chocolates &amp; Repostería</span>
-    <span class="s-badge">1 proveedor</span>
+<!-- HARINAS Y PROTEÍNAS DE SOYA -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#4caf82;--tier-bg:rgba(76,175,130,0.08);--tier-border:rgba(76,175,130,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🌾</span><div class="tier-dot"></div><span class="tier-title">Harinas y Proteínas de Soya</span></div>
+    <span class="tier-count">3 proveedores</span><div class="tier-line"></div>
   </div>
-  <div class="grid">
-    <div class="card c3" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 16</div>
-        <div class="card-name">MADISA</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Chocolate líquida</span>
-        <span class="prod-tag">Cocoa Celinda 500gr</span>
-        <span class="prod-tag">Celinda cobertura</span>
-        <span class="prod-tag">Chocolike</span>
-      </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#4caf82;">
+      <div class="card-top"><div class="card-num">05</div><div class="years-badge" style="--badge-bg:rgba(76,175,130,0.12);--badge-color:#4caf82;--badge-border:rgba(76,175,130,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">De Mi Tierra</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Carne de soya menuda</span></div>
     </div>
-  </div>
-
-  <!-- SECTION: Abarrotes & Varios -->
-  <div class="section-hd">
-    <span class="s-icon">🛒</span>
-    <span class="s-title">Abarrotes Generales &amp; Varios</span>
-    <span class="s-badge">4 proveedores</span>
-  </div>
-  <div class="grid">
-    <div class="card c5" style="animation-delay:.05s">
-      <div class="card-top">
-        <div class="card-num">N° 17</div>
-        <div class="card-name">VIDAURRE</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Variedad de abarrotes</span>
-      </div>
+    <div class="card" style="--card-accent:#4caf82;">
+      <div class="card-top"><div class="card-num">06</div><div class="years-badge" style="--badge-bg:rgba(76,175,130,0.12);--badge-color:#4caf82;--badge-border:rgba(76,175,130,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Sensorial</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Harina de gluten</span><span class="product-tag">Levadura instantánea</span><span class="product-tag">Crema vegetal</span><span class="product-tag">Carne de soya mediana</span></div>
     </div>
-    <div class="card c5" style="animation-delay:.10s">
-      <div class="card-top">
-        <div class="card-num">N° 18</div>
-        <div class="card-name">NUFOBOL S.R.L.</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Variedad de abarrotes</span>
-      </div>
-    </div>
-    <div class="card c5" style="animation-delay:.15s">
-      <div class="card-top">
-        <div class="card-num">N° 20</div>
-        <div class="card-name">ALICORP</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Manteca 15 kg</span>
-        <span class="prod-tag">Mantequilla 10 kg</span>
-        <span class="prod-tag">Fideos Don Vittorio</span>
-      </div>
-    </div>
-    <div class="card c5" style="animation-delay:.20s">
-      <div class="card-top">
-        <div class="card-num">N° 12</div>
-        <div class="card-name">HORTIFRESH</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Lechuga hidropónica</span>
-      </div>
-    </div>
-    <div class="card c5" style="animation-delay:.25s">
-      <div class="card-top">
-        <div class="card-num">N° 24</div>
-        <div class="card-name">PITHER CABEZAS VILLÁN</div>
-      </div>
-      <div class="products">
-        <span class="prod-tag">Variedad de frutas y verduras</span>
-      </div>
+    <div class="card" style="--card-accent:#4caf82;">
+      <div class="card-top"><div class="card-num">13</div><div class="years-badge" style="--badge-bg:rgba(76,175,130,0.12);--badge-color:#4caf82;--badge-border:rgba(76,175,130,0.3);">⏱ 1 año</div></div>
+      <div class="card-name">Eurosigma Import &amp; Export S.R.L.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Harina de gluten</span></div>
     </div>
   </div>
+</div>
 
-</div><!-- /body -->
 
-<footer>
-  <div class="f-note">Fuente: Registro de Proveedores UAB · Gestión 2026 · Uso interno — Junta Administrativa</div>
-  <div class="f-brand">Universidad Adventista de Bolivia</div>
-</footer>
+<!-- ADERESOS Y SALSAS -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#e09a5a;--tier-bg:rgba(224,154,90,0.08);--tier-border:rgba(224,154,90,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🫙</span><div class="tier-dot"></div><span class="tier-title">Aderesos y Salsas</span></div>
+    <span class="tier-count">3 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#e09a5a;">
+      <div class="card-top"><div class="card-num">01</div><div class="years-badge" style="--badge-bg:rgba(224,154,90,0.12);--badge-color:#e09a5a;--badge-border:rgba(224,154,90,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Industrias Venado</div>
+      <div class="products-label">Aderesos y Postres</div>
+      <div class="products-list"><span class="product-tag">Mayonesa</span><span class="product-tag">Ketchup</span><span class="product-tag">Mostaza</span><span class="product-tag">Flan de vainilla</span><span class="product-tag">Pudín de chocolate</span><span class="product-tag">Gelatinas</span></div>
+    </div>
+    <div class="card" style="--card-accent:#e09a5a;">
+      <div class="card-top"><div class="card-num">10</div><div class="years-badge" style="--badge-bg:rgba(224,154,90,0.12);--badge-color:#e09a5a;--badge-border:rgba(224,154,90,0.3);">⏱ 1 año</div></div>
+      <div class="card-name">Tralocom S.R.L.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Salsa soy sillao</span></div>
+    </div>
+    <div class="card" style="--card-accent:#e09a5a;">
+      <div class="card-top"><div class="card-num">19</div><div class="years-badge" style="--badge-bg:rgba(224,154,90,0.12);--badge-color:#e09a5a;--badge-border:rgba(224,154,90,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Industrias Alimenticias</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Salsas italianas</span><span class="product-tag">Mermeladas</span></div>
+    </div>
+  </div>
+</div>
 
+
+<!-- ABARROTES -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#9b7fe8;--tier-bg:rgba(155,127,232,0.08);--tier-border:rgba(155,127,232,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🛒</span><div class="tier-dot"></div><span class="tier-title">Abarrotes</span></div>
+    <span class="tier-count">2 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#9b7fe8;">
+      <div class="card-top"><div class="card-num">17</div><div class="years-badge" style="--badge-bg:rgba(155,127,232,0.12);--badge-color:#9b7fe8;--badge-border:rgba(155,127,232,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Vidaurre</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Variedad de abarrotes</span></div>
+    </div>
+    <div class="card" style="--card-accent:#9b7fe8;">
+      <div class="card-top"><div class="card-num">18</div><div class="years-badge" style="--badge-bg:rgba(155,127,232,0.12);--badge-color:#9b7fe8;--badge-border:rgba(155,127,232,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Nufobol S.R.L.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Variedad de abarrotes</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FRUTAS Y VERDURAS -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#4caf82;--tier-bg:rgba(76,175,130,0.08);--tier-border:rgba(76,175,130,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🥦</span><div class="tier-dot"></div><span class="tier-title">Frutas y Verduras</span></div>
+    <span class="tier-count">2 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#4caf82;">
+      <div class="card-top"><div class="card-num">12</div><div class="years-badge" style="--badge-bg:rgba(76,175,130,0.12);--badge-color:#4caf82;--badge-border:rgba(76,175,130,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">Hortifresh</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Lechuga hidropónica</span></div>
+    </div>
+    <div class="card" style="--card-accent:#4caf82;">
+      <div class="card-top"><div class="card-num">24</div><div class="years-badge" style="--badge-bg:rgba(76,175,130,0.12);--badge-color:#4caf82;--badge-border:rgba(76,175,130,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Pither Cabezas Villán</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Variedad de frutas y verduras</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- CHOCOLATERÍA Y CEREALES -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#c9a84c;--tier-bg:rgba(201,168,76,0.08);--tier-border:rgba(201,168,76,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🍫</span><div class="tier-dot"></div><span class="tier-title">Chocolatería y Cereales</span></div>
+    <span class="tier-count">2 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#c9a84c;">
+      <div class="card-top"><div class="card-num">15</div><div class="years-badge" style="--badge-bg:rgba(201,168,76,0.12);--badge-color:#e8c97a;--badge-border:rgba(201,168,76,0.3);">⏱ 3 años</div></div>
+      <div class="card-name">Narval S.R.L.</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Cereal Corn Flakes</span></div>
+    </div>
+    <div class="card" style="--card-accent:#c9a84c;">
+      <div class="card-top"><div class="card-num">16</div><div class="years-badge" style="--badge-bg:rgba(201,168,76,0.12);--badge-color:#e8c97a;--badge-border:rgba(201,168,76,0.3);">⏱ 5 años</div></div>
+      <div class="card-name">Madisa</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Chocolate líquida</span><span class="product-tag">Cocoa Celinda 500gr</span><span class="product-tag">Celinda cobertura</span><span class="product-tag">Chocolike</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ACEITES Y REPOSTERÍA -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#e0c45a;--tier-bg:rgba(224,196,90,0.08);--tier-border:rgba(224,196,90,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🫒</span><div class="tier-dot"></div><span class="tier-title">Aceites y Repostería</span></div>
+    <span class="tier-count">2 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#e0c45a;">
+      <div class="card-top"><div class="card-num">04</div><div class="years-badge" style="--badge-bg:rgba(224,196,90,0.12);--badge-color:#e0c45a;--badge-border:rgba(224,196,90,0.3);">⏱ 2 meses</div></div>
+      <div class="card-name">Silvia Soria Escalera</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Aceite</span></div>
+    </div>
+    <div class="card" style="--card-accent:#e0c45a;">
+      <div class="card-top"><div class="card-num">23</div><div class="years-badge" style="--badge-bg:rgba(224,196,90,0.12);--badge-color:#e0c45a;--badge-border:rgba(224,196,90,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">Industrias Facrulesa</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Polvo de hornear</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- INSTANTÁNEOS Y HUEVERÍA -->
+<div class="tier-section">
+  <div class="tier-header" style="--tier-color:#d47faa;--tier-bg:rgba(212,127,170,0.08);--tier-border:rgba(212,127,170,0.25);">
+    <div class="tier-pill"><span class="tier-icon">🥚</span><div class="tier-dot"></div><span class="tier-title">Instantáneos y Huevería</span></div>
+    <span class="tier-count">2 proveedores</span><div class="tier-line"></div>
+  </div>
+  <div class="cards-grid">
+    <div class="card" style="--card-accent:#d47faa;">
+      <div class="card-top"><div class="card-num">03</div><div class="years-badge" style="--badge-bg:rgba(212,127,170,0.12);--badge-color:#d47faa;--badge-border:rgba(212,127,170,0.3);">⏱ 3 meses</div></div>
+      <div class="card-name">Patricia Álvarez Cartagena</div>
+      <div class="products-label">Productos</div>
+      <div class="products-list"><span class="product-tag">Huevo</span></div>
+    </div>
+    <div class="card" style="--card-accent:#d47faa;">
+      <div class="card-top"><div class="card-num">08</div><div class="years-badge" style="--badge-bg:rgba(212,127,170,0.12);--badge-color:#d47faa;--badge-border:rgba(212,127,170,0.3);">⏱ 2 años</div></div>
+      <div class="card-name">Fanny Zárate Zurita</div>
+      <div class="products-label">Instantáneos</div>
+      <div class="products-list"><span class="product-tag">Coco</span><span class="product-tag">Almendra</span><span class="product-tag">Maní</span><span class="product-tag">Extracalcio</span></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="footer">Universidad Adventista de Bolivia · Dirección Administrativa · 2026</div>
 </body>
 </html>
-
