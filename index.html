@@ -1,534 +1,774 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Costos — UAB</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f0f4f8;
-  --bg2:#e8edf3;
-  --surface:#ffffff;
-  --surface2:#f8fafc;
-  --border:#d4dde8;
-  --border2:#b0bec5;
-  --amber:#e8942e;
-  --amber-light:#fff3e0;
-  --emerald:#26a69a;
-  --emerald-light:#e0f2f1;
-  --indigo:#5c6bc0;
-  --indigo-light:#e8eaf6;
-  --violet:#ab47bc;
-  --violet-light:#f3e5f5;
-  --crimson:#ef5350;
-  --crimson-light:#ffebee;
-  --sky:#29b6f6;
-  --sky-light:#e1f5fe;
-  --text:#2c3e50;
-  --text2:#5a6a7a;
-  --muted:#8a99aa;
-  --faint:#b0bec5;
-  --serif:'Cormorant Garamond',serif;
-  --sans:'Outfit',sans-serif;
-}
-html{font-size:15px}
-body{
-  background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ==================== WELCOME SCREEN ==================== */
-#welcome{
-  position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(160deg,#1a237e 0%,#0d47a1 30%,#01579b 60%,#004d40 100%);
-  transition:opacity 1s ease,transform 1s ease;
-}
-#welcome.fade-out{opacity:0;transform:scale(1.05);pointer-events:none}
-#welcome::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(circle at 20% 30%,rgba(255,255,255,0.06) 0%,transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(0,230,118,0.06) 0%,transparent 40%);
-}
-#welcome::after{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(2px 2px at 15% 25%,rgba(255,255,255,0.15),transparent),
-    radial-gradient(2px 2px at 85% 15%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(2px 2px at 45% 75%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(2px 2px at 75% 55%,rgba(255,255,255,0.12),transparent),
-    radial-gradient(2px 2px at 30% 85%,rgba(255,255,255,0.07),transparent),
-    radial-gradient(2px 2px at 60% 35%,rgba(255,255,255,0.11),transparent),
-    radial-gradient(2px 2px at 90% 80%,rgba(255,255,255,0.09),transparent),
-    radial-gradient(2px 2px at 10% 65%,rgba(255,255,255,0.06),transparent);
-  animation:twinkle 4s ease-in-out infinite alternate;
-}
-@keyframes twinkle{0%{opacity:.5}100%{opacity:1}}
-
-.welcome-content{position:relative;text-align:center;z-index:1}
-.welcome-icon{
-  width:100px;height:100px;margin:0 auto 35px;
-  background:linear-gradient(135deg,#ff8f00,#ff6f00);
-  border-radius:26px;display:flex;align-items:center;justify-content:center;
-  font-size:44px;font-weight:700;color:#fff;font-family:var(--serif);
-  box-shadow:0 15px 60px rgba(255,143,0,0.4);
-  animation:float 3s ease-in-out infinite;
-  position:relative;
-}
-.welcome-icon::after{
-  content:'';position:absolute;inset:-4px;border-radius:30px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
-  z-index:-1;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-.welcome-line1{
-  font-family:var(--serif);font-size:52px;font-weight:700;
-  color:#fff;margin-bottom:14px;
-  opacity:0;animation:fadeUp 1s ease 0.4s forwards;
-  text-shadow:0 2px 30px rgba(0,0,0,0.3);
-}
-.welcome-line2{
-  font-size:20px;color:rgba(255,255,255,0.85);letter-spacing:.2em;text-transform:uppercase;
-  font-weight:500;margin-bottom:14px;
-  opacity:0;animation:fadeUp 1s ease 0.9s forwards;
-}
-.welcome-line3{
-  font-family:var(--serif);font-size:32px;color:#ffc107;font-weight:600;
-  opacity:0;animation:fadeUp 1s ease 1.4s forwards;
-  text-shadow:0 2px 20px rgba(255,193,7,0.3);
-}
-.welcome-progress{
-  position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
-  width:220px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;
-  overflow:hidden;z-index:1;
-}
-.welcome-progress-bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,#ff8f00,#ffc107,#00e676);
-  border-radius:4px;
-  animation:progressBar 4.5s ease 0.5s forwards;
-}
-@keyframes progressBar{to{width:100%}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
-
-/* ==================== MAIN LAYOUT ==================== */
-#mainApp{
-  position:relative;z-index:1;
-  opacity:0;transition:opacity 1s ease 0.2s;
-  max-width:850px;margin:0 auto;padding:30px 20px 60px;
-}
-#mainApp.visible{opacity:1}
-
-/* HEADER */
-.main-header{
-  text-align:center;padding:40px 20px 35px;margin-bottom:35px;
-  position:relative;
-}
-.header-logo{
-  width:65px;height:65px;margin:0 auto 18px;
-  background:linear-gradient(135deg,#ff8f00,#f57c00);
-  border-radius:18px;display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;
-  box-shadow:0 8px 30px rgba(245,124,0,0.3);
-}
-.main-header h1{
-  font-family:var(--serif);font-size:30px;font-weight:700;
-  color:var(--text);margin-bottom:6px;
-}
-.main-header h1 span{color:var(--amber)}
-.main-header p{font-size:13px;color:var(--muted);letter-spacing:.05em}
-
-/* CATEGORY SECTIONS */
-.category{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:18px;margin-bottom:14px;
-  overflow:hidden;
-  transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
-  box-shadow:0 1px 4px rgba(0,0,0,0.04);
-}
-.category:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
-.category.open{
-  box-shadow:0 8px 40px rgba(0,0,0,0.1);
-  border-color:var(--border2);
-}
-.category-header{
-  display:flex;align-items:center;gap:16px;
-  padding:20px 24px;cursor:pointer;
-  transition:background 0.2s;
-  user-select:none;
-}
-.category-header:hover{background:var(--surface2)}
-.cat-icon{
-  width:48px;height:48px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;
-  transition:transform 0.3s,box-shadow 0.3s;
-}
-.category.open .cat-icon{transform:scale(1.08)}
-.cat-icon.comparativa{background:var(--indigo-light);color:var(--indigo)}
-.cat-icon.promedio{background:var(--emerald-light);color:var(--emerald)}
-.cat-icon.proveedores{background:var(--amber-light);color:var(--amber)}
-.cat-info{flex:1}
-.cat-title{font-weight:600;font-size:16px;color:var(--text)}
-.cat-subtitle{font-size:12px;color:var(--muted);margin-top:3px}
-.cat-badge{
-  font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;
-  text-transform:uppercase;letter-spacing:.06em;margin-left:8px;vertical-align:middle;
-}
-.cat-badge.new{background:var(--emerald-light);color:var(--emerald)}
-.cat-badge.current{background:var(--indigo-light);color:var(--indigo)}
-.cat-arrow{
-  width:32px;height:32px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--surface2);color:var(--muted);
-  transition:transform 0.4s,background 0.3s,color 0.3s;
-  flex-shrink:0;font-size:16px;
-}
-.category.open .cat-arrow{transform:rotate(90deg);background:var(--amber-light);color:var(--amber)}
-
-.cat-content{
-  max-height:0;overflow:hidden;
-  transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.4s;
-  opacity:0;
-}
-.category.open .cat-content{max-height:3000px;opacity:1}
-.cat-content-inner{padding:0 24px 22px;border-top:1px solid var(--border)}
-
-/* SUBCATEGORY */
-.subcategory{margin-top:16px}
-.sub-header{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 14px;border-radius:12px;cursor:pointer;
-  transition:background 0.2s;
-  user-select:none;
-}
-.sub-header:hover{background:var(--surface2)}
-.sub-icon{
-  width:32px;height:32px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;
-  background:var(--indigo-light);color:var(--indigo);
-}
-.sub-title{font-size:13px;font-weight:600;color:var(--indigo);text-transform:uppercase;letter-spacing:.06em}
-.sub-arrow{
-  font-size:14px;color:var(--faint);transition:transform 0.3s;margin-left:auto;
-}
-.subcategory.open .sub-arrow{transform:rotate(90deg);color:var(--indigo)}
-.sub-content{
-  max-height:0;overflow:hidden;
-  transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-.subcategory.open .sub-content{max-height:800px}
-.sub-content-inner{padding:6px 0 6px 44px}
-
-/* FILE LINKS */
-.file-list{list-style:none;display:flex;flex-direction:column;gap:6px}
-.file-link{
-  display:flex;align-items:center;gap:12px;
-  padding:11px 16px;border-radius:12px;
-  text-decoration:none;color:var(--text);
-  background:var(--surface2);
-  border:1px solid transparent;
-  transition:all 0.25s;
-}
-.file-link:hover{
-  background:#fff;
-  border-color:var(--border2);
-  transform:translateX(6px);
-  box-shadow:0 2px 12px rgba(0,0,0,0.06);
-}
-.file-link .f-icon{
-  width:34px;height:34px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;flex-shrink:0;
-  background:var(--amber-light);
-}
-.file-link .f-info{flex:1;min-width:0}
-.file-link .f-name{font-weight:500;font-size:13.5px}
-.file-link .f-desc{font-size:10.5px;color:var(--muted);margin-top:2px}
-.file-link .f-arrow{
-  font-size:14px;color:var(--faint);transition:transform 0.2s,color 0.2s;
-}
-.file-link:hover .f-arrow{transform:translateX(4px);color:var(--amber)}
-
-/* FOOTER */
-.main-footer{
-  text-align:center;padding:30px 20px;margin-top:20px;
-  border-top:1px solid var(--border);
-}
-.main-footer p{font-size:11px;color:var(--faint);letter-spacing:.04em}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-  .welcome-line1{font-size:36px}
-  .welcome-line2{font-size:16px}
-  .welcome-line3{font-size:24px}
-  .main-header h1{font-size:24px}
-  .category-header{padding:16px 18px;gap:12px}
-  .cat-icon{width:42px;height:42px;font-size:20px}
-  .cat-content-inner{padding:0 18px 18px}
-  .sub-content-inner{padding:6px 0 6px 32px}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard UAB - Para Imprimir</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @page {
+            size: letter portrait;
+            margin: 0.8cm;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            line-height: 1.3;
+        }
+        
+        /* Cada producto ocupa 2 páginas */
+        .producto-page {
+            width: 21.59cm;
+            min-height: 55.8cm; /* 2 × 27.9cm (2 páginas) */
+            padding: 1cm;
+            page-break-after: always;
+            break-after: page;
+            position: relative;
+        }
+        
+        .producto-page:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+        
+        /* Encabezado de cada producto (solo página 1) */
+        .page-header {
+            text-align: center;
+            margin-bottom: 12mm;
+            padding-bottom: 5mm;
+            border-bottom: 3px solid #2563eb;
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+        
+        .page-header h1 {
+            font-size: 20pt;
+            color: #1f2937;
+            margin-bottom: 3mm;
+        }
+        
+        .categoria {
+            display: inline-block;
+            background: #e5e7eb;
+            color: #374151;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10pt;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .categoria.comparativa {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* Contenedor de la gráfica - ocupa 2 páginas */
+        .grafica-container {
+            width: 100%;
+            height: 50cm; /* Altura para 2 páginas */
+            min-height: 50cm;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            overflow: visible;
+            background: white;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+        
+        .grafica-container iframe,
+        .grafica-container object {
+            width: 100%;
+            height: 100%;
+            min-height: 50cm;
+            border: none;
+            display: block;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+        
+        /* Indicador de continuación de página */
+        .continua-indicator {
+            position: absolute;
+            bottom: 1cm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 9pt;
+            color: #6b7280;
+            font-style: italic;
+            page-break-inside: avoid;
+        }
+        
+        /* Footer con numeración */
+        .page-footer {
+            position: absolute;
+            bottom: 5mm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 9pt;
+            color: #6b7280;
+        }
+        
+        /* Botón de imprimir (solo pantalla) */
+        .btn-imprimir {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            z-index: 10000;
+            transition: all 0.3s;
+        }
+        
+        .btn-imprimir:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-imprimir:active {
+            transform: translateY(0);
+        }
+        
+        /* Instrucciones (solo pantalla) */
+        .instrucciones {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 320px;
+            z-index: 10000;
+        }
+        
+        .instrucciones h3 {
+            margin-bottom: 8px;
+            color: #1f2937;
+            font-size: 14px;
+        }
+        
+        .instrucciones ul {
+            margin-left: 18px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+        
+        .instrucciones li {
+            margin-bottom: 4px;
+        }
+        
+        .info-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        /* Ocultar en impresión */
+        @media print {
+            .btn-imprimir,
+            .instrucciones {
+                display: none !important;
+            }
+            
+            body {
+                background: white;
+            }
+            
+            .producto-page {
+                width: 100%;
+                height: auto;
+                min-height: 55.8cm;
+                padding: 0.8cm;
+            }
+            
+            .grafica-container {
+                height: 51cm;
+                min-height: 51cm;
+                border: 1px solid #e5e7eb;
+            }
+            
+            .grafica-container iframe {
+                min-height: 51cm;
+            }
+        }
+        
+        /* Loader mientras carga */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+        
+        .loader.hidden {
+            display: none;
+        }
+        
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loader-text {
+            color: #4b5563;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .loader-text small {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ==================== WELCOME SCREEN ==================== -->
-<div id="welcome">
-  <div class="welcome-content">
-    <div class="welcome-icon">UAB</div>
-    <div class="welcome-line1">Bienvenidos</div>
-    <div class="welcome-line2">Almacén Comedor</div>
-    <div class="welcome-line3">2025 — 2026</div>
-  </div>
-  <div class="welcome-progress">
-    <div class="welcome-progress-bar"></div>
-  </div>
-</div>
-
-<!-- ==================== MAIN APP ==================== -->
-<div id="mainApp">
-
-  <div class="main-header">
-    <div class="header-logo">UAB</div>
-    <h1>Sistema de Gestión de <span>Costos</span></h1>
-    <p>Universidad Adventista de Bolivia · Panel de Control</p>
-  </div>
-
-  <!-- 1. COMPARATIVA -->
-  <div class="category" id="cat-comparativa">
-    <div class="category-header" onclick="openCategory('cat-comparativa')">
-      <div class="cat-icon comparativa">📊</div>
-      <div class="cat-info">
-        <div class="cat-title">Comparativa de Costos <span class="cat-badge new">Nuevo</span></div>
-        <div class="cat-subtitle">Enero-Marzo 2025 vs 2026 · Organizado por categoría</div>
-      </div>
-      <div class="cat-arrow">›</div>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">
+            Cargando gráficas...
+            <small>Esto puede tomar unos segundos</small>
+        </div>
     </div>
-    <div class="cat-content"><div class="cat-content-inner">
 
-      <!-- Verduras -->
-      <div class="subcategory" id="sub-comp-verduras">
-        <div class="sub-header" onclick="toggleSub('sub-comp-verduras')">
-          <div class="sub-icon">🥬</div>
-          <span class="sub-title">Verduras</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/TOMATE.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/CEBOLLA.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla Roja</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ZANAHORIA.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPA_HOLANDESA.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/BROCOLI.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MORRON.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón Verde</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
+    <!-- Botón Imprimir -->
+    <button class="btn-imprimir" onclick="imprimirPDF()">
+        🖨️ Imprimir / Guardar PDF
+    </button>
 
-      <!-- Frutas -->
-      <div class="subcategory" id="sub-comp-frutas">
-        <div class="sub-header" onclick="toggleSub('sub-comp-frutas')">
-          <div class="sub-icon">🍎</div>
-          <span class="sub-title">Frutas</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPAYA.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PIÑA.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/PLATANO.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/SANDIA.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-      <!-- Lácteos -->
-      <div class="subcategory" id="sub-comp-lacteos">
-        <div class="sub-header" onclick="toggleSub('sub-comp-lacteos')">
-          <div class="sub-icon">🥛</div>
-          <span class="sub-title">Lácteos</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/LECHE.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HUEVO.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/QUESORIO.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/MOSARELLA.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozzarella</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/YOGURT.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-      <!-- Abarrotes -->
-      <div class="subcategory" id="sub-comp-abarrotes">
-        <div class="sub-header" onclick="toggleSub('sub-comp-abarrotes')">
-          <div class="sub-icon">🥫</div>
-          <span class="sub-title">Abarrotes</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ARROZ.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz Grano de Oro</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/HARINA.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina Blanca</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/AZUCAR.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar Blanca</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Enero-Marzo (2025 vs 2026)/ACEITE.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Comparativo trimestral</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-    </div></div>
-  </div>
-
-  <!-- 2. PROMEDIO ANUAL 2025 -->
-  <div class="category" id="cat-promedio">
-    <div class="category-header" onclick="openCategory('cat-promedio')">
-      <div class="cat-icon promedio">📈</div>
-      <div class="cat-info">
-        <div class="cat-title">Promedio Anual 2025 <span class="cat-badge current">2025</span></div>
-        <div class="cat-subtitle">Datos históricos organizados por categoría</div>
-      </div>
-      <div class="cat-arrow">›</div>
+    <!-- Instrucciones -->
+    <div class="instrucciones">
+        <h3>📋 Instrucciones:</h3>
+        <ul>
+            <li>Espera a que carguen todas las gráficas</li>
+            <li>Cada producto ocupa <strong>2 páginas</strong></li>
+            <li>Haz clic en "Imprimir / Guardar PDF"</li>
+            <li>En destino: "Guardar como PDF"</li>
+            <li>Márgenes: "Predeterminados"</li>
+            <li>Activa "Gráficos de fondo"</li>
+        </ul>
+        <div class="info-badge">📄 Total: ~76 páginas</div>
     </div>
-    <div class="cat-content"><div class="cat-content-inner">
 
-      <div class="subcategory" id="sub-abarrotes">
-        <div class="sub-header" onclick="toggleSub('sub-abarrotes')">
-          <div class="sub-icon">🥫</div>
-          <span class="sub-title">Abarrotes</span>
-          <div class="sub-arrow">›</div>
+    <!-- ==================== VERDURAS ==================== -->
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍅 Tomate</h1>
+            <span class="categoria">🥦 Verduras</span>
         </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Promedio anual 2025/Abarrotes/Aceite.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Abarrotes/Arroz.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Abarrotes/Azucar.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Abarrotes/Harina.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina Blanca</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Abarrotes/Huevo.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-      <div class="subcategory" id="sub-frutas">
-        <div class="sub-header" onclick="toggleSub('sub-frutas')">
-          <div class="sub-icon">🍎</div>
-          <span class="sub-title">Frutas</span>
-          <div class="sub-arrow">›</div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Tomate.html" loading="lazy"></iframe>
         </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Promedio anual 2025/Frutas/Papaya.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Frutas/Pina.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Frutas/Platano.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Frutas/Sandia.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-      <div class="subcategory" id="sub-lacteos">
-        <div class="sub-header" onclick="toggleSub('sub-lacteos')">
-          <div class="sub-icon">🥛</div>
-          <span class="sub-title">Lácteos</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Promedio anual 2025/Lacteos/Leche.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche Fresca</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Lacteos/Mosarella.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozzarella</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Lacteos/Queso_Rio.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Lacteos/Yogurt.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-      <div class="subcategory" id="sub-verduras">
-        <div class="sub-header" onclick="toggleSub('sub-verduras')">
-          <div class="sub-icon">🥬</div>
-          <span class="sub-title">Verduras</span>
-          <div class="sub-arrow">›</div>
-        </div>
-        <div class="sub-content"><div class="sub-content-inner">
-          <ul class="file-list">
-            <li><a href="Promedio anual 2025/Verduras/Brocoli.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Verduras/Cebolla.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla Roja</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Verduras/Morron.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón Verde</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Verduras/Papa_Holandesa.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Verduras/Tomate.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Promedio anual 2025/Verduras/Zanahoria.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Promedio anual 2025</div></div><span class="f-arrow">→</span></a></li>
-          </ul>
-        </div></div>
-      </div>
-
-    </div></div>
-  </div>
-
-  <!-- 3. PROVEEDORES -->
-  <div class="category" id="cat-proveedores">
-    <div class="category-header" onclick="openCategory('cat-proveedores')">
-      <div class="cat-icon proveedores">👥</div>
-      <div class="cat-info">
-        <div class="cat-title">Proveedores</div>
-        <div class="cat-subtitle">Directorio de proveedores registrados</div>
-      </div>
-      <div class="cat-arrow">›</div>
+        <div class="page-footer">Dashboard UAB - Tomate (Pág. 1-2)</div>
     </div>
-    <div class="cat-content"><div class="cat-content-inner">
-      <ul class="file-list">
-        <li><a href="Proveedores/proveedores.html" class="file-link"><div class="f-icon">📋</div><div class="f-info"><div class="f-name">Lista de Proveedores</div><div class="f-desc">Directorio completo</div></div><span class="f-arrow">→</span></a></li>
-      </ul>
-    </div></div>
-  </div>
 
-  <div class="main-footer">
-    <p>Universidad Adventista de Bolivia · Sistema de Gestión de Costos</p>
-    <p style="margin-top:6px;opacity:.5">Abril 2026 · Uso interno — Junta Administrativa</p>
-  </div>
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🧅 Cebolla Roja</h1>
+            <span class="categoria">🥦 Verduras</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Cebolla.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Cebolla Roja (Pág. 3-4)</div>
+    </div>
 
-</div>
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥕 Zanahoria</h1>
+            <span class="categoria">🥦 Verduras</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Zanahoria.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Zanahoria (Pág. 5-6)</div>
+    </div>
 
-<script>
-// Welcome screen — only show once per session
-window.addEventListener('load', function(){
-  if(sessionStorage.getItem('welcomeShown')){
-    // Skip welcome, show app directly
-    document.getElementById('welcome').style.display='none';
-    document.getElementById('mainApp').classList.add('visible');
-  } else {
-    // Show welcome for 5 seconds
-    setTimeout(function(){
-      document.getElementById('welcome').classList.add('fade-out');
-      setTimeout(function(){
-        document.getElementById('welcome').style.display='none';
-        document.getElementById('mainApp').classList.add('visible');
-        sessionStorage.setItem('welcomeShown','true');
-      },1000);
-    },5000);
-  }
-});
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥔 Papa Holandesa</h1>
+            <span class="categoria">🥦 Verduras</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Papa_Holandesa.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Papa Holandesa (Pág. 7-8)</div>
+    </div>
 
-// Open category — accordion: close all others first
-function openCategory(id){
-  var cats = document.querySelectorAll('.category');
-  cats.forEach(function(cat){
-    if(cat.id !== id && cat.classList.contains('open')){
-      cat.classList.remove('open');
-    }
-  });
-  document.getElementById(id).classList.toggle('open');
-}
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥦 Brócoli</h1>
+            <span class="categoria">🥦 Verduras</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Brocoli.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Brócoli (Pág. 9-10)</div>
+    </div>
 
-// Toggle subcategory
-function toggleSub(id){
-  document.getElementById(id).classList.toggle('open');
-}
-</script>
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🫑 Morrón Verde</h1>
+            <span class="categoria">🥦 Verduras</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Verduras/Morron.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Morrón Verde (Pág. 11-12)</div>
+    </div>
+
+    <!-- ==================== FRUTAS ==================== -->
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥭 Papaya</h1>
+            <span class="categoria">🍎 Frutas</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Frutas/Papaya.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Papaya (Pág. 13-14)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍍 Piña</h1>
+            <span class="categoria">🍎 Frutas</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Frutas/Piña.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Piña (Pág. 15-16)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍌 Plátano</h1>
+            <span class="categoria">🍎 Frutas</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Frutas/Platano.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Plátano (Pág. 17-18)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍉 Sandía</h1>
+            <span class="categoria">🍎 Frutas</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Frutas/Sandia.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Sandía (Pág. 19-20)</div>
+    </div>
+
+    <!-- ==================== LÁCTEOS ==================== -->
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥛 Leche Fresca</h1>
+            <span class="categoria">🥛 Lácteos</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Lacteos/Leche.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Leche Fresca (Pág. 21-22)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🧀 Queso Mozzarella</h1>
+            <span class="categoria">🥛 Lácteos</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Lacteos/Mosarella.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Queso Mozzarella (Pág. 23-24)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🧀 Queso Río</h1>
+            <span class="categoria">🥛 Lácteos</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Lacteos/Queso_Rio.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Queso Río (Pág. 25-26)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥛 Yogurt</h1>
+            <span class="categoria">🥛 Lácteos</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Lacteos/Yogurt.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Yogurt (Pág. 27-28)</div>
+    </div>
+
+    <!-- ==================== ABARROTES ==================== -->
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🫗 Aceite</h1>
+            <span class="categoria">🥫 Abarrotes</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Abarrotes/Aceite.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Aceite (Pág. 29-30)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍚 Arroz</h1>
+            <span class="categoria">🥫 Abarrotes</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Abarrotes/Arroz.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Arroz (Pág. 31-32)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🍬 Azúcar</h1>
+            <span class="categoria">🥫 Abarrotes</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Abarrotes/Azucar.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Azúcar (Pág. 33-34)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🌾 Harina</h1>
+            <span class="categoria">🥫 Abarrotes</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Abarrotes/Harina.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Harina (Pág. 35-36)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>🥚 Huevo</h1>
+            <span class="categoria">🥫 Abarrotes</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Promedio anual 2025/Abarrotes/Huevo.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Huevo (Pág. 37-38)</div>
+    </div>
+
+    <!-- ==================== COMPARATIVA ==================== -->
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Aceite - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/ACEITE.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Aceite Comparativa (Pág. 39-40)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Arroz - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/ARROZ.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Arroz Comparativa (Pág. 41-42)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Azúcar - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/AZUCAR.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Azúcar Comparativa (Pág. 43-44)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Brócoli - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/BROCOLI.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Brócoli Comparativa (Pág. 45-46)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Cebolla Roja - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/CEBOLLA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Cebolla Comparativa (Pág. 47-48)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Harina - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/HARINA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Harina Comparativa (Pág. 49-50)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Huevo - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/HUEVO.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Huevo Comparativa (Pág. 51-52)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Leche - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/LECHE.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Leche Comparativa (Pág. 53-54)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Morrón - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/MORRON.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Morrón Comparativa (Pág. 55-56)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Mozzarella - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/MOSARELLA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Mozzarella Comparativa (Pág. 57-58)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Papa Holandesa - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPA_HOLANDESA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Papa Comparativa (Pág. 59-60)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Papaya - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/PAPAYA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Papaya Comparativa (Pág. 61-62)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Piña - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/PIÑA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Piña Comparativa (Pág. 63-64)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Plátano - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/PLATANO.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Plátano Comparativa (Pág. 65-66)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Queso Río - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/QUESORIO.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Queso Río Comparativa (Pág. 67-68)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Sandía - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/SANDIA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Sandía Comparativa (Pág. 69-70)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Tomate - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/TOMATE.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Tomate Comparativa (Pág. 71-72)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Yogurt - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/YOGURT.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Yogurt Comparativa (Pág. 73-74)</div>
+    </div>
+
+    <div class="producto-page">
+        <div class="page-header">
+            <h1>📊 Zanahoria - Comparativa</h1>
+            <span class="categoria comparativa">📈 2025 vs 2026</span>
+        </div>
+        <div class="grafica-container">
+            <iframe src="Comparativa de costos Enero-Marzo (2025 vs 2026)/ZANAHORIA.html" loading="lazy"></iframe>
+        </div>
+        <div class="page-footer">Dashboard UAB - Zanahoria Comparativa (Pág. 75-76)</div>
+    </div>
+
+    <script>
+        // Esperar a que carguen todos los iframes
+        window.addEventListener('load', function() {
+            const iframes = document.querySelectorAll('iframe');
+            let loadedCount = 0;
+            const total = iframes.length;
+            
+            iframes.forEach((iframe, index) => {
+                if (iframe.complete) {
+                    loadedCount++;
+                } else {
+                    iframe.addEventListener('load', () => {
+                        loadedCount++;
+                        updateLoader(loadedCount, total);
+                        if (loadedCount === total) {
+                            setTimeout(() => {
+                                document.getElementById('loader').classList.add('hidden');
+                            }, 1000);
+                        }
+                    });
+                }
+            });
+            
+            // Timeout de seguridad (20 segundos máx)
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 20000);
+        });
+
+        function updateLoader(loaded, total) {
+            const loaderText = document.querySelector('.loader-text');
+            if (loaderText) {
+                const percentage = Math.round((loaded / total) * 100);
+                loaderText.innerHTML = `Cargando gráficas...<br><small>${loaded} de ${total} (${percentage}%)</small>`;
+            }
+        }
+
+        // Función para imprimir
+        function imprimirPDF() {
+            const loader = document.getElementById('loader');
+            if (!loader.classList.contains('hidden')) {
+                alert('Por favor espera a que carguen todas las gráficas...');
+                return;
+            }
+            
+            if (confirm('¿Estás listo para imprimir?\n\n📄 Se generarán ~76 páginas (2 por producto)\n\nAsegúrate de:\n✓ Tamaño: Carta\n✓ Márgenes: Predeterminados\n✓ Gráficos de fondo: Activado')) {
+                window.print();
+            }
+        }
+
+        // Atajo de teclado Ctrl+P / Cmd+P
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                imprimirPDF();
+            }
+        });
+    </script>
+
 </body>
 </html>
