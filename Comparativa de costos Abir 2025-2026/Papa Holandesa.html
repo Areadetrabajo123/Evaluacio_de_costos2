@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Costos — Papa Holandesa UAB</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#08111c;
+ --surface:#0d1b2a;
+ --surface2:#111f30;
+ --border:rgba(255,255,255,0.06);
+ --border2:rgba(255,255,255,0.11);
+ --gold:#f2c94c;
+ --gold-dim:rgba(242,201,76,0.15);
+ --teal:#2dd4bf;
+ --teal-dim:rgba(45,212,191,0.13);
+ --coral:#ff6b6b;
+ --coral-dim:rgba(255,107,107,0.13);
+ --sky:#60a5fa;
+ --sky-dim:rgba(96,165,250,0.13);
+ --green:#22c55e;
+ --green-dim:rgba(34,197,94,0.13);
+ --text:#e8eef5;
+ --muted:rgba(232,238,245,0.42);
+ --faint:rgba(232,238,245,0.16);
+ --serif:'Cormorant Garamond',serif;
+ --sans:'Outfit',sans-serif;
+}
+
+html{font-size:15px}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+body::before{
+ content:'';position:fixed;inset:0;
+ background-image:url("image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+ pointer-events:none;z-index:0;opacity:.4;
+}
+
+header{
+ position:relative;z-index:1;
+ background:linear-gradient(180deg,rgba(13,27,42,1) 0%,rgba(8,17,28,1) 100%);
+ border-bottom:1px solid var(--border2);
+ padding:22px 36px;
+ display:flex;align-items:center;justify-content:space-between;
+}
+header::after{
+ content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+ background:linear-gradient(90deg,transparent,var(--gold),transparent);
+ opacity:.35;
+}
+.h-left{display:flex;align-items:center;gap:18px}
+.logo{
+ width:50px;height:50px;
+ background:linear-gradient(135deg,#fbbf24,#f59e0b);
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-family:var(--serif);font-size:24px;font-weight:700;color:#08111c;
+ box-shadow:0 4px 20px rgba(245,158,11,.25);
+ flex-shrink:0;
+}
+.h-meta .h-title{font-family:var(--serif);font-size:26px;font-weight:700;color:#f0ead8;letter-spacing:.01em;line-height:1.1}
+.h-meta .h-sub{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.h-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.pill{
+ display:inline-flex;align-items:center;gap:6px;
+ background:var(--coral-dim);border:1px solid rgba(255,107,107,.28);
+ color:var(--coral);font-size:11px;font-weight:600;letter-spacing:.1em;
+ padding:5px 14px;border-radius:20px;text-transform:uppercase;
+}
+.pill::before{content:'';width:7px;height:7px;background:var(--coral);border-radius:50%}
+.h-period{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+.wrap{position:relative;z-index:1;padding:32px 36px 40px;display:flex;flex-direction:column;gap:26px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.kpi{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:24px 26px;
+ position:relative;overflow:hidden;
+ transition:transform .2s,box-shadow .2s;
+}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0}
+.kpi-flag{
+ position:absolute;top:16px;right:16px;
+ font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+ padding:4px 10px;border-radius:20px;
+}
+.kpi-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.kpi-num{font-family:var(--serif);font-size:52px;font-weight:700;line-height:1;margin-bottom:6px}
+.kpi-desc{font-size:12px;color:var(--muted)}
+
+.kpi.c-gold .kpi-accent{background:linear-gradient(90deg,#c47f0a,var(--gold))}
+.kpi.c-gold .kpi-num{color:var(--gold)}
+.kpi.c-teal .kpi-accent{background:linear-gradient(90deg,#0d9488,var(--teal))}
+.kpi.c-teal .kpi-num{color:var(--teal)}
+.kpi.c-teal .kpi-flag{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(45,212,191,.25)}
+.kpi.c-coral .kpi-accent{background:linear-gradient(90deg,#dc2626,var(--coral))}
+.kpi.c-coral .kpi-num{color:var(--coral)}
+.kpi.c-coral .kpi-flag{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,.25)}
+.kpi.c-sky .kpi-accent{background:linear-gradient(90deg,#2563eb,var(--sky))}
+.kpi.c-sky .kpi-num{color:var(--sky)}
+.kpi.c-sky .kpi-flag{background:var(--sky-dim);color:var(--sky);border:1px solid rgba(96,165,250,.25)}
+.kpi.c-green .kpi-accent{background:linear-gradient(90deg,#16a34a,var(--green))}
+.kpi.c-green .kpi-num{color:var(--green)}
+.kpi.c-green .kpi-flag{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+
+.chart-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:32px 32px 26px;
+}
+.panel-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.panel-hd-left .p-title{font-family:var(--serif);font-size:22px;font-weight:700;color:#f0ead8;line-height:1.1}
+.panel-hd-left .p-sub{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:.03em}
+.legend-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.leg{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.leg-dot{width:12px;height:12px;border-radius:50%}
+.leg-dash{width:24px;height:0;border-top:2px dashed}
+.chart-box{position:relative;height:340px}
+
+.bottom-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px}
+
+.tbl-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:28px;
+}
+.tbl-panel .p-title{font-family:var(--serif);font-size:20px;font-weight:700;color:#f0ead8}
+.tbl-panel .p-sub{font-size:12px;color:var(--muted);margin-bottom:20px;margin-top:4px;letter-spacing:.03em}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+.th-group{background:rgba(242,201,76,.07);border-bottom:1px solid rgba(242,201,76,.18)}
+.th-group th{
+ padding:12px 14px;text-align:center;
+ font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--gold);
+}
+.th-group th:first-child{text-align:left}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,0.025)}
+tbody td{padding:11px 14px;text-align:center;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.03)}
+tbody td:first-child{text-align:left;color:rgba(232,238,245,.82);font-weight:500}
+.month-label{
+ padding:10px 14px 6px;
+ font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+ color:rgba(242,201,76,.55);
+ background:rgba(242,201,76,0.03);
+ border-top:1px solid rgba(242,201,76,0.08);
+}
+.avg-row td{
+ font-weight:700;color:var(--green);
+ background:var(--green-dim);
+ border-top:1px dashed rgba(34,197,94,0.25);
+}
+.avg-row td:first-child{color:var(--green)}
+tfoot tr{background:rgba(242,201,76,.06)}
+tfoot td{
+ padding:13px 14px;text-align:center;font-weight:600;
+ color:var(--gold);font-size:14px;
+ border-top:1px solid rgba(242,201,76,0.2);
+}
+tfoot td:first-child{text-align:left}
+
+.v25{color:var(--sky);font-weight:600;font-size:15px}
+.v26{color:var(--teal);font-weight:600;font-size:15px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.tag-better{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(45,212,191,.22)}
+.tag-worse{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,.2)}
+.tag-equal{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(255,255,255,.1)}
+.tag-savings{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.22)}
+
+.sav-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:28px;
+ display:flex;flex-direction:column;gap:0;
+}
+.sav-panel .p-title{font-family:var(--serif);font-size:20px;font-weight:700;color:#f0ead8}
+.sav-panel .p-sub{font-size:12px;color:var(--muted);margin-bottom:24px;margin-top:4px;letter-spacing:.03em}
+
+.sav-item{margin-bottom:24px}
+.sav-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.sav-month{font-weight:600;font-size:16px;color:var(--text)}
+.sav-val{font-size:13px;font-weight:700}
+.sav-val.neg{color:var(--teal)}
+.sav-val.pos{color:var(--coral)}
+.sav-note{font-size:12px;color:var(--muted);margin-bottom:8px}
+.track{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.fill{height:100%;border-radius:4px}
+.fill.coral{background:linear-gradient(90deg,#dc2626,var(--coral))}
+.fill.teal{background:linear-gradient(90deg,#0d9488,var(--teal))}
+.fill.green{background:linear-gradient(90deg,#16a34a,var(--green))}
+
+.divider{height:1px;background:var(--border);margin:6px 0 24px}
+
+.result-card{
+ background:linear-gradient(135deg,rgba(255,107,107,0.12),rgba(220,38,38,0.08));
+ border:1px solid rgba(255,107,107,.25);
+ border-radius:16px;
+ padding:18px 20px;
+ display:flex;justify-content:space-between;align-items:center;
+ margin-top:auto;
+}
+.rc-left .rc-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--coral);font-weight:700}
+.rc-left .rc-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.rc-right{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--coral)}
+
+footer{
+ position:relative;z-index:1;
+ border-top:1px solid var(--border);
+ padding:16px 36px;
+ display:flex;justify-content:space-between;align-items:center;
+}
+footer .f-note{font-size:12px;color:var(--faint);letter-spacing:.04em}
+footer .f-brand{font-size:12px;color:var(--faint);font-family:var(--serif)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.kpi{animation:fadeUp .5s ease both}
+.kpi:nth-child(1){animation-delay:.05s}
+.kpi:nth-child(2){animation-delay:.12s}
+.kpi:nth-child(3){animation-delay:.19s}
+.kpi:nth-child(4){animation-delay:.26s}
+.chart-panel{animation:fadeUp .55s 0.3s ease both}
+.bottom-grid>*:nth-child(1){animation:fadeUp 0.55s 0.4s ease both}
+.bottom-grid>*:nth-child(2){animation:fadeUp 0.55s 0.48s ease both}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="h-left">
+   <div class="logo">PH</div>
+   <div class="h-meta">
+     <div class="h-title">Evolución de Costos — Papa Holandesa</div>
+     <div class="h-sub">Universidad Adventista de Bolivia</div>
+   </div>
+ </div>
+ <div class="h-right">
+   <div class="pill">⚠ Incremento</div>
+   <div class="h-period">Abril · Gestión 2025 vs. 2026</div>
+ </div>
+</header>
+
+<div class="wrap">
+
+ <div class="kpi-row">
+   <div class="kpi c-gold">
+     <div class="kpi-accent"></div>
+     <div class="kpi-lbl">Prom. Mensual 2025</div>
+     <div class="kpi-num">3,70</div>
+     <div class="kpi-desc">Bs./Kg · Línea base</div>
+   </div>
+   <div class="kpi c-coral">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">▲ 67,6%</div>
+     <div class="kpi-lbl">Prom. Mensual 2026</div>
+     <div class="kpi-num">6,20</div>
+     <div class="kpi-desc">Bs./Kg · Incremento significativo</div>
+   </div>
+   <div class="kpi c-coral">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">⚠ Máx 2026</div>
+     <div class="kpi-lbl">Pico más alto (Sem 2/26)</div>
+     <div class="kpi-num">6,40</div>
+     <div class="kpi-desc">Bs./Kg · Papa Holandesa</div>
+   </div>
+   <div class="kpi c-sky">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">★ Mín 2025</div>
+     <div class="kpi-lbl">Mejor precio (Sem 1/25)</div>
+     <div class="kpi-num">3,00</div>
+     <div class="kpi-desc">Bs./Kg · Papa Holandesa</div>
+   </div>
+ </div>
+
+ <div class="chart-panel">
+   <div class="panel-hd">
+     <div class="panel-hd-left">
+       <div class="p-title">Comparativo Semanal de Costos - Papa Holandesa</div>
+       <div class="p-sub">Barras: costo semanal (Bs/Kg) · Líneas: tendencia de precios · Promedios mensuales en punteado</div>
+     </div>
+     <div class="legend-row">
+       <div class="leg"><div class="leg-dot" style="background:var(--sky)"></div>Semanal 2025</div>
+       <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div>Semanal 2026</div>
+       <div class="leg"><div class="leg-dash" style="border-color:rgba(96,165,250,.55)"></div>Prom 2025</div>
+       <div class="leg"><div class="leg-dash" style="border-color:rgba(45,212,191,.55)"></div>Prom 2026</div>
+     </div>
+   </div>
+   <div class="chart-box">
+     <canvas id="mainChart"></canvas>
+   </div>
+ </div>
+
+ <div class="bottom-grid">
+
+   <div class="tbl-panel">
+     <div class="p-title">Detalle Semanal - Abril</div>
+     <div class="p-sub">Costo Bs./Kg · semanas registradas · comparativo de gestiones</div>
+     <table>
+       <thead>
+         <tr class="th-group">
+           <th>Semana</th>
+           <th>2025 Bs/Kg</th>
+           <th>2026 Bs/Kg</th>
+           <th>Variación</th>
+           <th>Resultado</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr>
+           <td>Semana 1</td>
+           <td><span class="v25">3,00</span></td>
+           <td><span class="v26">5,90</span></td>
+           <td style="color:var(--coral)">+96,7%</td>
+           <td><span class="tag tag-worse">2025 mejor</span></td>
+         </tr>
+         <tr>
+           <td>Semana 2</td>
+           <td><span class="v25">4,20</span></td>
+           <td><span class="v26">6,40</span></td>
+           <td style="color:var(--coral)">+52,4%</td>
+           <td><span class="tag tag-worse">2025 mejor</span></td>
+         </tr>
+         <tr>
+           <td>Semana 3</td>
+           <td><span class="v25">3,60</span></td>
+           <td><span class="v26">6,10</span></td>
+           <td style="color:var(--coral)">+69,4%</td>
+           <td><span class="tag tag-worse">2025 mejor</span></td>
+         </tr>
+         <tr>
+           <td>Semana 4</td>
+           <td><span class="v25">3,90</span></td>
+           <td><span class="v26">6,30</span></td>
+           <td style="color:var(--coral)">+61,5%</td>
+           <td><span class="tag tag-worse">2025 mejor</span></td>
+         </tr>
+       </tbody>
+       <tfoot>
+         <tr>
+           <td>Promedio Mensual</td>
+           <td>3,70</td>
+           <td>6,20</td>
+           <td style="color:var(--coral)">+67,6%</td>
+           <td><span class="tag tag-worse">2025 mejor</span></td>
+         </tr>
+       </tfoot>
+     </table>
+   </div>
+
+   <div class="sav-panel">
+     <div class="p-title">Incremento de Costos por Semana</div>
+     <div class="p-sub">Diferencia semanal (Bs/Kg) - 2026 vs 2025 (valores positivos = costo adicional)</div>
+
+     <div class="sav-item">
+       <div class="sav-hd">
+         <span class="sav-month">Semana 1</span>
+         <span class="sav-val pos">+2,90 Bs/Kg — Costo adicional</span>
+       </div>
+       <div class="sav-note">Incremento del 96.7% - inicio de gestión con precio alto</div>
+       <div class="track"><div class="fill coral" style="width:75%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd">
+         <span class="sav-month">Semana 2</span>
+         <span class="sav-val pos">+2,20 Bs/Kg — Costo adicional</span>
+       </div>
+       <div class="sav-note">Incremento del 52.4% - pico más alto del mes</div>
+       <div class="track"><div class="fill coral" style="width:60%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd">
+         <span class="sav-month">Semana 3</span>
+         <span class="sav-val pos">+2,50 Bs/Kg — Costo adicional</span>
+       </div>
+       <div class="sav-note">Incremento del 69.4% - tendencia al alza</div>
+       <div class="track"><div class="fill coral" style="width:68%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd">
+         <span class="sav-month">Semana 4</span>
+         <span class="sav-val pos">+2,40 Bs/Kg — Costo adicional</span>
+       </div>
+       <div class="sav-note">Incremento del 61.5% - cierre de mes con precio elevado</div>
+       <div class="track"><div class="fill coral" style="width:65%"></div></div>
+     </div>
+
+     <div class="divider"></div>
+
+     <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-weight:600">Tendencia de incremento mensual</div>
+     <div style="position:relative;height:120px;margin-bottom:22px">
+       <canvas id="miniChart"></canvas>
+     </div>
+
+     <div class="result-card">
+       <div class="rc-left">
+         <div class="rc-lbl">Incremento Total Mensual</div>
+         <div class="rc-sub">Costo adicional promedio por Kg en gestión 2026</div>
+       </div>
+       <div class="rc-right">+2,50 Bs/Kg</div>
+     </div>
+   </div>
+
+ </div>
+</div>
+
+<footer>
+ <div class="f-note">Datos: Compras Semanales · Producto: Papa Holandesa: Kg</div>
+ <div class="f-brand">UAB - Dashboard de Costos</div>
+</footer>
+
+<script>
+// ─── PALETTE ───
+const SKY  = '#60a5fa';
+const TEAL = '#2dd4bf';
+const GOLD = '#f2c94c';
+const CORAL = '#ff6b6b';
+const GREEN = '#22c55e';
+
+// ── MAIN CHART ───
+const semLabels = ['Semana 1','Semana 2','Semana 3','Semana 4'];
+const w25 = [3.0, 4.2, 3.6, 3.9];
+const w26 = [5.9, 6.4, 6.1, 6.3];
+
+const chartCtx = document.getElementById('mainChart').getContext('2d');
+
+const gSky = chartCtx.createLinearGradient(0,0,0,340);
+gSky.addColorStop(0,'rgba(96,165,250,0.22)');
+gSky.addColorStop(1,'rgba(96,165,250,0)');
+const gTeal = chartCtx.createLinearGradient(0,0,0,340);
+gTeal.addColorStop(0,'rgba(45,212,191,0.18)');
+gTeal.addColorStop(1,'rgba(45,212,191,0)');
+
+new Chart(chartCtx, {
+  type: 'bar',
+  data: {
+    labels: semLabels,
+    datasets:[
+      {type:'bar',label:'2025',data:w25,
+        backgroundColor:'rgba(96,165,250,0.65)',borderColor:SKY,borderWidth:2,
+        borderRadius:8,borderSkipped:false,barPercentage:.6,categoryPercentage:.65,order:4},
+      {type:'bar',label:'2026',data:w26,
+        backgroundColor:'rgba(255,107,107,0.65)',borderColor:CORAL,borderWidth:2,
+        borderRadius:8,borderSkipped:false,barPercentage:.6,categoryPercentage:.65,order:5},
+      {type:'line',label:'Tendencia 2025',data:w25,
+        borderColor:SKY,backgroundColor:gSky,borderWidth:2.5,
+        pointRadius:5,pointHoverRadius:7,pointBackgroundColor:SKY,
+        pointBorderColor:'#08111c',pointBorderWidth:2,
+        fill:true,tension:.38,order:1},
+      {type:'line',label:'Tendencia 2026',data:w26,
+        borderColor:CORAL,backgroundColor:'rgba(255,107,107,0.18)',borderWidth:2.5,
+        pointRadius:5,pointHoverRadius:7,pointBackgroundColor:CORAL,
+        pointBorderColor:'#08111c',pointBorderWidth:2,
+        fill:true,tension:.38,order:2},
+      {type:'line',label:'Prom. 2025 (3,7)',data:Array(4).fill(3.7),
+        borderColor:'rgba(96,165,250,.45)',borderWidth:1.5,borderDash:[7,4],
+        pointRadius:0,fill:false,tension:0,order:3},
+      {type:'line',label:'Prom. 2026 (6,2)',data:Array(4).fill(6.2),
+        borderColor:'rgba(255,107,107,.45)',borderWidth:1.5,borderDash:[7,4],
+        pointRadius:0,fill:false,tension:0,order:6}
+     ]
+   },
+   options:{
+    responsive:true,maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{
+        labels:{color:'rgba(232,238,245,.45)',
+          font:{family:"'Outfit',sans-serif",size:13},
+          boxWidth:12,boxHeight:10,padding:16,
+          filter: i=>!i.text.startsWith('Prom.')}
+      },
+      tooltip:{
+        backgroundColor:'rgba(8,17,28,.97)',
+        borderColor:'rgba(255,255,255,.1)',borderWidth:1,
+        titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',
+        padding:13,
+        titleFont:{size:14},
+        bodyFont:{size:13},
+        callbacks:{
+          label:c=>c.parsed.y===null?null:` ${c.dataset.label}: Bs. ${c.parsed.y}`,
+        },
+        filter:i=>i.parsed.y!==null
+      }
+    },
+    scales:{
+      x:{grid:{color:'rgba(255,255,255,.04)'},
+        ticks:{color:'rgba(232,238,245,.4)',font:{size:13,family:"'Outfit',sans-serif"}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},
+        ticks:{color:'rgba(232,238,245,.38)',font:{size:13},callback:v=>'Bs. '+v},
+        min:0,max:8,
+        title:{display:true,text:'Costo (Bs./Kg)',color:'rgba(232,238,245,.22)',font:{size:12}}}
+     }
+   }
+});
+
+// ─── MINI TREND CHART ───
+const miniCtx = document.getElementById('miniChart').getContext('2d');
+new Chart(miniCtx, {
+  type:'line',
+  data: {
+    labels:['Sem 1','Sem 2','Sem 3','Sem 4'],
+    datasets:[
+      {label:'Incremento',data:[2.90, 2.20, 2.50, 2.40],
+        borderColor:CORAL,borderWidth:2.5,
+        pointRadius:4,pointBackgroundColor:CORAL,pointBorderColor:'#08111c',pointBorderWidth:2,
+        fill:true,
+        backgroundColor:'rgba(255,107,107,0.15)',
+        tension:.4},
+     ]
+   },
+   options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{backgroundColor:'rgba(8,17,28,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,
+        titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',padding:10,
+        titleFont:{size:13},bodyFont:{size:12},
+        callbacks:{label:c=>` Incremento: +Bs. ${c.parsed.y}/Kg`}}
+    },
+    scales:{
+      x:{grid:{color:'rgba(255,255,255,.04)'},
+        ticks:{color:'rgba(232,238,245,.38)',font:{size:12}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},
+        ticks:{color:'rgba(232,238,245,.35)',font:{size:12},callback:v=>'Bs.'+v},
+        min:0,max:4}
+     }
+   }
+});
+</script>
+</body>
+</html>
