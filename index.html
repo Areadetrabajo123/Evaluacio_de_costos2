@@ -38,8 +38,6 @@ body{
   background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;
   overflow-x:hidden;
 }
-
-/* ==================== WELCOME SCREEN ==================== */
 #welcome{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -47,27 +45,6 @@ body{
   transition:opacity 1s ease,transform 1s ease;
 }
 #welcome.fade-out{opacity:0;transform:scale(1.05);pointer-events:none}
-#welcome::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(circle at 20% 30%,rgba(255,255,255,0.06) 0%,transparent 40%),
-    radial-gradient(circle at 80% 70%,rgba(0,230,118,0.06) 0%,transparent 40%);
-}
-#welcome::after{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(2px 2px at 15% 25%,rgba(255,255,255,0.15),transparent),
-    radial-gradient(2px 2px at 85% 15%,rgba(255,255,255,0.1),transparent),
-    radial-gradient(2px 2px at 45% 75%,rgba(255,255,255,0.08),transparent),
-    radial-gradient(2px 2px at 75% 55%,rgba(255,255,255,0.12),transparent),
-    radial-gradient(2px 2px at 30% 85%,rgba(255,255,255,0.07),transparent),
-    radial-gradient(2px 2px at 60% 35%,rgba(255,255,255,0.11),transparent),
-    radial-gradient(2px 2px at 90% 80%,rgba(255,255,255,0.09),transparent),
-    radial-gradient(2px 2px at 10% 65%,rgba(255,255,255,0.06),transparent);
-  animation:twinkle 4s ease-in-out infinite alternate;
-}
-@keyframes twinkle{0%{opacity:.5}100%{opacity:1}}
-
 .welcome-content{position:relative;text-align:center;z-index:1}
 .welcome-icon{
   width:100px;height:100px;margin:0 auto 35px;
@@ -76,22 +53,12 @@ body{
   font-size:44px;font-weight:700;color:#fff;font-family:var(--serif);
   box-shadow:0 15px 60px rgba(255,143,0,0.4);
   animation:float 3s ease-in-out infinite;
-  position:relative;
 }
-.welcome-icon::after{
-  content:'';position:absolute;inset:-4px;border-radius:30px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);
-  z-index:-1;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .welcome-line1{
   font-family:var(--serif);font-size:52px;font-weight:700;
   color:#fff;margin-bottom:14px;
   opacity:0;animation:fadeUp 1s ease 0.4s forwards;
-  text-shadow:0 2px 30px rgba(0,0,0,0.3);
 }
 .welcome-line2{
   font-size:20px;color:rgba(255,255,255,0.85);letter-spacing:.2em;text-transform:uppercase;
@@ -101,12 +68,11 @@ body{
 .welcome-line3{
   font-family:var(--serif);font-size:32px;color:#ffc107;font-weight:600;
   opacity:0;animation:fadeUp 1s ease 1.4s forwards;
-  text-shadow:0 2px 20px rgba(255,193,7,0.3);
 }
 .welcome-progress{
   position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
   width:220px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;
-  overflow:hidden;z-index:1;
+  overflow:hidden;
 }
 .welcome-progress-bar{
   height:100%;width:0%;
@@ -116,19 +82,14 @@ body{
 }
 @keyframes progressBar{to{width:100%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
-
-/* ==================== MAIN LAYOUT ==================== */
 #mainApp{
   position:relative;z-index:1;
   opacity:0;transition:opacity 1s ease 0.2s;
   max-width:850px;margin:0 auto;padding:30px 20px 60px;
 }
 #mainApp.visible{opacity:1}
-
-/* HEADER */
 .main-header{
   text-align:center;padding:40px 20px 35px;margin-bottom:35px;
-  position:relative;
 }
 .header-logo{
   width:65px;height:65px;margin:0 auto 18px;
@@ -143,8 +104,6 @@ body{
 }
 .main-header h1 span{color:var(--amber)}
 .main-header p{font-size:13px;color:var(--muted);letter-spacing:.05em}
-
-/* CATEGORY SECTIONS */
 .category{
   background:var(--surface);
   border:1px solid var(--border);
@@ -169,9 +128,7 @@ body{
   width:48px;height:48px;border-radius:14px;
   display:flex;align-items:center;justify-content:center;
   font-size:22px;flex-shrink:0;
-  transition:transform 0.3s,box-shadow 0.3s;
 }
-.category.open .cat-icon{transform:scale(1.08)}
 .cat-icon.comparativa{background:var(--indigo-light);color:var(--indigo)}
 .cat-icon.promedio{background:var(--emerald-light);color:var(--emerald)}
 .cat-icon.proveedores{background:var(--amber-light);color:var(--amber)}
@@ -188,11 +145,10 @@ body{
   width:32px;height:32px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   background:var(--surface2);color:var(--muted);
-  transition:transform 0.4s,background 0.3s,color 0.3s;
+  transition:transform 0.4s;
   flex-shrink:0;font-size:16px;
 }
 .category.open .cat-arrow{transform:rotate(90deg);background:var(--amber-light);color:var(--amber)}
-
 .cat-content{
   max-height:0;overflow:hidden;
   transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1),opacity 0.4s;
@@ -200,8 +156,6 @@ body{
 }
 .category.open .cat-content{max-height:3000px;opacity:1}
 .cat-content-inner{padding:0 24px 22px;border-top:1px solid var(--border)}
-
-/* SUBCATEGORY */
 .subcategory{margin-top:16px}
 .sub-header{
   display:flex;align-items:center;gap:12px;
@@ -227,8 +181,6 @@ body{
 }
 .subcategory.open .sub-content{max-height:800px}
 .sub-content-inner{padding:6px 0 6px 44px}
-
-/* FILE LINKS */
 .file-list{list-style:none;display:flex;flex-direction:column;gap:6px}
 .file-link{
   display:flex;align-items:center;gap:12px;
@@ -257,15 +209,11 @@ body{
   font-size:14px;color:var(--faint);transition:transform 0.2s,color 0.2s;
 }
 .file-link:hover .f-arrow{transform:translateX(4px);color:var(--amber)}
-
-/* FOOTER */
 .main-footer{
   text-align:center;padding:30px 20px;margin-top:20px;
   border-top:1px solid var(--border);
 }
 .main-footer p{font-size:11px;color:var(--faint);letter-spacing:.04em}
-
-/* RESPONSIVE */
 @media(max-width:600px){
   .welcome-line1{font-size:36px}
   .welcome-line2{font-size:16px}
@@ -280,7 +228,6 @@ body{
 </head>
 <body>
 
-<!-- ==================== WELCOME SCREEN ==================== -->
 <div id="welcome">
   <div class="welcome-content">
     <div class="welcome-icon">UAB</div>
@@ -293,7 +240,6 @@ body{
   </div>
 </div>
 
-<!-- ==================== MAIN APP ==================== -->
 <div id="mainApp">
 
   <div class="main-header">
@@ -302,7 +248,7 @@ body{
     <p>Universidad Adventista de Bolivia · Panel de Control</p>
   </div>
 
-  <!-- 1. COMPARATIVA ENERO-MARZO (PRIMERO) -->
+  <!-- 1. COMPARATIVA ENERO-MARZO -->
   <div class="category" id="cat-comparativa">
     <div class="category-header" onclick="openCategory('cat-comparativa')">
       <div class="cat-icon comparativa">📊</div>
@@ -314,7 +260,6 @@ body{
     </div>
     <div class="cat-content"><div class="cat-content-inner">
 
-      <!-- Verduras -->
       <div class="subcategory" id="sub-comp-verduras">
         <div class="sub-header" onclick="toggleSub('sub-comp-verduras')">
           <div class="sub-icon">🥬</div>
@@ -333,7 +278,6 @@ body{
         </div></div>
       </div>
 
-      <!-- Frutas -->
       <div class="subcategory" id="sub-comp-frutas">
         <div class="sub-header" onclick="toggleSub('sub-comp-frutas')">
           <div class="sub-icon">🍎</div>
@@ -350,7 +294,6 @@ body{
         </div></div>
       </div>
 
-      <!-- Lácteos -->
       <div class="subcategory" id="sub-comp-lacteos">
         <div class="sub-header" onclick="toggleSub('sub-comp-lacteos')">
           <div class="sub-icon">🥛</div>
@@ -368,7 +311,6 @@ body{
         </div></div>
       </div>
 
-      <!-- Abarrotes -->
       <div class="subcategory" id="sub-comp-abarrotes">
         <div class="sub-header" onclick="toggleSub('sub-comp-abarrotes')">
           <div class="sub-icon">🥫</div>
@@ -388,85 +330,81 @@ body{
     </div></div>
   </div>
 
-  <!-- 2. COMPARATIVA ABRIL 2025-2026 (SEGUNDO - NUEVO) -->
-  <div class="category" id="cat-comparativa-abril">
-    <div class="category-header" onclick="openCategory('cat-comparativa-abril')">
+  <!-- 2. COMPARATIVA MARZO-ABRIL 2025-2026 (NUEVO) -->
+  <div class="category" id="cat-marzo-abril">
+    <div class="category-header" onclick="openCategory('cat-marzo-abril')">
       <div class="cat-icon comparativa">📊</div>
       <div class="cat-info">
-        <div class="cat-title">Comparativa de costos Abril 2025-2026 <span class="cat-badge new">Abril</span></div>
-        <div class="cat-subtitle">Abril 2025 vs 2026 · Organizado por categoría</div>
+        <div class="cat-title">Comparativa de costos Marzo - Abril (2025-2026) <span class="cat-badge new">Marzo-Abril</span></div>
+        <div class="cat-subtitle">Marzo-Abril 2025 vs 2026 · Organizado por categoría</div>
       </div>
       <div class="cat-arrow">›</div>
     </div>
     <div class="cat-content"><div class="cat-content-inner">
 
-      <!-- Verduras -->
-      <div class="subcategory" id="sub-abril-verduras">
-        <div class="sub-header" onclick="toggleSub('sub-abril-verduras')">
+      <div class="subcategory" id="sub-ma-verduras">
+        <div class="sub-header" onclick="toggleSub('sub-ma-verduras')">
           <div class="sub-icon">🥬</div>
           <span class="sub-title">Verduras</span>
           <div class="sub-arrow">›</div>
         </div>
         <div class="sub-content"><div class="sub-content-inner">
           <ul class="file-list">
-            <li><a href="Comparativa de costos Abir 2025-2026/Tomate.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Cebolla.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Zanahoria.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Papa Holandesa.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Brocoli.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Morron.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Tomate.html" class="file-link"><div class="f-icon">🍅</div><div class="f-info"><div class="f-name">Tomate</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Cebolla roja.html" class="file-link"><div class="f-icon">🧅</div><div class="f-info"><div class="f-name">Cebolla Roja</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Zanahoria.html" class="file-link"><div class="f-icon">🥕</div><div class="f-info"><div class="f-name">Zanahoria</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Papa holandesa.html" class="file-link"><div class="f-icon">🥔</div><div class="f-info"><div class="f-name">Papa Holandesa</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Brocoli.html" class="file-link"><div class="f-icon">🥦</div><div class="f-info"><div class="f-name">Brócoli</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Morron.html" class="file-link"><div class="f-icon">🫑</div><div class="f-info"><div class="f-name">Morrón</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
           </ul>
         </div></div>
       </div>
 
-      <!-- Frutas -->
-      <div class="subcategory" id="sub-abril-frutas">
-        <div class="sub-header" onclick="toggleSub('sub-abril-frutas')">
+      <div class="subcategory" id="sub-ma-frutas">
+        <div class="sub-header" onclick="toggleSub('sub-ma-frutas')">
           <div class="sub-icon">🍎</div>
           <span class="sub-title">Frutas</span>
           <div class="sub-arrow">›</div>
         </div>
         <div class="sub-content"><div class="sub-content-inner">
           <ul class="file-list">
-            <li><a href="Comparativa de costos Abir 2025-2026/Papaya.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Piña.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Platano.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Sandia.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Papaya.html" class="file-link"><div class="f-icon">🥭</div><div class="f-info"><div class="f-name">Papaya</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Piña.html" class="file-link"><div class="f-icon">🍍</div><div class="f-info"><div class="f-name">Piña</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Platano.html" class="file-link"><div class="f-icon">🍌</div><div class="f-info"><div class="f-name">Plátano</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Sandia.html" class="file-link"><div class="f-icon">🍉</div><div class="f-info"><div class="f-name">Sandía</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
           </ul>
         </div></div>
       </div>
 
-      <!-- Lácteos -->
-      <div class="subcategory" id="sub-abril-lacteos">
-        <div class="sub-header" onclick="toggleSub('sub-abril-lacteos')">
+      <div class="subcategory" id="sub-ma-lacteos">
+        <div class="sub-header" onclick="toggleSub('sub-ma-lacteos')">
           <div class="sub-icon">🥛</div>
           <span class="sub-title">Lácteos</span>
           <div class="sub-arrow">›</div>
         </div>
         <div class="sub-content"><div class="sub-content-inner">
           <ul class="file-list">
-            <li><a href="Comparativa de costos Abir 2025-2026/Leche.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Huevo segunda.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo Segunda</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Queso Rio.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Queso Mozarella.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozarella</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Yogurt.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Leche.html" class="file-link"><div class="f-icon">🥛</div><div class="f-info"><div class="f-name">Leche</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Huevo segunda.html" class="file-link"><div class="f-icon">🥚</div><div class="f-info"><div class="f-name">Huevo Segunda</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Queso rio.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Río</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Queso Mozarella.html" class="file-link"><div class="f-icon">🧀</div><div class="f-info"><div class="f-name">Queso Mozarella</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Yogurt.html" class="file-link"><div class="f-icon">🥣</div><div class="f-info"><div class="f-name">Yogurt</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
           </ul>
         </div></div>
       </div>
 
-      <!-- Abarrotes -->
-      <div class="subcategory" id="sub-abril-abarrotes">
-        <div class="sub-header" onclick="toggleSub('sub-abril-abarrotes')">
+      <div class="subcategory" id="sub-ma-abarrotes">
+        <div class="sub-header" onclick="toggleSub('sub-ma-abarrotes')">
           <div class="sub-icon">🥫</div>
           <span class="sub-title">Abarrotes</span>
           <div class="sub-arrow">›</div>
         </div>
         <div class="sub-content"><div class="sub-content-inner">
           <ul class="file-list">
-            <li><a href="Comparativa de costos Abir 2025-2026/Aceite.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Arroz.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Azucar.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
-            <li><a href="Comparativa de costos Abir 2025-2026/Harina.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina</div><div class="f-desc">Comparativo Abril 2025-2026</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Aceite.html" class="file-link"><div class="f-icon">🫒</div><div class="f-info"><div class="f-name">Aceite</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Arroz.html" class="file-link"><div class="f-icon">🍚</div><div class="f-info"><div class="f-name">Arroz</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Azucar.html" class="file-link"><div class="f-icon">🍬</div><div class="f-info"><div class="f-name">Azúcar</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
+            <li><a href="Marzo-Abril 2025-2026/Harina blanca.html" class="file-link"><div class="f-icon">🌾</div><div class="f-info"><div class="f-name">Harina Blanca</div><div class="f-desc">Comparativo Marzo-Abril</div></div><span class="f-arrow">→</span></a></li>
           </ul>
         </div></div>
       </div>
@@ -486,8 +424,8 @@ body{
     </div>
     <div class="cat-content"><div class="cat-content-inner">
 
-      <div class="subcategory" id="sub-abarrotes">
-        <div class="sub-header" onclick="toggleSub('sub-abarrotes')">
+      <div class="subcategory" id="sub-prom-abarrotes">
+        <div class="sub-header" onclick="toggleSub('sub-prom-abarrotes')">
           <div class="sub-icon">🥫</div>
           <span class="sub-title">Abarrotes</span>
           <div class="sub-arrow">›</div>
@@ -503,8 +441,8 @@ body{
         </div></div>
       </div>
 
-      <div class="subcategory" id="sub-frutas">
-        <div class="sub-header" onclick="toggleSub('sub-frutas')">
+      <div class="subcategory" id="sub-prom-frutas">
+        <div class="sub-header" onclick="toggleSub('sub-prom-frutas')">
           <div class="sub-icon">🍎</div>
           <span class="sub-title">Frutas</span>
           <div class="sub-arrow">›</div>
@@ -519,8 +457,8 @@ body{
         </div></div>
       </div>
 
-      <div class="subcategory" id="sub-lacteos">
-        <div class="sub-header" onclick="toggleSub('sub-lacteos')">
+      <div class="subcategory" id="sub-prom-lacteos">
+        <div class="sub-header" onclick="toggleSub('sub-prom-lacteos')">
           <div class="sub-icon">🥛</div>
           <span class="sub-title">Lácteos</span>
           <div class="sub-arrow">›</div>
@@ -535,8 +473,8 @@ body{
         </div></div>
       </div>
 
-      <div class="subcategory" id="sub-verduras">
-        <div class="sub-header" onclick="toggleSub('sub-verduras')">
+      <div class="subcategory" id="sub-prom-verduras">
+        <div class="sub-header" onclick="toggleSub('sub-prom-verduras')">
           <div class="sub-icon">🥬</div>
           <span class="sub-title">Verduras</span>
           <div class="sub-arrow">›</div>
@@ -581,19 +519,13 @@ body{
 </div>
 
 <script>
-// Welcome screen — show only ONCE per browser session
 window.addEventListener('load', function(){
   const welcomeShown = sessionStorage.getItem('uabWelcomeShown');
-  
   if(welcomeShown === 'true'){
-    // Already shown in this session - skip welcome
     document.getElementById('welcome').style.display='none';
     document.getElementById('mainApp').classList.add('visible');
   } else {
-    // First time in this session - show welcome
     sessionStorage.setItem('uabWelcomeShown','true');
-    
-    // Hide welcome after 5 seconds
     setTimeout(function(){
       document.getElementById('welcome').classList.add('fade-out');
       setTimeout(function(){
@@ -602,40 +534,28 @@ window.addEventListener('load', function(){
       },1000);
     },5000);
   }
-  
-  // Restore last opened category if exists
   const lastOpen = sessionStorage.getItem('uabLastCategory');
   if(lastOpen){
     const cat = document.getElementById(lastOpen);
-    if(cat){
-      cat.classList.add('open');
-    }
+    if(cat) cat.classList.add('open');
   }
 });
 
-// Save last opened category and handle accordion
 function openCategory(id){
-  // Toggle current category
   const currentCat = document.getElementById(id);
   const isOpen = currentCat.classList.contains('open');
-  
-  // Close all categories
   var cats = document.querySelectorAll('.category');
   cats.forEach(function(cat){
     cat.classList.remove('open');
   });
-  
-  // If it wasn't open before, open it now and save
   if(!isOpen){
     currentCat.classList.add('open');
     sessionStorage.setItem('uabLastCategory', id);
   } else {
-    // If it was open and we're closing it, clear the saved state
     sessionStorage.removeItem('uabLastCategory');
   }
 }
 
-// Toggle subcategory
 function toggleSub(id){
   document.getElementById(id).classList.toggle('open');
 }

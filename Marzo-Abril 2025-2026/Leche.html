@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Costos — Leche Fresca 2025 vs 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #060f1a; font-family: Georgia, 'Times New Roman', serif; color: #e8e0d0; min-height: 100vh; padding: 32px 24px; }
+  .dash { background: #0d1b2a; border-radius: 16px; padding: 28px; max-width: 1100px; margin: 0 auto; }
+
+  .kpi-header { text-align: center; margin-bottom: 20px; }
+  h2.title { font-size: 20px; font-weight: 500; color: #d4c98a; display: inline; }
+  .vs-badge { display: inline-block; background: #0f2a1e; border: 1px solid #2a6a44; color: #6fd97a; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 10px; margin-left: 10px; vertical-align: middle; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+  .kpi { background: #122035; border: 0.5px solid #2a3f55; border-radius: 10px; padding: 16px; text-align: center; }
+  .kpi-val { font-size: 24px; font-weight: 600; margin-bottom: 5px; }
+  .kpi-val.green { color: #6fd97a; }
+  .kpi-val.blue { color: #5bb8f5; }
+  .kpi-label { font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: #7a9ab5; }
+
+  .badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 600; letter-spacing: 0.05em; display: inline-block; }
+  .badge-mar { background: #1a3d28; color: #6fd97a; }
+  .badge-abr { background: #12305a; color: #5bb8f5; }
+
+  .chart-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+  .chart-box p.sub { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+
+  .toggle-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+  .toggle-row span { font-size: 11px; color: #5a7a8a; }
+  .tog-btn { cursor: pointer; font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 1.5px solid; font-family: Georgia, serif; transition: opacity 0.2s; user-select: none; }
+  .tog-btn.g25 { border-color: #6fd97a; color: #6fd97a; background: rgba(111,217,122,0.12); }
+  .tog-btn.g26 { border-color: #5bb8f5; color: #5bb8f5; background: rgba(91,184,245,0.12); }
+  .tog-btn.p25 { border-color: #f0a500; color: #f0a500; background: rgba(240,165,0,0.10); }
+  .tog-btn.p26 { border-color: #e05ccc; color: #e05ccc; background: rgba(224,92,204,0.10); }
+  .tog-btn.off { opacity: 0.3; }
+
+  .tables-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .tbl-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 16px; }
+  .tbl-box h3 { font-size: 13px; font-weight: 500; color: #c8dce8; margin-bottom: 3px; }
+  .tbl-box p.ts { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  thead tr { border-bottom: 0.5px solid #2a3f55; }
+  thead td { color: #c8a84a; font-weight: 600; font-size: 10px; letter-spacing: 0.07em; padding: 0 0 7px; text-transform: uppercase; }
+  tbody tr { border-bottom: 0.5px solid #1a2e42; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr.avg-row { border-top: 0.5px solid #2a3f55; }
+  td { padding: 7px 0; }
+  td.g25c { color: #6fd97a; text-align: right; padding-right: 8px; }
+  td.g26c { color: #5bb8f5; text-align: right; padding-right: 8px; }
+  td.varc { color: #aaa; text-align: right; padding-right: 8px; }
+  td.res { text-align: right; }
+  .pill { background: #1a3d28; color: #6fd97a; font-size: 10px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+  td.avg-label { color: #d4c98a; font-weight: 600; }
+  td.avg-25 { color: #6fd97a; font-weight: 600; text-align: right; padding-right: 8px; }
+  td.avg-26 { color: #5bb8f5; font-weight: 600; text-align: right; padding-right: 8px; }
+  td.avg-var { color: #aaa; font-weight: 600; text-align: right; padding-right: 8px; }
+
+  .savings-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sav-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 16px; }
+  .sav-box h3 { font-size: 13px; font-weight: 500; color: #c8dce8; margin-bottom: 3px; }
+  .sav-box p.ts { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+  .sav-item { margin-bottom: 14px; }
+  .sav-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+  .sav-week { font-size: 13px; font-weight: 500; color: #c8dce8; }
+  .sav-val { font-size: 12px; color: #e05ccc; font-weight: 600; text-align: right; }
+  .sav-desc { font-size: 10px; color: #5a7a8a; margin-bottom: 5px; }
+  .bar-track { background: #1a2e42; border-radius: 4px; height: 6px; }
+  .bar-fill { height: 6px; border-radius: 4px; background: #e05ccc; }
+  .total-box { background: #2d1625; border: 0.5px solid #5c2a48; border-radius: 10px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .total-label { font-size: 11px; color: #e05ccc; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+  .total-sub { font-size: 10px; color: #8a4a6a; margin-top: 2px; }
+  .total-val { font-size: 26px; font-weight: 700; color: #e05ccc; }
+
+  @media (max-width: 700px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .tables-row, .savings-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="dash">
+
+  <div class="kpi-header">
+    <h2 class="title">Evolución de Costos — Leche</h2>
+    <span class="vs-badge">2025 VS. 2026</span>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-val green">5,95 Bs</div><div class="kpi-label">Prom. Marzo 2025</div></div>
+    <div class="kpi"><div class="kpi-val blue">7,15 Bs</div><div class="kpi-label">Prom. Marzo 2026</div></div>
+    <div class="kpi"><div class="kpi-val green">5,99 Bs</div><div class="kpi-label">Prom. Abril 2025</div></div>
+    <div class="kpi"><div class="kpi-val blue">7,75 Bs</div><div class="kpi-label">Prom. Abril 2026</div></div>
+  </div>
+
+  <div class="chart-box">
+    <p class="sub">Precio Unitario Semanal (Bs/Bolsa) — barras + tendencia + promedios mensuales · Mar S1 a Abr S2</p>
+    <div class="toggle-row">
+      <span>Mostrar:</span>
+      <div class="tog-btn g25" id="btn0" onclick="toggle(0)">● Gestión 2025</div>
+      <div class="tog-btn g26" id="btn1" onclick="toggle(1)">● Gestión 2026</div>
+      <div class="tog-btn p25" id="btn2" onclick="toggle(2)">– Prom. mensual 2025</div>
+      <div class="tog-btn p26" id="btn3" onclick="toggle(3)">– Prom. mensual 2026</div>
+    </div>
+    <div style="position:relative;width:100%;height:300px;">
+      <canvas id="combo"></canvas>
+    </div>
+  </div>
+
+  <div class="tables-row">
+    <div class="tbl-box">
+      <h3><span class="badge badge-mar" style="margin-right:6px;">MARZO</span>Detalle Semanal</h3>
+      <p class="ts">Costo Bs/Bolsa · semanas registradas · comparativo de gestiones</p>
+      <table>
+        <thead><tr><td>Semana</td><td style="text-align:right;padding-right:8px;">2025</td><td style="text-align:right;padding-right:8px;">2026</td><td style="text-align:right;padding-right:8px;">Var.</td><td style="text-align:right;">Resultado</td></tr></thead>
+        <tbody>
+          <tr><td>Semana 1</td><td class="g25c">5,90</td><td class="g26c">6,79</td><td class="varc">+15,1%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+          <tr><td>Semana 2</td><td class="g25c">5,99</td><td class="g26c">7,50</td><td class="varc">+25,2%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">5,95</td><td class="avg-26">7,15</td><td class="avg-var">+20,2%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl-box">
+      <h3><span class="badge badge-abr" style="margin-right:6px;">ABRIL</span>Detalle Semanal</h3>
+      <p class="ts">Costo Bs/Bolsa · semanas registradas · comparativo de gestiones</p>
+      <table>
+        <thead><tr><td>Semana</td><td style="text-align:right;padding-right:8px;">2025</td><td style="text-align:right;padding-right:8px;">2026</td><td style="text-align:right;padding-right:8px;">Var.</td><td style="text-align:right;">Resultado</td></tr></thead>
+        <tbody>
+          <tr><td>Semana 1</td><td class="g25c">5,99</td><td class="g26c">7,50</td><td class="varc">+25,2%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+          <tr><td>Semana 2</td><td class="g25c">5,99</td><td class="g26c">8,00</td><td class="varc">+33,6%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">5,99</td><td class="avg-26">7,75</td><td class="avg-var">+29,4%</td><td class="res"><span class="pill" style="background:#3d1a3a;color:#e05ccc">2025 mejor</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="savings-row">
+    <div class="sav-box">
+      <h3><span class="badge badge-mar" style="margin-right:6px;">MARZO</span>Incremento de Costo</h3>
+      <p class="ts">Diferencia semanal (Bs/Bolsa) · aumento de precios 2026 vs 2025</p>
+      <div class="sav-item">
+        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val">+0,89 Bs — Sobrecosto</span></div>
+        <div class="sav-desc">Aumento del 15,1% en 2026</div>
+        <div class="bar-track"><div class="bar-fill" style="width:45%"></div></div>
+      </div>
+      <div class="sav-item">
+        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val">+1,51 Bs — Máximo incremento</span></div>
+        <div class="sav-desc">Aumento del 25,2% en 2026</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+      </div>
+      <div class="total-box">
+        <div><div class="total-label">Incremento Promedio</div><div class="total-sub">Sobrecosto promedio por Bolsa en gestión 2026</div></div>
+        <div class="total-val">+1,20 Bs</div>
+      </div>
+    </div>
+    <div class="sav-box">
+      <h3><span class="badge badge-abr" style="margin-right:6px;">ABRIL</span>Incremento de Costo</h3>
+      <p class="ts">Diferencia semanal (Bs/Bolsa) · aumento de precios 2026 vs 2025</p>
+      <div class="sav-item">
+        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val">+1,51 Bs — Sobrecosto</span></div>
+        <div class="sav-desc">Aumento del 25,2% en 2026</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+      </div>
+      <div class="sav-item">
+        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val">+2,01 Bs — Máximo incremento</span></div>
+        <div class="sav-desc">Aumento del 33,6% en 2026</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="total-box">
+        <div><div class="total-label">Incremento Total Mensual</div><div class="total-sub">Sobrecosto promedio por Bolsa en gestión 2026</div></div>
+        <div class="total-val">+1,76 Bs</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const labels = ['Mar S1','Mar S2','Abr S1','Abr S2'];
+const d25   = [5.90, 5.99, 5.99, 5.99];
+const d26   = [6.79, 7.50, 7.50, 8.00];
+const prom25 = [5.95, 5.95, 5.99, 5.99];
+const prom26 = [7.15, 7.15, 7.75, 7.75];
+
+const gridColor = 'rgba(255,255,255,0.06)';
+const tickColor = '#5a7a8a';
+
+const myChart = new Chart(document.getElementById('combo'), {
+  data: {
+    labels,
+    datasets: [
+      { type:'bar',  label:'Gestión 2025',      data:d25,    backgroundColor:'rgba(111,217,122,0.65)', borderRadius:4, order:3 },
+      { type:'bar',  label:'Gestión 2026',      data:d26,    backgroundColor:'rgba(91,184,245,0.65)',  borderRadius:4, order:3 },
+      { type:'line', label:'Tendencia 2025',    data:d25,    borderColor:'#6fd97a', backgroundColor:'transparent', tension:0.35, pointRadius:4, pointBackgroundColor:'#6fd97a', borderWidth:2, order:2 },
+      { type:'line', label:'Tendencia 2026',    data:d26,    borderColor:'#5bb8f5', backgroundColor:'transparent', tension:0.35, pointRadius:4, pointBackgroundColor:'#5bb8f5', borderDash:[5,3], borderWidth:2, order:2 },
+      { type:'line', label:'Prom. mensual 2025',data:prom25, borderColor:'#f0a500', backgroundColor:'transparent', tension:0, pointRadius:0, borderDash:[8,4], borderWidth:2.5, order:1 },
+      { type:'line', label:'Prom. mensual 2026',data:prom26, borderColor:'#e05ccc', backgroundColor:'transparent', tension:0, pointRadius:0, borderDash:[8,4], borderWidth:2.5, order:1 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks:{ color:tickColor, font:{size:11}, autoSkip:false }, grid:{ color:gridColor } },
+      y: { min:4, max:9, ticks:{ color:tickColor, font:{size:11}, callback: v => 'Bs ' + v }, grid:{ color:gridColor } }
+    }
+  }
+});
+
+const groupMap = { 0:[0,2], 1:[1,3], 2:[4], 3:[5] };
+const visible  = [true, true, true, true];
+
+function toggle(g) {
+  visible[g] = !visible[g];
+  document.getElementById('btn' + g).classList.toggle('off', !visible[g]);
+  groupMap[g].forEach(i => { myChart.data.datasets[i].hidden = !visible[g]; });
+  myChart.update();
+}
+</script>
+</body>
+</html>
