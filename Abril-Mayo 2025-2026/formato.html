@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Costos — Tomate UAB · Semestre Ene-Jun</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#08111c;
+ --surface:#0d1b2a;
+ --surface2:#111f30;
+ --border:rgba(255,255,255,0.06);
+ --border2:rgba(255,255,255,0.11);
+ --gold:#f2c94c;
+ --gold-dim:rgba(242,201,76,0.15);
+ --teal:#2dd4bf;
+ --teal-dim:rgba(45,212,191,0.13);
+ --coral:#ff6b6b;
+ --coral-dim:rgba(255,107,107,0.13);
+ --sky:#60a5fa;
+ --sky-dim:rgba(96,165,250,0.13);
+ --green:#22c55e;
+ --green-dim:rgba(34,197,94,0.13);
+ --purple:#a78bfa;
+ --purple-dim:rgba(167,139,250,0.13);
+ --text:#e8eef5;
+ --muted:rgba(232,238,245,0.42);
+ --faint:rgba(232,238,245,0.16);
+ --serif:'Cormorant Garamond',serif;
+ --sans:'Outfit',sans-serif;
+}
+
+html{font-size:15px}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+body::before{
+ content:'';position:fixed;inset:0;
+ background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+ pointer-events:none;z-index:0;opacity:.4;
+}
+
+header{
+ position:relative;z-index:1;
+ background:linear-gradient(180deg,rgba(13,27,42,1) 0%,rgba(8,17,28,1) 100%);
+ border-bottom:1px solid var(--border2);
+ padding:22px 36px;
+ display:flex;align-items:center;justify-content:space-between;
+}
+header::after{
+ content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+ background:linear-gradient(90deg,transparent,var(--gold),transparent);
+ opacity:.35;
+}
+.h-left{display:flex;align-items:center;gap:18px}
+.logo{
+ width:50px;height:50px;
+ background:linear-gradient(135deg,#ef4444,var(--coral));
+ border-radius:14px;
+ display:flex;align-items:center;justify-content:center;
+ font-family:var(--serif);font-size:28px;font-weight:700;color:#08111c;
+ box-shadow:0 4px 20px rgba(255,107,107,.25);
+ flex-shrink:0;
+}
+.h-meta .h-title{font-family:var(--serif);font-size:26px;font-weight:700;color:#f0ead8;letter-spacing:.01em;line-height:1.1}
+.h-meta .h-sub{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:3px}
+.h-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.h-period{font-size:12px;color:var(--muted);letter-spacing:.04em}
+
+.section-nav{
+ position:relative;z-index:1;display:flex;gap:10px;padding:16px 36px 0;
+}
+.nav-pill{
+ font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+ color:var(--muted);padding:8px 18px;border-radius:20px;
+ border:1px solid var(--border2);background:var(--surface);
+}
+.nav-pill.active{color:var(--gold);border-color:rgba(242,201,76,.35);background:var(--gold-dim)}
+
+.section-title-row{
+ position:relative;z-index:1;padding:34px 36px 0;display:flex;align-items:center;gap:14px;
+}
+.section-title-row .line{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
+.section-title-row .st-label{
+ font-family:var(--serif);font-size:24px;font-weight:700;color:#f0ead8;white-space:nowrap;
+}
+.section-title-row .st-tag{
+ font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+ color:var(--purple);background:var(--purple-dim);border:1px solid rgba(167,139,250,.28);
+ padding:4px 12px;border-radius:20px;
+}
+
+.wrap{position:relative;z-index:1;padding:24px 36px 40px;display:flex;flex-direction:column;gap:26px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.kpi{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:18px;
+ padding:24px 26px;
+ position:relative;overflow:hidden;
+}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0}
+.kpi-flag{
+ position:absolute;top:16px;right:16px;
+ font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+ padding:4px 10px;border-radius:20px;
+}
+.kpi-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.kpi-num{font-family:var(--serif);font-size:48px;font-weight:700;line-height:1;margin-bottom:6px}
+.kpi-desc{font-size:12px;color:var(--muted)}
+
+.kpi.c-gold .kpi-accent{background:linear-gradient(90deg,#c47f0a,var(--gold))}
+.kpi.c-gold .kpi-num{color:var(--gold)}
+.kpi.c-teal .kpi-accent{background:linear-gradient(90deg,#0d9488,var(--teal))}
+.kpi.c-teal .kpi-num{color:var(--teal)}
+.kpi.c-teal .kpi-flag{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(45,212,191,.25)}
+.kpi.c-coral .kpi-accent{background:linear-gradient(90deg,#dc2626,var(--coral))}
+.kpi.c-coral .kpi-num{color:var(--coral)}
+.kpi.c-coral .kpi-flag{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,.25)}
+.kpi.c-sky .kpi-accent{background:linear-gradient(90deg,#2563eb,var(--sky))}
+.kpi.c-sky .kpi-num{color:var(--sky)}
+.kpi.c-sky .kpi-flag{background:var(--sky-dim);color:var(--sky);border:1px solid rgba(96,165,250,.25)}
+.kpi.c-purple .kpi-accent{background:linear-gradient(90deg,#7c3aed,var(--purple))}
+.kpi.c-purple .kpi-num{color:var(--purple)}
+.kpi.c-purple .kpi-flag{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
+
+.chart-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:32px 32px 26px;
+}
+.panel-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.panel-hd-left .p-title{font-family:var(--serif);font-size:22px;font-weight:700;color:#f0ead8;line-height:1.1}
+.panel-hd-left .p-sub{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:.03em}
+.legend-row{display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.leg{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.leg-dot{width:12px;height:12px;border-radius:50%}
+.leg-dash{width:24px;height:0;border-top:2px dashed}
+.chart-box{position:relative;height:340px}
+.chart-box.tall{height:300px}
+
+.bottom-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;align-items:start}
+
+.tbl-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:28px;
+}
+.tbl-panel .p-title{font-family:var(--serif);font-size:20px;font-weight:700;color:#f0ead8}
+.tbl-panel .p-sub{font-size:12px;color:var(--muted);margin-bottom:20px;margin-top:4px;letter-spacing:.03em}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+.th-group{background:rgba(242,201,76,.07);border-bottom:1px solid rgba(242,201,76,.18)}
+.th-group th{
+ padding:12px 14px;text-align:center;
+ font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--gold);
+}
+.th-group th:first-child{text-align:left}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,0.025)}
+tbody td{padding:11px 14px;text-align:center;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.03)}
+tbody td:first-child{text-align:left;color:rgba(232,238,245,.82);font-weight:500}
+.month-label{
+ padding:10px 14px 6px;
+ font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+ color:rgba(242,201,76,.55);
+ background:rgba(242,201,76,0.03);
+ border-top:1px solid rgba(242,201,76,0.08);
+}
+.avg-row td{
+ font-weight:700;color:var(--green);
+ background:var(--green-dim);
+ border-top:1px dashed rgba(34,197,94,0.25);
+}
+.avg-row td:first-child{color:var(--green)}
+tfoot tr{background:rgba(242,201,76,.06)}
+tfoot td{
+ padding:13px 14px;text-align:center;font-weight:600;
+ color:var(--gold);font-size:14px;
+ border-top:1px solid rgba(242,201,76,0.2);
+}
+tfoot td:first-child{text-align:left}
+
+.v25{color:var(--sky);font-weight:600;font-size:15px}
+.v26{color:var(--teal);font-weight:600;font-size:15px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.tag-better{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(45,212,191,.22)}
+.tag-worse{background:var(--coral-dim);color:var(--coral);border:1px solid rgba(255,107,107,.2)}
+.tag-equal{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid rgba(255,255,255,.1)}
+
+.sav-panel{
+ background:var(--surface);
+ border:1px solid var(--border);
+ border-radius:20px;
+ padding:28px;
+ display:flex;flex-direction:column;gap:0;
+}
+.sav-panel .p-title{font-family:var(--serif);font-size:20px;font-weight:700;color:#f0ead8}
+.sav-panel .p-sub{font-size:12px;color:var(--muted);margin-bottom:24px;margin-top:4px;letter-spacing:.03em}
+
+.sav-item{margin-bottom:16px}
+.sav-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.sav-month{font-weight:600;font-size:16px;color:var(--text)}
+.sav-val{font-size:13px;font-weight:700}
+.sav-val.neg{color:var(--teal)}
+.sav-val.pos{color:var(--coral)}
+.sav-note{font-size:12px;color:var(--muted);margin-bottom:8px}
+.track{height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.fill{height:100%;border-radius:4px}
+.fill.coral{background:linear-gradient(90deg,#dc2626,var(--coral))}
+.fill.teal{background:linear-gradient(90deg,#0d9488,var(--teal))}
+.fill.green{background:linear-gradient(90deg,#16a34a,var(--green))}
+
+.divider{height:1px;background:var(--border);margin:4px 0 16px}
+
+.result-card{
+ background:linear-gradient(135deg,rgba(242,201,76,0.09),rgba(45,212,191,0.06));
+ border:1px solid rgba(242,201,76,.2);
+ border-radius:16px;
+ padding:16px 20px;
+ display:flex;justify-content:space-between;align-items:center;
+ margin-top:4px;
+}
+.rc-left .rc-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700}
+.rc-left .rc-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.rc-right{font-family:var(--serif);font-size:30px;font-weight:700}
+
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.insight-card{
+ background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px 24px;
+}
+.insight-card .ic-icon{
+ width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+ font-size:18px;margin-bottom:14px;
+}
+.insight-card.i-purple .ic-icon{background:var(--purple-dim);color:var(--purple)}
+.insight-card.i-coral .ic-icon{background:var(--coral-dim);color:var(--coral)}
+.insight-card.i-teal .ic-icon{background:var(--teal-dim);color:var(--teal)}
+.insight-card .ic-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.insight-card .ic-body{font-size:12.5px;color:var(--muted);line-height:1.55}
+
+footer{
+ position:relative;z-index:1;
+ border-top:1px solid var(--border);
+ padding:16px 36px;
+ display:flex;justify-content:space-between;align-items:center;
+}
+footer .f-note{font-size:12px;color:var(--faint);letter-spacing:.04em}
+footer .f-brand{font-size:12px;color:var(--faint);font-family:var(--serif)}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="h-left">
+   <div class="logo">T</div>
+   <div class="h-meta">
+     <div class="h-title">Evolución de Costos — Tomate</div>
+     <div class="h-sub">Universidad Adventista de Bolivia</div>
+   </div>
+ </div>
+ <div class="h-right">
+   <div class="h-period">Enero – Junio · Gestión 2025 vs. 2026</div>
+ </div>
+</header>
+
+<div class="section-nav">
+ <div class="nav-pill">Trimestre II · Abr–Jun</div>
+ <div class="nav-pill active">Semestre · Ene–Jun</div>
+</div>
+
+<!-- ============ TRIMESTRE II (ABR-JUN) — SE CONSERVA TAL CUAL ============ -->
+<div class="wrap">
+
+ <div class="kpi-row">
+   <div class="kpi c-gold">
+     <div class="kpi-accent"></div>
+     <div class="kpi-lbl">Prom. Trimestral 2025</div>
+     <div class="kpi-num">6,74</div>
+     <div class="kpi-desc">Bs./kg · Línea base</div>
+   </div>
+   <div class="kpi c-teal">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">▲ +1,2%</div>
+     <div class="kpi-lbl">Prom. Trimestral 2026</div>
+     <div class="kpi-num">6,82</div>
+     <div class="kpi-desc">Bs./kg · Ligero incremento</div>
+   </div>
+   <div class="kpi c-coral">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">⚠ Máximo</div>
+     <div class="kpi-lbl">Pico más alto (Jun 2026)</div>
+     <div class="kpi-num">19,02</div>
+     <div class="kpi-desc">Bs./kg · Semana 2</div>
+   </div>
+   <div class="kpi c-sky">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">★ Mínimo</div>
+     <div class="kpi-lbl">Mejor precio (Abr 2026)</div>
+     <div class="kpi-num">3,18</div>
+     <div class="kpi-desc">Bs./kg · Semana 3</div>
+   </div>
+ </div>
+
+ <div class="chart-panel">
+   <div class="panel-hd">
+     <div class="panel-hd-left">
+       <div class="p-title">Comparativo Mensual &amp; Tendencia Semanal de Costos</div>
+       <div class="p-sub">Barras: promedio mensual (Bs/kg) · Líneas: evolución semanal registrada · Promedios trimestrales en punteado</div>
+     </div>
+     <div class="legend-row">
+       <div class="leg"><div class="leg-dot" style="background:var(--sky)"></div>Semanal 2025</div>
+       <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div>Semanal 2026</div>
+       <div class="leg"><div class="leg-dash" style="border-color:rgba(96,165,250,.55)"></div>Prom 2025</div>
+       <div class="leg"><div class="leg-dash" style="border-color:rgba(45,212,191,.55)"></div>Prom 2026</div>
+     </div>
+   </div>
+   <div class="chart-box">
+     <canvas id="mainChart"></canvas>
+   </div>
+ </div>
+
+ <div class="bottom-grid">
+
+   <div class="tbl-panel">
+     <div class="p-title">Detalle Semanal por Mes</div>
+     <div class="p-sub">Costo unitario Bs./kg · semanas registradas · comparativo de gestiones</div>
+     <table>
+       <thead>
+         <tr class="th-group">
+           <th>Mes / Semana</th>
+           <th>2025 Bs/kg</th>
+           <th>2026 Bs/kg</th>
+           <th>Variación</th>
+           <th>Resultado</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr><td colspan="5" class="month-label">● Abril</td></tr>
+         <tr><td>Semana 1</td><td><span class="v25">6,36</span></td><td><span class="v26">3,27</span></td><td style="color:var(--teal)">−48,6%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Semana 2</td><td><span class="v25">8,33</span></td><td><span class="v26">3,64</span></td><td style="color:var(--teal)">−56,3%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Semana 3</td><td><span class="v25">10,00</span></td><td><span class="v26">3,18</span></td><td style="color:var(--teal)">−68,2%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Semana 4</td><td><span class="v25">10,00</span></td><td><span class="v26">3,41</span></td><td style="color:var(--teal)">−65,9%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr class="avg-row"><td>→ Costo Promedio Mensual</td><td>8,67</td><td>3,38</td><td style="color:var(--teal)">−61,0%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+
+         <tr><td colspan="5" class="month-label">● Mayo</td></tr>
+         <tr><td>Semana 1</td><td><span class="v25">7,73</span></td><td><span class="v26">4,09</span></td><td style="color:var(--teal)">−47,1%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Semana 2</td><td><span class="v25">6,14</span></td><td><span class="v26">5,52</span></td><td style="color:var(--teal)">−10,1%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Semana 3</td><td><span class="v25">8,00</span></td><td><span class="v26">8,96</span></td><td style="color:var(--coral)">+12,0%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Semana 4</td><td><span class="v25">8,00</span></td><td><span class="v26">-</span></td><td style="color:var(--muted)">-</td><td><span class="tag tag-equal">Sin dato</span></td></tr>
+         <tr class="avg-row"><td>→ Costo Promedio Mensual</td><td>5,97</td><td>6,19</td><td style="color:var(--coral)">+3,7%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+
+         <tr><td colspan="5" class="month-label">● Junio</td></tr>
+         <tr><td>Semana 1</td><td><span class="v25">4,55</span></td><td><span class="v26">16,36</span></td><td style="color:var(--coral)">+259,6%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Semana 2</td><td><span class="v25">8,64</span></td><td><span class="v26">19,02</span></td><td style="color:var(--coral)">+120,1%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Semana 3</td><td><span class="v25">4,55</span></td><td><span class="v26">4,78</span></td><td style="color:var(--coral)">+5,1%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Semana 4</td><td><span class="v25">4,55</span></td><td><span class="v26">3,46</span></td><td style="color:var(--teal)">−24,0%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr class="avg-row"><td>→ Costo Promedio Mensual</td><td>5,57</td><td>10,90</td><td style="color:var(--coral)">+95,7%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+       </tbody>
+       <tfoot>
+         <tr><td>Promedio Trimestral</td><td>6,74</td><td>6,82</td><td style="color:var(--coral)">+1,2%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+       </tfoot>
+     </table>
+   </div>
+
+   <div class="sav-panel">
+     <div class="p-title">Variación de Costos</div>
+     <div class="p-sub">Diferencia mensual promedio (Bs/kg) respecto a gestión 2025</div>
+
+     <div class="sav-item">
+       <div class="sav-hd"><span class="sav-month">Abril</span><span class="sav-val neg">−5,29 Bs/kg — 2026 mucho más económico</span></div>
+       <div class="sav-note">2026 redujo el costo un 61% — mejor mes</div>
+       <div class="track"><div class="fill green" style="width:100%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd"><span class="sav-month">Mayo</span><span class="sav-val pos">+0,22 Bs/kg — 2026 más caro</span></div>
+       <div class="sav-note">Incremento del 3,7% en el promedio mensual</div>
+       <div class="track"><div class="fill coral" style="width:8%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd"><span class="sav-month">Junio</span><span class="sav-val pos">+5,33 Bs/kg — 2026 mucho más caro</span></div>
+       <div class="sav-note">El precio subió 95,7% en junio 2026 — pico máximo</div>
+       <div class="track"><div class="fill coral" style="width:100%"></div></div>
+     </div>
+
+     <div class="divider"></div>
+
+     <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-weight:600">Tendencia mensual promedio</div>
+     <div style="position:relative;height:110px;margin-bottom:12px">
+       <canvas id="miniChart"></canvas>
+     </div>
+
+     <div class="result-card">
+       <div class="rc-left">
+         <div class="rc-lbl">Resultado Trimestral</div>
+         <div class="rc-sub">Balance neto de gestión 2026 vs. 2025</div>
+       </div>
+       <div class="rc-right" style="color:var(--coral)">+0,08 Bs/kg</div>
+     </div>
+   </div>
+
+ </div>
+</div>
+
+<!-- ============ NUEVO: ANÁLISIS SEMESTRAL ENE-JUN ============ -->
+<div class="section-title-row">
+ <div class="st-label">Análisis Semestral · Enero – Junio</div>
+ <div class="st-tag">Visión de conjunto</div>
+ <div class="line"></div>
+</div>
+
+<div class="wrap">
+
+ <div class="kpi-row">
+   <div class="kpi c-gold">
+     <div class="kpi-accent"></div>
+     <div class="kpi-lbl">Prom. Semestral 2025</div>
+     <div class="kpi-num">6,65</div>
+     <div class="kpi-desc">Bs./kg · Línea base (6 meses)</div>
+   </div>
+   <div class="kpi c-teal">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">▼ -1,6%</div>
+     <div class="kpi-lbl">Prom. Semestral 2026</div>
+     <div class="kpi-num">6,55</div>
+     <div class="kpi-desc">Bs./kg · Prácticamente estable</div>
+   </div>
+   <div class="kpi c-purple">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">★ Mejor mes</div>
+     <div class="kpi-lbl">Mes más económico 2026</div>
+     <div class="kpi-num">3,40</div>
+     <div class="kpi-desc">Bs./kg · Marzo</div>
+   </div>
+   <div class="kpi c-coral">
+     <div class="kpi-accent"></div>
+     <div class="kpi-flag">⚠ Peor mes</div>
+     <div class="kpi-lbl">Mes más caro 2026</div>
+     <div class="kpi-num">10,90</div>
+     <div class="kpi-desc">Bs./kg · Junio (pico Bs. 19,02/kg)</div>
+   </div>
+ </div>
+
+ <div class="chart-panel">
+   <div class="panel-hd">
+     <div class="panel-hd-left">
+       <div class="p-title">Evolución Mensual del Semestre — Ene a Jun</div>
+       <div class="p-sub">Promedio mensual (Bs/kg) · Gestión 2025 vs. 2026 · Se aprecia la caída en Q1 2026 y el repunte en Q2 2026</div>
+     </div>
+     <div class="legend-row">
+       <div class="leg"><div class="leg-dot" style="background:var(--sky)"></div>2025</div>
+       <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div>2026</div>
+     </div>
+   </div>
+   <div class="chart-box tall">
+     <canvas id="semChart"></canvas>
+   </div>
+ </div>
+
+ <div class="bottom-grid">
+
+   <div class="tbl-panel">
+     <div class="p-title">Resumen Mensual Consolidado</div>
+     <div class="p-sub">Promedio mensual Bs./kg · Enero a Junio · ambas gestiones</div>
+     <table>
+       <thead>
+         <tr class="th-group">
+           <th>Mes</th>
+           <th>2025 Bs/kg</th>
+           <th>2026 Bs/kg</th>
+           <th>Variación</th>
+           <th>Resultado</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr><td>Enero</td><td><span class="v25">5,90</span></td><td><span class="v26">9,10</span></td><td style="color:var(--coral)">+54,2%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Febrero</td><td><span class="v25">6,90</span></td><td><span class="v26">6,30</span></td><td style="color:var(--teal)">−8,7%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Marzo</td><td><span class="v25">6,90</span></td><td><span class="v26">3,40</span></td><td style="color:var(--teal)">−50,7%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Abril</td><td><span class="v25">8,67</span></td><td><span class="v26">3,38</span></td><td style="color:var(--teal)">−61,0%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+         <tr><td>Mayo</td><td><span class="v25">5,97</span></td><td><span class="v26">6,19</span></td><td style="color:var(--coral)">+3,7%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+         <tr><td>Junio</td><td><span class="v25">5,57</span></td><td><span class="v26">10,90</span></td><td style="color:var(--coral)">+95,7%</td><td><span class="tag tag-worse">2025 mejor</span></td></tr>
+       </tbody>
+       <tfoot>
+         <tr><td>Promedio Semestral</td><td>6,65</td><td>6,55</td><td style="color:var(--teal)">−1,6%</td><td><span class="tag tag-better">2026 mejor</span></td></tr>
+       </tfoot>
+     </table>
+   </div>
+
+   <div class="sav-panel">
+     <div class="p-title">Balance del Semestre</div>
+     <div class="p-sub">3 meses favorables y 3 desfavorables para 2026 — el semestre se define por la magnitud de cada desvío</div>
+
+     <div class="sav-item">
+       <div class="sav-hd"><span class="sav-month">Q1 · Ene–Mar</span><span class="sav-val neg">−0,3 Bs/kg promedio</span></div>
+       <div class="sav-note">Tendencia descendente sostenida: 2026 cerró el trimestre 4,5% más barato</div>
+       <div class="track"><div class="fill teal" style="width:35%"></div></div>
+     </div>
+
+     <div class="sav-item">
+       <div class="sav-hd"><span class="sav-month">Q2 · Abr–Jun</span><span class="sav-val pos">+0,08 Bs/kg promedio</span></div>
+       <div class="sav-note">Abril fue el mejor mes del semestre, pero Junio revirtió la ganancia con un alza de 95,7%</div>
+       <div class="track"><div class="fill coral" style="width:12%"></div></div>
+     </div>
+
+     <div class="divider"></div>
+
+     <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-weight:600">Tendencia semestral promedio</div>
+     <div style="position:relative;height:110px;margin-bottom:12px">
+       <canvas id="miniSemChart"></canvas>
+     </div>
+
+     <div class="result-card">
+       <div class="rc-left">
+         <div class="rc-lbl">Resultado Semestral</div>
+         <div class="rc-sub">Balance neto de gestión 2026 vs. 2025 (Ene–Jun)</div>
+       </div>
+       <div class="rc-right" style="color:var(--teal)">−0,10 Bs/kg</div>
+     </div>
+   </div>
+
+ </div>
+
+ <div class="insight-grid">
+   <div class="insight-card i-teal">
+     <div class="ic-icon">▼</div>
+     <div class="ic-title">Primer trimestre: mejora clara</div>
+     <div class="ic-body">Entre enero y marzo 2026 el costo bajó de forma consistente (9,10 → 6,30 → 3,40 Bs/kg), cerrando el trimestre 4,5% por debajo de 2025. Marzo fue el mejor mes de todo el semestre.</div>
+   </div>
+   <div class="insight-card i-coral">
+     <div class="ic-icon">▲</div>
+     <div class="ic-title">Segundo trimestre: alta volatilidad</div>
+     <div class="ic-body">Abril repitió precios bajos, pero mayo y sobre todo junio dispararon el costo (pico de 19,02 Bs/kg), llevando el trimestre a cerrar 1,2% por encima de 2025.</div>
+   </div>
+   <div class="insight-card i-purple">
+     <div class="ic-icon">≈</div>
+     <div class="ic-title">Balance semestral: prácticamente neutro</div>
+     <div class="ic-body">En el acumulado Ene–Jun, 2026 queda apenas 1,6% por debajo de 2025 (6,55 vs. 6,65 Bs/kg). El ahorro del Q1 casi se diluye por el repunte de junio: se recomienda vigilar de cerca el abastecimiento en ese mes.</div>
+   </div>
+ </div>
+
+</div>
+
+<footer>
+ <div class="f-note">Dashboard generado para análisis de costos — comparativo trimestral y semestral</div>
+ <div class="f-brand">Universidad Adventista de Bolivia</div>
+</footer>
+
+<script>
+const SKY='#60a5fa', TEAL='#2dd4bf', GOLD='#f2c94c', CORAL='#ff6b6b', GREEN='#22c55e', PURPLE='#a78bfa';
+
+/* ===== Q2 (Abr-Jun) — chart original conservado ===== */
+const semLabelsQ2 = ['Abr S1','Abr S2','Abr S3','Abr S4','May S1','May S2','May S3','May S4','Jun S1','Jun S2','Jun S3','Jun S4'];
+const w25q2 = [6.36, 8.33, 10.00, 10.00, 7.73, 6.14, 8.00, 8.00, 4.55, 8.64, 4.55, 4.55];
+const w26q2 = [3.27, 3.64, 3.18, 3.41, 4.09, 5.52, 8.96, null, 16.36, 19.02, 4.78, 3.46];
+
+const ctxQ2 = document.getElementById('mainChart').getContext('2d');
+const gSkyQ2 = ctxQ2.createLinearGradient(0,0,0,340);
+gSkyQ2.addColorStop(0,'rgba(96,165,250,0.22)'); gSkyQ2.addColorStop(1,'rgba(96,165,250,0)');
+const gTealQ2 = ctxQ2.createLinearGradient(0,0,0,340);
+gTealQ2.addColorStop(0,'rgba(45,212,191,0.18)'); gTealQ2.addColorStop(1,'rgba(45,212,191,0)');
+
+new Chart(ctxQ2, {
+  data:{ labels: semLabelsQ2, datasets:[
+    {type:'bar',label:'Mensual 2025',data:w25q2,backgroundColor:'rgba(96,165,250,0.65)',borderColor:SKY,borderWidth:2,borderRadius:8,borderSkipped:false,barPercentage:.5,categoryPercentage:.55,order:4},
+    {type:'bar',label:'Mensual 2026',data:w26q2,backgroundColor:'rgba(45,212,191,0.65)',borderColor:TEAL,borderWidth:2,borderRadius:8,borderSkipped:false,barPercentage:.5,categoryPercentage:.55,order:5},
+    {type:'line',label:'Semanal 2025',data:w25q2,borderColor:SKY,backgroundColor:gSkyQ2,borderWidth:2.5,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:SKY,pointBorderColor:'#08111c',pointBorderWidth:2,fill:true,tension:.38,order:1},
+    {type:'line',label:'Semanal 2026',data:w26q2,borderColor:TEAL,backgroundColor:gTealQ2,borderWidth:2.5,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:TEAL,pointBorderColor:'#08111c',pointBorderWidth:2,fill:true,tension:.38,order:2},
+    {type:'line',label:'Prom. 2025 (6,74)',data:Array(12).fill(6.74),borderColor:'rgba(96,165,250,.45)',borderWidth:1.5,borderDash:[7,4],pointRadius:0,fill:false,tension:0,order:3},
+    {type:'line',label:'Prom. 2026 (6,82)',data:Array(12).fill(6.82),borderColor:'rgba(45,212,191,.45)',borderWidth:1.5,borderDash:[7,4],pointRadius:0,fill:false,tension:0,order:6}
+  ]},
+  options:{ responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{ legend:{labels:{color:'rgba(232,238,245,.45)',font:{family:"'Outfit',sans-serif",size:13},boxWidth:12,boxHeight:10,padding:16,filter:i=>!i.text.startsWith('Prom.')}},
+      tooltip:{backgroundColor:'rgba(8,17,28,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',padding:13,titleFont:{size:14},bodyFont:{size:13},
+        callbacks:{label:c=>c.parsed.y===null?null:` ${c.dataset.label}: Bs. ${c.parsed.y}`},filter:i=>i.parsed.y!==null} },
+    scales:{ x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(232,238,245,.4)',font:{size:13,family:"'Outfit',sans-serif"}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(232,238,245,.38)',font:{size:13},callback:v=>'Bs. '+v},min:0,max:21,title:{display:true,text:'Costo (Bs./kg)',color:'rgba(232,238,245,.22)',font:{size:12}}} }
+  }
+});
+
+const miniCtxQ2 = document.getElementById('miniChart').getContext('2d');
+new Chart(miniCtxQ2, { type:'line', data:{ labels:['Abril','Mayo','Junio'], datasets:[
+    {label:'2025',data:[8.67,5.97,5.57],borderColor:SKY,borderWidth:2,pointRadius:4,pointBackgroundColor:SKY,pointBorderColor:'#08111c',pointBorderWidth:2,fill:false,tension:.4},
+    {label:'2026',data:[3.38,6.19,10.90],borderColor:TEAL,borderWidth:2,pointRadius:4,pointBackgroundColor:TEAL,pointBorderColor:'#08111c',pointBorderWidth:2,fill:false,tension:.4}
+  ]}, options:{ responsive:true,maintainAspectRatio:false,
+    plugins:{ legend:{labels:{color:'rgba(232,238,245,.45)',font:{size:12},boxWidth:10,boxHeight:10,padding:12}},
+      tooltip:{backgroundColor:'rgba(8,17,28,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',padding:10,titleFont:{size:13},bodyFont:{size:12},callbacks:{label:c=>` ${c.dataset.label}: Bs. ${c.parsed.y}`}} },
+    scales:{ x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(232,238,245,.38)',font:{size:12}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(232,238,245,.35)',font:{size:12},callback:v=>'Bs.'+v},min:0,max:21} }
+  }
+});
+
+/* ===== NUEVO: Semestre Ene-Jun ===== */
+const semMonths = ['Enero','Febrero','Marzo','Abril','Mayo','Junio'];
+const sem25 = [5.90, 6.90, 6.90, 8.67, 5.97, 5.57];
+const sem26 = [9.10, 6.30, 3.40, 3.38, 6.19, 10.90];
+
+const ctxSem = document.getElementById('semChart').getContext('2d');
+const gSkySem = ctxSem.createLinearGradient(0,0,0,300);
+gSkySem.addColorStop(0,'rgba(96,165,250,0.22)'); gSkySem.addColorStop(1,'rgba(96,165,250,0)');
+const gTealSem = ctxSem.createLinearGradient(0,0,0,300);
+gTealSem.addColorStop(0,'rgba(45,212,191,0.2)'); gTealSem.addColorStop(1,'rgba(45,212,191,0)');
+const gPurple = ctxSem.createLinearGradient(0,0,0,300);
+gPurple.addColorStop(0,'rgba(167,139,250,.5)'); gPurple.addColorStop(1,'rgba(167,139,250,0)');
+
+new Chart(ctxSem, {
+  type:'line',
+  data:{ labels: semMonths, datasets:[
+    {label:'2025',data:sem25,borderColor:SKY,backgroundColor:gSkySem,borderWidth:3,pointRadius:6,pointHoverRadius:8,pointBackgroundColor:SKY,pointBorderColor:'#08111c',pointBorderWidth:2,fill:true,tension:.35},
+    {label:'2026',data:sem26,borderColor:TEAL,backgroundColor:gTealSem,borderWidth:3,pointRadius:6,pointHoverRadius:8,pointBackgroundColor:TEAL,pointBorderColor:'#08111c',pointBorderWidth:2,fill:true,tension:.35},
+    {label:'Prom. Semestral 2025 (6,65)',data:Array(6).fill(6.65),borderColor:'rgba(96,165,250,.4)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false},
+    {label:'Prom. Semestral 2026 (6,55)',data:Array(6).fill(6.55),borderColor:'rgba(45,212,191,.4)',borderWidth:1.5,borderDash:[6,4],pointRadius:0,fill:false}
+  ]},
+  options:{ responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{ legend:{labels:{color:'rgba(232,238,245,.45)',font:{family:"'Outfit',sans-serif",size:13},boxWidth:12,boxHeight:10,padding:16,filter:i=>!i.text.startsWith('Prom.')}},
+      tooltip:{backgroundColor:'rgba(8,17,28,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',padding:13,titleFont:{size:14},bodyFont:{size:13},
+        callbacks:{label:c=>` ${c.dataset.label}: Bs. ${c.parsed.y}`}} },
+    scales:{ x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(232,238,245,.4)',font:{size:13,family:"'Outfit',sans-serif"}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(232,238,245,.38)',font:{size:13},callback:v=>'Bs. '+v},min:0,max:11,title:{display:true,text:'Costo (Bs./kg)',color:'rgba(232,238,245,.22)',font:{size:12}}} }
+  }
+});
+
+const miniSemCtx = document.getElementById('miniSemChart').getContext('2d');
+new Chart(miniSemCtx, { type:'line', data:{ labels:['Q1 (Ene-Mar)','Q2 (Abr-Jun)'], datasets:[
+    {label:'2025',data:[6.6,6.74],borderColor:SKY,borderWidth:2,pointRadius:4,pointBackgroundColor:SKY,pointBorderColor:'#08111c',pointBorderWidth:2,fill:false,tension:.3},
+    {label:'2026',data:[6.3,6.82],borderColor:TEAL,borderWidth:2,pointRadius:4,pointBackgroundColor:TEAL,pointBorderColor:'#08111c',pointBorderWidth:2,fill:false,tension:.3}
+  ]}, options:{ responsive:true,maintainAspectRatio:false,
+    plugins:{ legend:{labels:{color:'rgba(232,238,245,.45)',font:{size:12},boxWidth:10,boxHeight:10,padding:12}},
+      tooltip:{backgroundColor:'rgba(8,17,28,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:GOLD,bodyColor:'rgba(232,238,245,.78)',padding:10,titleFont:{size:13},bodyFont:{size:12},callbacks:{label:c=>` ${c.dataset.label}: Bs. ${c.parsed.y}`}} },
+    scales:{ x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'rgba(232,238,245,.38)',font:{size:12}}},
+      y:{grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'rgba(232,238,245,.35)',font:{size:12},callback:v=>'Bs.'+v},min:0,max:8} }
+  }
+});
+</script>
+</body>
+</html>
