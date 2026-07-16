@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Costos — Papaya Abril-Mayo 2025 vs 2026</title>
+<title>Dashboard Costos — Cebolla Roja Mayo-Junio 2025 vs 2026</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,8 +22,8 @@
   .kpi-label { font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: #7a9ab5; }
 
   .badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 600; letter-spacing: 0.05em; display: inline-block; }
-  .badge-abr { background: #1a3d28; color: #6fd97a; }
-  .badge-may { background: #12305a; color: #5bb8f5; }
+  .badge-may { background: #1a3d28; color: #6fd97a; }
+  .badge-jun { background: #12305a; color: #5bb8f5; }
 
   .chart-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
   .chart-box p.sub { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
@@ -77,8 +77,6 @@
   .total-label { font-size: 11px; color: #6fd97a; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
   .total-sub { font-size: 10px; color: #4a8a5a; margin-top: 2px; }
   .total-val { font-size: 26px; font-weight: 700; color: #6fd97a; }
-  .note-box { background: #1a2e42; border: 0.5px solid #2a3f55; border-radius: 10px; padding: 12px 18px; margin-top: 12px; }
-  .note-label { font-size: 11px; color: #c8dce8; letter-spacing: 0.06em; font-weight: 600; }
 
   @media (max-width: 700px) {
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -90,19 +88,19 @@
 <div class="dash">
 
   <div class="kpi-header">
-    <h2 class="title">Evolución de Costos — Papaya</h2>
-    <span class="vs-badge">ABRIL-MAYO 2025 VS. 2026</span>
+    <h2 class="title">Evolución de Costos — Cebolla Roja</h2>
+    <span class="vs-badge">MAYO-JUNIO 2025 VS. 2026</span>
   </div>
 
   <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-val green">9,10 Bs</div><div class="kpi-label">Prom. Abril 2025</div></div>
-    <div class="kpi"><div class="kpi-val blue">9,80 Bs</div><div class="kpi-label">Prom. Abril 2026</div></div>
-    <div class="kpi"><div class="kpi-val green">11,20 Bs</div><div class="kpi-label">Prom. Mayo 2025</div></div>
-    <div class="kpi"><div class="kpi-val blue">11,60 Bs</div><div class="kpi-label">Prom. Mayo 2026</div></div>
+    <div class="kpi"><div class="kpi-val green">7,50 Bs</div><div class="kpi-label">Prom. Mayo 2025</div></div>
+    <div class="kpi"><div class="kpi-val blue">5,12 Bs</div><div class="kpi-label">Prom. Mayo 2026</div></div>
+    <div class="kpi"><div class="kpi-val green">8,50 Bs</div><div class="kpi-label">Prom. Junio 2025</div></div>
+    <div class="kpi"><div class="kpi-val blue">5,22 Bs</div><div class="kpi-label">Prom. Junio 2026</div></div>
   </div>
 
   <div class="chart-box">
-    <p class="sub">Precio Semanal (Bs/Uds) — barras + tendencia + promedios mensuales · Abr S1 a May S5</p>
+    <p class="sub">Precio Semanal (Bs/Kg) — barras + tendencia + promedios mensuales · May S1 a Jun S4</p>
     <div class="toggle-row">
       <span>Mostrar:</span>
       <div class="tog-btn g25" id="btn0" onclick="toggle(0)">● Gestión 2025</div>
@@ -117,32 +115,30 @@
 
   <div class="tables-row">
     <div class="tbl-box">
-      <h3><span class="badge badge-abr" style="margin-right:6px;">ABRIL</span>Detalle Semanal</h3>
-      <p class="ts">Costo Bs/Uds · semanas registradas · comparativo de gestiones</p>
+      <h3><span class="badge badge-may" style="margin-right:6px;">MAYO</span>Detalle Semanal</h3>
+      <p class="ts">Costo Bs/Kg · semanas registradas · comparativo de gestiones</p>
       <table>
         <thead><tr><td>Semana</td><td style="text-align:right;padding-right:8px;">2025</td><td style="text-align:right;padding-right:8px;">2026</td><td style="text-align:right;padding-right:8px;">Var.</td><td style="text-align:right;">Resultado</td></tr></thead>
         <tbody>
-          <tr><td>Semana 1</td><td class="g25c">10,00</td><td class="g26c">12,00</td><td class="varc">+20,0%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
-          <tr><td>Semana 2</td><td class="g25c">9,00</td><td class="g26c">7,40</td><td class="varc">-17,8%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
-          <tr><td>Semana 3</td><td class="g25c">9,00</td><td class="g26c">11,80</td><td class="varc">+31,1%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
-          <tr><td>Semana 4</td><td class="g25c">9,00</td><td class="g26c">8,20</td><td class="varc">-8,9%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
-          <tr><td>Semana 5</td><td class="g25c">8,50</td><td class="g26c">12,00</td><td class="varc">+41,2%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
-          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">9,10</td><td class="avg-26">9,80</td><td class="avg-var">+7,7%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
+          <tr><td>Semana 1</td><td class="g25c">5,60</td><td class="g26c">2,80</td><td class="varc">-50,0%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 2</td><td class="g25c">9,50</td><td class="g26c">4,38</td><td class="varc">-53,9%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 3</td><td class="g25c">6,40</td><td class="g26c">6,07</td><td class="varc">-5,2%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 4</td><td class="g25c">8,40</td><td class="g26c">7,25</td><td class="varc">-13,7%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">7,50</td><td class="avg-26">5,12</td><td class="avg-var">-31,7%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
         </tbody>
       </table>
     </div>
     <div class="tbl-box">
-      <h3><span class="badge badge-may" style="margin-right:6px;">MAYO</span>Detalle Semanal</h3>
-      <p class="ts">Costo Bs/Uds · semanas registradas · comparativo de gestiones</p>
+      <h3><span class="badge badge-jun" style="margin-right:6px;">JUNIO</span>Detalle Semanal</h3>
+      <p class="ts">Costo Bs/Kg · semanas registradas · comparativo de gestiones</p>
       <table>
         <thead><tr><td>Semana</td><td style="text-align:right;padding-right:8px;">2025</td><td style="text-align:right;padding-right:8px;">2026</td><td style="text-align:right;padding-right:8px;">Var.</td><td style="text-align:right;">Resultado</td></tr></thead>
         <tbody>
-          <tr><td>Semana 1</td><td class="g25c">12,00</td><td class="g26c">12,00</td><td class="varc">0,0%</td><td class="res"><span class="pill gray">Iguales</span></td></tr>
-          <tr><td>Semana 2</td><td class="g25c">11,00</td><td class="g26c">13,00</td><td class="varc">+18,2%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
-          <tr><td>Semana 3</td><td class="g25c">11,00</td><td class="g26c">9,40</td><td class="varc">-14,5%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
-          <tr><td>Semana 4</td><td class="g25c">12,00</td><td class="g26c">12,00</td><td class="varc">0,0%</td><td class="res"><span class="pill gray">Iguales</span></td></tr>
-          <tr><td>Semana 5</td><td class="g25c">10,00</td><td class="g26c">-</td><td class="varc">-</td><td class="res"><span class="pill gray">Sin dato</span></td></tr>
-          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">11,20</td><td class="avg-26">11,60</td><td class="avg-var">+3,6%</td><td class="res"><span class="pill bad">2025 mejor</span></td></tr>
+          <tr><td>Semana 1</td><td class="g25c">8,00</td><td class="g26c">5,93</td><td class="varc">-25,9%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 2</td><td class="g25c">9,10</td><td class="g26c">5,27</td><td class="varc">-42,1%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 3</td><td class="g25c">10,00</td><td class="g26c">6,13</td><td class="varc">-38,7%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr><td>Semana 4</td><td class="g25c">7,00</td><td class="g26c">3,56</td><td class="varc">-49,1%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
+          <tr class="avg-row"><td class="avg-label">Prom. Mensual</td><td class="avg-25">8,50</td><td class="avg-26">5,22</td><td class="avg-var">-38,6%</td><td class="res"><span class="pill">2026 mejor</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -150,79 +146,71 @@
 
   <div class="savings-row">
     <div class="sav-box">
-      <h3><span class="badge badge-abr" style="margin-right:6px;">ABRIL</span>Variación por Semana</h3>
-      <p class="ts">Diferencia semanal (Bs/Uds) · comparación de costos 2026 vs 2025</p>
+      <h3><span class="badge badge-may" style="margin-right:6px;">MAYO</span>Ahorro por Semana</h3>
+      <p class="ts">Diferencia semanal (Bs/Kg) · reducción de costos 2026 vs 2025</p>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val inc">+2,00 Bs/Uds — Incremento</span></div>
-        <div class="sav-desc">Aumento del 20,0% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:55%; background:#e05ccc"></div></div>
-      </div>
-      <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val">-1,60 Bs/Uds — Ahorro</span></div>
-        <div class="sav-desc">Reducción del 17,8% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val">-2,80 Bs/Kg — Máximo ahorro</span></div>
+        <div class="sav-desc">Reducción del 50,0% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
       </div>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 3</span><span class="sav-val inc">+2,80 Bs/Uds — Máximo incremento</span></div>
-        <div class="sav-desc">Aumento del 31,1% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:75%; background:#e05ccc"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val">-5,12 Bs/Kg — Máximo ahorro</span></div>
+        <div class="sav-desc">Reducción del 53,9% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
       </div>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 4</span><span class="sav-val">-0,80 Bs/Uds — Ahorro</span></div>
-        <div class="sav-desc">Reducción del 8,9% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:30%"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 3</span><span class="sav-val">-0,33 Bs/Kg — Ahorro</span></div>
+        <div class="sav-desc">Reducción del 5,2% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
       </div>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 5</span><span class="sav-val inc">+3,50 Bs/Uds — Gran incremento</span></div>
-        <div class="sav-desc">Aumento del 41,2% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:90%; background:#e05ccc"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 4</span><span class="sav-val">-1,15 Bs/Kg — Ahorro</span></div>
+        <div class="sav-desc">Reducción del 13,7% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%"></div></div>
       </div>
-      <div class="total-box loss">
-        <div><div class="total-label" style="color:#e05ccc">Incremento Total Mensual</div><div class="total-sub" style="color:#8a4a5a">Aumento promedio por Unidad en gestión 2026</div></div>
-        <div class="total-val" style="color:#e05ccc">+0,70 Bs/Uds</div>
-      </div>
-      <div class="note-box">
-        <div class="note-label">Análisis: Abril 2026 registró un incremento del 7,7% en el costo promedio de la papaya. El comportamiento fue volátil: las semanas 1, 3 y 5 presentaron incrementos significativos (+20,0%, +31,1% y +41,2%), mientras que las semanas 2 y 4 mostraron ahorros (-17,8% y -8,9%). El mayor incremento se registró en la semana 5 (+41,2%).</div>
+      <div class="total-box">
+        <div><div class="total-label">Ahorro Total Mensual</div><div class="total-sub">Reducción promedio por Kg en gestión 2026</div></div>
+        <div class="total-val">-2,38 Bs/Kg</div>
       </div>
     </div>
     <div class="sav-box">
-      <h3><span class="badge badge-may" style="margin-right:6px;">MAYO</span>Variación por Semana</h3>
-      <p class="ts">Diferencia semanal (Bs/Uds) · comparación de costos 2026 vs 2025</p>
+      <h3><span class="badge badge-jun" style="margin-right:6px;">JUNIO</span>Ahorro por Semana</h3>
+      <p class="ts">Diferencia semanal (Bs/Kg) · reducción de costos 2026 vs 2025</p>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val" style="color:#7a9ab5">0,00 Bs/Uds — Sin cambio</span></div>
-        <div class="sav-desc">Mismo costo en ambas gestiones (12,00 Bs/Uds)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
-      </div>
-      <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val inc">+2,00 Bs/Uds — Incremento</span></div>
-        <div class="sav-desc">Aumento del 18,2% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:55%; background:#e05ccc"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 1</span><span class="sav-val">-2,07 Bs/Kg — Ahorro</span></div>
+        <div class="sav-desc">Reducción del 25,9% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:55%"></div></div>
       </div>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 3</span><span class="sav-val">-1,60 Bs/Uds — Ahorro</span></div>
-        <div class="sav-desc">Reducción del 14,5% en costo por unidad</div>
-        <div class="bar-track"><div class="bar-fill" style="width:45%"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 2</span><span class="sav-val">-3,83 Bs/Kg — Gran ahorro</span></div>
+        <div class="sav-desc">Reducción del 42,1% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
       </div>
       <div class="sav-item">
-        <div class="sav-header"><span class="sav-week">Semana 4</span><span class="sav-val" style="color:#7a9ab5">0,00 Bs/Uds — Sin cambio</span></div>
-        <div class="sav-desc">Mismo costo en ambas gestiones (12,00 Bs/Uds)</div>
-        <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+        <div class="sav-header"><span class="sav-week">Semana 3</span><span class="sav-val">-3,87 Bs/Kg — Gran ahorro</span></div>
+        <div class="sav-desc">Reducción del 38,7% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
       </div>
-      <div class="total-box loss">
-        <div><div class="total-label" style="color:#e05ccc">Variación Promedio Mensual</div><div class="total-sub" style="color:#8a4a5a">Incremento promedio por Unidad en gestión 2026</div></div>
-        <div class="total-val" style="color:#e05ccc">+0,40 Bs/Uds</div>
+      <div class="sav-item">
+        <div class="sav-header"><span class="sav-week">Semana 4</span><span class="sav-val">-3,44 Bs/Kg — Máximo ahorro</span></div>
+        <div class="sav-desc">Reducción del 49,1% en costo por kilo</div>
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
       </div>
-      <div class="note-box">
-        <div class="note-label">Nota:No se registra datos en la semana 5 de mayo 2026 debido al dessabastecimiento temporal del productp en el mercado, consecuencia de la situacon economica y logistica que afectó el suministros de diversos productos en bolivia durante este periodo.
+      <div class="total-box">
+        <div><div class="total-label">Ahorro Total Mensual</div><div class="total-sub">Reducción promedio por Kg en gestión 2026</div></div>
+        <div class="total-val">-3,28 Bs/Kg</div>
+      </div>
+    </div>
+  </div>
 
 </div>
 
 <script>
-const labels = ['Abr S1','Abr S2','Abr S3','Abr S4','Abr S5','May S1','May S2','May S3','May S4','May S5'];
-const d25   = [10.00, 9.00, 9.00, 9.00, 8.50, 12.00, 11.00, 11.00, 12.00, 10.00];
-const d26   = [12.00, 7.40, 11.80, 8.20, 12.00, 12.00, 13.00, 9.40, 12.00, null];
-const prom25 = [9.10, 9.10, 9.10, 9.10, 9.10, 11.20, 11.20, 11.20, 11.20, 11.20];
-const prom26 = [9.80, 9.80, 9.80, 9.80, 9.80, 11.60, 11.60, 11.60, 11.60, 11.60];
+const labels = ['May S1','May S2','May S3','May S4','Jun S1','Jun S2','Jun S3','Jun S4'];
+const d25   = [5.60, 9.50, 6.40, 8.40, 8.00, 9.10, 10.00, 7.00];
+const d26   = [2.80, 4.38, 6.07, 7.25, 5.93, 5.27, 6.13, 3.56];
+const prom25 = [7.50, 7.50, 7.50, 7.50, 8.50, 8.50, 8.50, 8.50];
+const prom26 = [5.12, 5.12, 5.12, 5.12, 5.22, 5.22, 5.22, 5.22];
 
 const gridColor = 'rgba(255,255,255,0.06)';
 const tickColor = '#5a7a8a';
@@ -245,7 +233,7 @@ const myChart = new Chart(document.getElementById('combo'), {
     plugins: { legend: { display: false } },
     scales: {
       x: { ticks:{ color:tickColor, font:{size:11}, autoSkip:false }, grid:{ color:gridColor } },
-      y: { min:0, max:15, ticks:{ color:tickColor, font:{size:11}, callback: v => 'Bs ' + v }, grid:{ color:gridColor } }
+      y: { min:0, max:12, ticks:{ color:tickColor, font:{size:11}, callback: v => 'Bs ' + v }, grid:{ color:gridColor } }
     }
   }
 });
