@@ -1,0 +1,12 @@
+﻿# Archivos de trabajo local (no se commitean)
+_descartados/
+*.old
+*.original
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
