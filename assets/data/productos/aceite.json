@@ -1,0 +1,15 @@
+﻿{
+  "producto": "Aceite",
+  "categoria": "abarrotes",
+  "unidad": "Bs/Litro",
+  "periodos": [
+    { "mes": "Abril", "semana": "S1", "v2025": 13.00, "v2026": 13.00 },
+    { "mes": "Abril", "semana": "S2", "v2025": 13.00, "v2026": 13.00 },
+    { "mes": "Mayo",  "semana": "S1", "v2025": 13.00, "v2026": 14.00 },
+    { "mes": "Mayo",  "semana": "S2", "v2025": 13.00, "v2026": 14.00 }
+  ],
+  "meta": {
+    "actualizado": "2026-05-15",
+    "fuente": "Registro interno comedor"
+  }
+}

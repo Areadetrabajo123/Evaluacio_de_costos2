@@ -1,0 +1,105 @@
+﻿/* ============================================================
+   dashboard.css — Estilos compartidos para dashboards de producto
+   Sistema de Gestión de Costos — UAB
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #060f1a;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: #e8e0d0;
+  min-height: 100vh;
+  padding: 32px 24px;
+}
+
+.dash {
+  background: #0d1b2a;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.kpi-header { text-align: center; margin-bottom: 20px; }
+h2.title { font-size: 20px; font-weight: 500; color: #d4c98a; display: inline; }
+.vs-badge {
+  display: inline-block; background: #0f2a1e; border: 1px solid #2a6a44;
+  color: #6fd97a; font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  padding: 3px 10px; border-radius: 10px; margin-left: 10px; vertical-align: middle;
+}
+
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+.kpi { background: #122035; border: 0.5px solid #2a3f55; border-radius: 10px; padding: 16px; text-align: center; }
+.kpi-val { font-size: 24px; font-weight: 600; margin-bottom: 5px; }
+.kpi-val.green { color: #6fd97a; }
+.kpi-val.blue  { color: #5bb8f5; }
+.kpi-label { font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: #7a9ab5; }
+
+.badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 600; letter-spacing: 0.05em; display: inline-block; }
+.badge-mar { background: #1a3d28; color: #6fd97a; }
+.badge-abr { background: #12305a; color: #5bb8f5; }
+
+.chart-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 18px; margin-bottom: 20px; }
+.chart-box p.sub { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+
+.toggle-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+.toggle-row span { font-size: 11px; color: #5a7a8a; }
+.tog-btn {
+  cursor: pointer; font-size: 12px; padding: 5px 14px; border-radius: 20px;
+  border: 1.5px solid; font-family: Georgia, serif; transition: opacity 0.2s; user-select: none;
+}
+.tog-btn.g25 { border-color: #6fd97a; color: #6fd97a; background: rgba(111,217,122,0.12); }
+.tog-btn.g26 { border-color: #5bb8f5; color: #5bb8f5; background: rgba(91,184,245,0.12); }
+.tog-btn.p25 { border-color: #f0a500; color: #f0a500; background: rgba(240,165,0,0.10); }
+.tog-btn.p26 { border-color: #e05ccc; color: #e05ccc; background: rgba(224,92,204,0.10); }
+.tog-btn.off { opacity: 0.3; }
+
+.tables-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.tbl-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 16px; }
+.tbl-box h3 { font-size: 13px; font-weight: 500; color: #c8dce8; margin-bottom: 3px; }
+.tbl-box p.ts { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead tr { border-bottom: 0.5px solid #2a3f55; }
+thead td { color: #c8a84a; font-weight: 600; font-size: 10px; letter-spacing: 0.07em; padding: 0 0 7px; text-transform: uppercase; }
+tbody tr { border-bottom: 0.5px solid #1a2e42; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr.avg-row { border-top: 0.5px solid #2a3f55; }
+td { padding: 7px 0; }
+td.g25c { color: #6fd97a; text-align: right; padding-right: 8px; }
+td.g26c { color: #5bb8f5; text-align: right; padding-right: 8px; }
+td.varc { color: #aaa; text-align: right; padding-right: 8px; }
+td.res { text-align: right; }
+.pill { background: #1a3d28; color: #6fd97a; font-size: 10px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+td.avg-label { color: #d4c98a; font-weight: 600; }
+td.avg-25 { color: #6fd97a; font-weight: 600; text-align: right; padding-right: 8px; }
+td.avg-26 { color: #5bb8f5; font-weight: 600; text-align: right; padding-right: 8px; }
+td.avg-var { color: #aaa; font-weight: 600; text-align: right; padding-right: 8px; }
+
+.savings-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sav-box { background: #0f1e2e; border: 0.5px solid #1e3349; border-radius: 10px; padding: 16px; }
+.sav-box h3 { font-size: 13px; font-weight: 500; color: #c8dce8; margin-bottom: 3px; }
+.sav-box p.ts { font-size: 11px; color: #5a7a8a; margin-bottom: 12px; }
+.sav-item { margin-bottom: 14px; }
+.sav-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+.sav-week { font-size: 13px; font-weight: 500; color: #c8dce8; }
+.sav-val { font-size: 12px; color: #6fd97a; font-weight: 600; text-align: right; }
+.sav-desc { font-size: 10px; color: #5a7a8a; margin-bottom: 5px; }
+.bar-track { background: #1a2e42; border-radius: 4px; height: 6px; }
+.bar-fill { height: 6px; border-radius: 4px; background: #6fd97a; }
+.total-box {
+  background: #162d1e; border: 0.5px solid #2a5c38; border-radius: 10px;
+  padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; margin-top: 12px;
+}
+.total-label { font-size: 11px; color: #6fd97a; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+.total-sub { font-size: 10px; color: #4a8a5a; margin-top: 2px; }
+.total-val { font-size: 26px; font-weight: 700; color: #6fd97a; }
+
+.note-box { background: #1a2e42; border: 0.5px solid #2a3f55; border-radius: 10px; padding: 12px 18px; margin-top: 12px; }
+.note-label { font-size: 11px; color: #c8dce8; letter-spacing: 0.06em; font-weight: 600; }
+
+@media (max-width: 700px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .tables-row, .savings-row { grid-template-columns: 1fr; }
+}
